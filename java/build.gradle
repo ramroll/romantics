@@ -1,0 +1,22 @@
+plugins {
+    id 'java'
+}
+
+group 'org.example'
+version '1.0-SNAPSHOT'
+
+sourceCompatibility = 11
+
+repositories {
+    mavenCentral()
+}
+
+test {
+    useJUnitPlatform()
+}
+
+dependencies {
+    testImplementation('org.junit.jupiter:junit-jupiter-api:5.4.2')
+    compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.9'
+    testRuntime('org.junit.jupiter:junit-jupiter-engine:5.4.2')
+}

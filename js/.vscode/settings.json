@@ -1,0 +1,3 @@
+{
+    "mochaExplorer.files": "src/tests/**/*.test.js",
+}

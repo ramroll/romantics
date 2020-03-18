@@ -1,0 +1,4 @@
+node_modules
+*.lock
+.idea
+.gradle
