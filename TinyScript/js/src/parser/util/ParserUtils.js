@@ -1,5 +1,7 @@
 const Factor = require('../ast/Factor')
 const ASTNodeTypes = require('../ast/ASTNodeTypes')
+const LinkedList = require('linkedlist')
+
 class ParserUtils {
 
     
@@ -22,6 +24,23 @@ class ParserUtils {
         } else {
             return prts.join(" ")
         }
+    }
+
+    static toBFSString(root, max) {
+
+        const queue = new LinkedList()
+        const list = []
+        queue.push(root)
+
+        let c = 0
+        while(queue.length > 0 && c++ < max) {
+            var node = queue.shift()
+            list.push(node.getLabel())
+            for(const child of node.getChildren()) {
+                queue.push(child);
+            }
+        }
+        return list.join(" ")
     }
 }
 

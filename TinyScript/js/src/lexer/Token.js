@@ -10,7 +10,12 @@ const Keywords = new Set([
   "while",
   "break",
   "func",
-  "return"
+  "return",
+  "int",
+  "float",
+  "bool",
+  "void",
+  "string"
 ]);
 
 class Token {
@@ -31,8 +36,18 @@ class Token {
     return this._type == TokenType.VARIABLE;
   }
 
-  isValue(){
-    return this.isScalar() || this.isVariable()
+  isValue() {
+    return this.isScalar() || this.isVariable();
+  }
+
+  isType() {
+    return (
+      this._value === "bool" ||
+      this._value === "int" ||
+      this._value === "float" ||
+      this._value === "void" ||
+      this._value === "string"
+    );
   }
 
   isScalar() {
@@ -267,7 +282,7 @@ class Token {
 
   static makeNumber(it) {
     let state = 0;
-    let s = ""
+    let s = "";
 
     while (it.hasNext()) {
       let lookahead = it.peek();
@@ -309,7 +324,6 @@ class Token {
             state = 5;
           } else {
             throw LexicalException.fromChar(lookahead);
-            
           }
           break;
         case 4:
@@ -340,7 +354,7 @@ class Token {
       s += lookahead;
       it.next();
     } // end while
-    throw new LexicalException("Unexpected error")
+    throw new LexicalException("Unexpected error");
   }
 }
 

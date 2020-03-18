@@ -57,19 +57,18 @@ IfStmt.parse = (it) => {
 IfStmt.parseTail = (it) => {
   if (
     !it.hasNext() ||
-    !it
+    it
       .peek()
-      .getValue()
-      .equals("else")
+      .getValue() !== "else"
   ) {
     return null;
   }
   it.nextMatch("else");
   const lookahead = it.peek();
 
-  if (lookahead.getValue().equals("{")) {
+  if (lookahead.getValue() === "{") {
     return Block.parse(it)
-  } else if (lookahead.getValue().equals("if")) {
+  } else if (lookahead.getValue() === "if") {
     return IfStmt.parse(it)
   } else {
     return null;
