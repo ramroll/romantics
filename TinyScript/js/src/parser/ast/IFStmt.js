@@ -46,7 +46,7 @@ IfStmt.parse = (it) => {
   const block = Block.parse(it);
   ifStmt.addChild(block);
 
-  const tail = parseTail(it);
+  const tail = IfStmt.parseTail(it);
   if (tail != null) {
     ifStmt.addChild(tail);
   }
@@ -68,9 +68,9 @@ IfStmt.parseTail = (it) => {
   const lookahead = it.peek();
 
   if (lookahead.getValue().equals("{")) {
-    return Block.parse(it);
+    return Block.parse(it)
   } else if (lookahead.getValue().equals("if")) {
-    return IfStmt.parse(it);
+    return IfStmt.parse(it)
   } else {
     return null;
   }

@@ -9,7 +9,7 @@ module.exports = {
         return require('./DeclareStmt')
     },
     get Block() {
-        return require('./DeclareStmt')
+        return require('./Block')
     },
     get IfStmt() {
         return require('./IFStmt')
