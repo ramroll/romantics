@@ -30,9 +30,9 @@ public class TransExprTests {
 
 
         var translator = new Translator();
-        var symbolTable = new SymbolTable(null);
+        var symbolTable = new SymbolTable();
         var program = new TAProgram();
-        translator.translateBinaryExpr(program, exprNode, symbolTable);
+        translator.translateExpr(program, exprNode, symbolTable);
         var expectedResults = new String[] {
                 "p0 = b - c",
                 "p1 = b - c",

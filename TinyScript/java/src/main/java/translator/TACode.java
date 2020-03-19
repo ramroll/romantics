@@ -7,6 +7,7 @@ public class TACode {
     private Address result;
     private String op;
     private TACodeTypes type;
+    private String label;
 
     public TACode(TACodeTypes type, Address result, String op, Address arg1, Address arg2) {
         this.op = op;
@@ -32,5 +33,17 @@ public class TACode {
 
     public Address getResult() {
         return result;
+    }
+
+    public void setArg1(Address addr) {
+        this.arg1 = addr;
+    }
+
+    public Address getArg1() {
+        return this.arg1;
+    }
+
+    public void setLabel(String label) {
+        this.label = label;
     }
 }

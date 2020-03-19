@@ -26,11 +26,13 @@ public class TAProgram {
 
     public TACode createIfCode(Address exprResult) {
         var code = new TACode(TACodeTypes.IF_GOTO);
-        code.setArg1(result)
-        var label = this.createLabel();
-        code.setLabel(label);
+        code.setArg1(exprResult);
+        opcodes.add(code);
         return code;
+    }
 
+    public TACode lastOpCode() {
+        return this.opcodes.get(this.opcodes.size() - 1);
     }
 }
 
