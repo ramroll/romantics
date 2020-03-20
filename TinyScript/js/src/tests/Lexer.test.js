@@ -8,6 +8,7 @@ function assertToken(token, value, type) {
     assert.equal(token.getValue(), value)
     assert.equal(token.getType(), type)
 }
+
 describe("Lexer", () => {
 
     it('expression', () => {
@@ -70,4 +71,10 @@ describe("Lexer", () => {
         assert.equal(tokens.length, 3)
     })
 
+    it("delete one line comment", () => {
+        const lexer = new Lexer()
+        const source = "//adnwjdbakd\na=1"
+        const tokens = lexer.analyse(arrayToGenerator([...source]))
+        assert.equal(tokens.length, 3)
+    })
 })
