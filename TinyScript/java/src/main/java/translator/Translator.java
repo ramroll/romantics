@@ -31,8 +31,8 @@ public class Translator {
     public void translateIfStmt(TAProgram program, IfStmt node, SymbolTable symbolTable) {
         var expr = node.getExpr();
         translateBinaryExpr(program, expr, symbolTable);
-        var ifOpCode = program.createIfCode();
-        var label = program.addLabel();
+//        var ifOpCode = program.createIfCode();
+//        var label = program.addLabel();
         translateBlock(program, (Block)node.getBlock(), symbolTable);
     }
 
