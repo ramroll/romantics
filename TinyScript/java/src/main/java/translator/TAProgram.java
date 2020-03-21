@@ -26,9 +26,9 @@ public class TAProgram {
 
     public TACode createIfCode(Address exprResult) {
         var code = new TACode(TACodeTypes.IF_GOTO);
-        code.setArg1(result)
-        var label = this.createLabel();
-        code.setLabel(label);
+//        code.setArg1(result)
+//        var label = this.createLabel();
+//        code.setLabel(label);
         return code;
 
     }

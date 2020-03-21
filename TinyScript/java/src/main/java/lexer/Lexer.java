@@ -28,7 +28,8 @@ public class Lexer {
             // 删除注释
             if(c == '/') {
                 if(lookahead == '/') {
-                    while(it.hasNext() && (c = it.next()) != '\n');
+                    while(it.hasNext() && (c = it.next()) != '\n') {};
+                    continue;
                 }
                 else if(lookahead == '*') {
                     boolean valid = false;
