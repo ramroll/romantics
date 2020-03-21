@@ -76,7 +76,7 @@ public class LexerTests {
         //测试错误案例
         var errorSource='/*/';
         try{
-            List<Token> tokens = lexer.analyse(errorTest.chars().mapToObj(x ->(char)x));
+            List<Token> tokens = lexer.analyse(errorSource.chars().mapToObj(x ->(char)x));
         }catch (Exception e){
             return;
         }
