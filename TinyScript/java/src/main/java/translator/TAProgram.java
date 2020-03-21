@@ -38,6 +38,7 @@ public class TAProgram {
         return taCode;
     }
 
+
     public TAInstruction lastOpCode() {
         return this.opcodes.get(opcodes.size()-1);
     }

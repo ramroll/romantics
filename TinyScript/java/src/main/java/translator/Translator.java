@@ -103,6 +103,7 @@ public class Translator {
         var exprAddr = translateExpr(program,expr,symbolTable);
         var ifOpCode = new TAInstruction(TAOpCodeType.IF_GOTO, null, null, exprAddr, null);
         program.add(ifOpCode);
+
         translateBlock(program, (Block)node.getBlock(), symbolTable);
 
         TAInstruction gotoInstruction = null;

@@ -1,6 +1,5 @@
 package parser.ast;
 
-import javafx.beans.binding.ObjectBinding;
 import lexer.Token;
 import org.apache.commons.lang3.StringUtils;
 

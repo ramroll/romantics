@@ -38,12 +38,38 @@ class Lexer {
             }
           }
 
+<<<<<<< HEAD
           if (!valid) {
             throw new LexicalException("comment not matched");
           }
           continue;
         }
       }
+=======
+            // 提取注释的程序
+            if(c == '/') {
+                if(lookahead == '/') {
+                    while(it.hasNext() && (c = it.next()) != '\n');
+                    continue;
+                } else if(lookahead == '*') {
+                    let valid = false
+                    while(it.hasNext()) {
+                        const p = it.next()
+                        if(p == '*' && it.peek() == '/') {
+                            valid = true
+                            it.next()
+                            break
+                        }
+                    }
+
+                    if(!valid) {
+                        throw new LexicalException("comment not matched")
+                    }
+                    continue
+                }
+
+            }
+>>>>>>> master
 
       if (c == "{" || c == "}" || c == "(" || c == ")") {
         tokens.push(new Token(TokenType.BRACKET, c));

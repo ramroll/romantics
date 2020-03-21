@@ -33,6 +33,7 @@ public class TransExprTests {
         var symbolTable = new SymbolTable();
         var program = new TAProgram();
         translator.translateExpr(program, exprNode, symbolTable);
+
         var expectedResults = new String[] {
                 "p0 = b - c",
                 "p1 = b - c",
