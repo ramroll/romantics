@@ -12,7 +12,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "linkedlist": "^1.0.1"
+    "linkedlist": "^1.0.1",
+    "mkdirp": "^1.0.3"
   },
   "devDependencies": {
     "chai": "^4.2.0",

@@ -22,6 +22,7 @@ class Lexer {
             if(c == '/') {
                 if(lookahead == '/') {
                     while(it.hasNext() && (c = it.next()) != '\n');
+                    continue;
                 } else if(lookahead == '*') {
                     let valid = false
                     while(it.hasNext()) {

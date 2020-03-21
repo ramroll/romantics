@@ -85,6 +85,14 @@ public class LexerTests {
     }
 
     @Test
+    public void test_deleteOneLine() throws LexicalException {
+        var source = "//121212\na=1";
+        var lexer = new Lexer();
+        var tokens = lexer.analyse(source.chars().mapToObj(x -> (char)x));
+        assertEquals(3, tokens.size());
+    }
+
+    @Test
     public void minus() throws LexicalException {
         var source = "n-1";
         var lexer = new Lexer();

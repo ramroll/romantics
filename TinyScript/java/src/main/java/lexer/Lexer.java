@@ -28,8 +28,8 @@ public class Lexer {
             // 删除注释
             if(c == '/') {
                 if(lookahead == '/') {
-                    while(it.hasNext() && (c = it.next()) != '\n');
-                    continue;//单行注释
+                    while(it.hasNext() && (c = it.next()) != '\n') {};
+                    continue;
                 }
                 else if(lookahead == '*') {
                     it.next();//多读一个* 避免/*/通过
