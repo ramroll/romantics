@@ -1,7 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="translator.TransExprTests" tests="1" skipped="0" failures="0" errors="0" timestamp="2020-03-16T14:21:50" hostname="DESKTOP-3FBV0PF" time="0.044">
+<testsuite name="translator.TransExprTests" tests="5" skipped="0" failures="0" errors="0" timestamp="2020-03-21T14:32:22" hostname="DESKTOP-3FBV0PF" time="0.021">
   <properties/>
-  <testcase name="transExpr()" classname="translator.TransExprTests" time="0.044"/>
-  <system-out><![CDATA[]]></system-out>
+  <testcase name="optimizeExpr()" classname="translator.TransExprTests" time="0.009"/>
+  <testcase name="testAssignStmt()" classname="translator.TransExprTests" time="0.006"/>
+  <testcase name="transExpr()" classname="translator.TransExprTests" time="0.002"/>
+  <testcase name="testAssignStmt1()" classname="translator.TransExprTests" time="0.0"/>
+  <testcase name="testDeclareStmt()" classname="translator.TransExprTests" time="0.001"/>
+  <system-out><![CDATA[a = 1
+]]></system-out>
   <system-err><![CDATA[]]></system-err>
 </testsuite>

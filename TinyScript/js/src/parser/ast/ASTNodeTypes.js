@@ -11,5 +11,8 @@ module.exports = {
     ASSIGN_STMT : new Enum("ASSIGN_STMT", 8),
     FUNCTION_DECLARE_STMT: new Enum("FUNCTION_DECLARE_STMT", 9),
     DECLARE_STMT : new Enum("DECLARE_STMT", 10),
-    SCALAR : new Enum("SCALAR", 11)
+    SCALAR : new Enum("SCALAR", 11),
+    RETURN_STMT :new Enum("RETURN_STMT", 12),
+    FUNCTION_ARGS :new Enum("FUNCTION_ARGS", 13),
+    CALL_EXPR : new Enum("CALL_EXPR", 14)
 }

@@ -1,36 +1,46 @@
 package translator;
 
+import org.apache.commons.lang3.StringUtils;
+
 import java.util.ArrayList;
 import java.util.Hashtable;
 
 public class TAProgram {
 
-    private ArrayList<TACode> opcodes = new ArrayList<>();
-    private Hashtable<String, Integer> labels = new Hashtable<>();
+    private ArrayList<TAInstruction> opcodes = new ArrayList<>();
+    private Hashtable<String, TAValue> labels = new Hashtable<>();
     private int labelCounter = 0;
+    private Hashtable<Integer, TAValue> lineLabels = new Hashtable<>();
 
-    public void add(TACode code) {
+    public void add(TAInstruction code) {
         opcodes.add(code);
     }
 
-    public ArrayList<TACode> getOpCodes() {
+    public ArrayList<TAInstruction> getOpCodes() {
         return opcodes;
     }
 
-    public String createLabel(){
+
+    @Override
+    public String toString() {
+        var lines = new ArrayList<String>();
+        for(var opcode : opcodes) {
+            lines.add(opcode.toString());
+        }
+        return StringUtils.join(lines, "\n");
+    }
+
+    public TAInstruction addLabel() {
         var label = "L" + labelCounter++;
-        this.labels.put(label, this.opcodes.size());
-        return label;
+        var taCode = new TAInstruction(TAOpCodeType.LABEL, null, null, null, null);
+        taCode.setArg1(label);
+        opcodes.add(taCode);
+        return taCode;
     }
 
 
-    public TACode createIfCode(Address exprResult) {
-        var code = new TACode(TACodeTypes.IF_GOTO);
-//        code.setArg1(result)
-//        var label = this.createLabel();
-//        code.setLabel(label);
-        return code;
-
+    public TAInstruction lastOpCode() {
+        return this.opcodes.get(opcodes.size()-1);
     }
 }
 

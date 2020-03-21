@@ -19,6 +19,10 @@ class ASTNode {
         this.children.push(node)
     }
 
+    getLabel(){
+        return this.label
+    }
+
     getLexeme(){
         return this.lexeme
     }

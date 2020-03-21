@@ -8,6 +8,9 @@ import parser.ast.Program;
 import parser.util.ParseException;
 import parser.util.PeekTokenIterator;
 
+import java.io.FileNotFoundException;
+import java.io.UnsupportedEncodingException;
+
 public class Parser {
 
     public static ASTNode parse(String source) throws LexicalException, ParseException {
@@ -16,4 +19,8 @@ public class Parser {
         return Program.parse(new PeekTokenIterator(tokens.stream()));
     }
 
+    public static ASTNode fromFile(String file) throws FileNotFoundException, UnsupportedEncodingException, LexicalException, ParseException {
+        var tokens = Lexer.fromFile(file);
+        return Program.parse(new PeekTokenIterator(tokens.stream()));
+    }
 }

@@ -1,0 +1,59 @@
+print a b c
+ print:parser.ast.Expr@2da8aa32
+ +
+  1
+  ++
+    i
+ print:parser.ast.Expr@6b81a349
+ +
+  1
+  i
+ print:parser.ast.Expr@693046a8
+ !
+  +
+    a
+    +
+	      b
+	      c
+ print:parser.ast.Expr@77c945e0
+ +
+  1
+  +
+    2
+    +
+	      3
+	      4
+#&a = 1
+)(L0:
+)(p0 = n == 0
+)(IF p0 ELSE_GOTO L1
+)(	RETURN 1
+)(L1:
+)(p3 = n - 1
+)(	PARAM p3
+)(CALL L0
+)(p4 = p1 * n
+)(RETURN p4
+,-IF a ELSE_GOTO L0
+,-b = 1
+,-L0:
+,.p0 = a == 1
+,.IF p0 ELSE_GOTO L0
+,.b = 100
+,.GOTO L5
+,.L0:
+,.p1 = a == 2
+,.IF p1 ELSE_GOTO L1
+,.b = 500
+,.GOTO L4
+,.L1:
+,.p2 = a == 3
+,.IF p2 ELSE_GOTO L2
+,.p0 = a * 1000
+,.b = p0
+,.GOTO L3
+,.L2:
+,.b = -1
+,.L3:
+,.L4:
+,.L5:

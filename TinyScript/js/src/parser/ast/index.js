@@ -9,7 +9,7 @@ module.exports = {
         return require('./DeclareStmt')
     },
     get Block() {
-        return require('./DeclareStmt')
+        return require('./Block')
     },
     get IfStmt() {
         return require('./IFStmt')
@@ -28,6 +28,18 @@ module.exports = {
 
     get Scalar() {
         return require('./Scalar')
+    },
+    get FunctionDeclareStmt() {
+        return require('./FunctionDeclareStmt')
+    },
+    get ReturnStmt() {
+        return require('./ReturnStmt')
+    },
+    get FunctionArgs(){
+        return require("./FunctionArgs")
+    },
+    get CallExpr() {
+        return require('./CallExpr')
     }
    
 }

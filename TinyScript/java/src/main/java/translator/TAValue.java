@@ -1,21 +1,21 @@
 package translator;
 
 import lexer.Token;
-import lexer.TokenType;
 
-public class Address {
-
+/**
+ * 一个值或者变量的集合体
+ */
+public class TAValue {
 
     SymbolTable parent;
     int offset;
-
     Token lexeme;
+    String label;
+    public TAValue(){}
 
-    public Address(Token lexeme) {
+    public TAValue(Token lexeme) {
         this.lexeme = lexeme;
     }
-
-
 
     public void setParent(SymbolTable parent) {
         this.parent = parent;
@@ -28,5 +28,9 @@ public class Address {
     @Override
     public String toString() {
         return lexeme.getValue();
+    }
+
+    public void setLexeme(Token lexeme) {
+        this.lexeme = lexeme;
     }
 }
