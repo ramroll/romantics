@@ -1,0 +1,25 @@
+print a b c
+ print:parser.ast.Expr@78388600
+ +
+  1
+  ++
+    i
+ print:parser.ast.Expr@73635040
+ +
+  1
+  i
+ print:parser.ast.Expr@51c43f30
+ !
+  +
+    a
+    +
+	      b
+	      c
+ print:parser.ast.Expr@48bb92b8
+ +
+  1
+  +
+    2
+    +
+	      3
+	      4
