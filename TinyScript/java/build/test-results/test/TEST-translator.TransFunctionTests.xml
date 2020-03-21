@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="translator.TransFunctionTests" tests="1" skipped="0" failures="0" errors="0" timestamp="2020-03-21T02:43:46" hostname="DESKTOP-3FBV0PF" time="0.053">
+  <properties/>
+  <testcase name="testRecursiveFunction()" classname="translator.TransFunctionTests" time="0.053"/>
+  <system-out><![CDATA[L0:
+p0 = n == 0
+IF p0 ELSE_GOTO L1
+RETURN 1
+L1:
+p3 = n - 1
+PARAMp3
+CALL
+p4 = p1 * n
+RETURN p4
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

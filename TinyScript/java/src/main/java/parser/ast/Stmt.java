@@ -21,7 +21,7 @@ public abstract class Stmt extends ASTNode{
         var lookahead = it.peek();
         it.putBack();
 
-        if(token.isVariable() && lookahead.getValue().equals("=")) {
+        if(token.isVariable() && lookahead != null && lookahead.getValue().equals("=")) {
             return AssignStmt.parse(it);
         } else if(token.getValue().equals("var")) {
             return DeclareStmt.parse(it);

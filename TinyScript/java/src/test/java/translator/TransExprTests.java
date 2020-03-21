@@ -7,6 +7,8 @@ import parser.util.GraphvizHelpler;
 import parser.util.ParseException;
 import translator.optimizer.ExprOptimizer;
 
+import java.io.FileNotFoundException;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -20,6 +22,23 @@ public class TransExprTests {
             var strVal = opcode.toString();
             assertEquals(lines[i], strVal);
         }
+    }
+
+    @Test
+    public void transFactorExpr() throws LexicalException, ParseException {
+        var source = "a";
+        var astNode = Parser.parse("a");
+        var expr = astNode.getChild(0);
+        var translator = new Translator();
+        var program = new TAProgram();
+        var symbolTable = new SymbolTable();
+        translator.translateExpr(program, expr, symbolTable);
+
+        System.out.println(program.toString());
+
+
+
+
     }
 
     @Test
@@ -78,4 +97,50 @@ public class TransExprTests {
                 "\"v9\" -> \"v10\"\n";
         assertEquals(expected, actual);
     }
+
+    @Test
+    public void testAssignStmt() throws LexicalException, ParseException {
+        var source = "a=1.0*2.0*3.0";
+        var astNode = Parser.parse(source);
+
+        var translator = new Translator();
+        var program = translator.translate(astNode);
+        var code = program.toString();
+
+        String expected = "p0 = 2.0 * 3.0\n" +
+                "p1 = 1.0 * p0\n" +
+                "a = p1";
+        assertEquals(expected, code);
+    }
+
+    @Test
+    public void testAssignStmt1() throws LexicalException, ParseException {
+        var source = "a=1";
+        var astNode = Parser.parse(source);
+
+        var translator = new Translator();
+        var program = translator.translate(astNode);
+        var code = program.toString();
+        System.out.println(code);
+
+        assertEquals("a = 1", code);
+    }
+
+
+    @Test
+    public void testDeclareStmt() throws LexicalException, ParseException {
+        var source = "var a=1.0*2.0*3.0";
+        var astNode = Parser.parse(source);
+
+        var translator = new Translator();
+        var program = translator.translate(astNode);
+        var code = program.toString();
+
+        String expected = "p0 = 2.0 * 3.0\n" +
+                "p1 = 1.0 * p0\n" +
+                "a = p1";
+        assertEquals(expected, code);
+    }
+
+
 }

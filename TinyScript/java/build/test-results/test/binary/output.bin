@@ -1,0 +1,10 @@
+L0:
+p0 = n == 0
+IF p0 ELSE_GOTO L1
+	RETURN 1
+L1:
+p3 = n - 1
+PARAMp3
+CALL
+p4 = p1 * n
+RETURN p4

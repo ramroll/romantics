@@ -60,4 +60,12 @@ public class SymbolTable {
         child.parent = this;
         this.children.add(child);
     }
+
+    public Address getSymbol(int i) {
+        return this.symbols.get(0);
+    }
+
+    public int size() {
+        return this.symbols.size();
+    }
 }
