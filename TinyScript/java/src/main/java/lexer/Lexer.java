@@ -29,8 +29,10 @@ public class Lexer {
             if(c == '/') {
                 if(lookahead == '/') {
                     while(it.hasNext() && (c = it.next()) != '\n');
+                    continue;//单行注释
                 }
                 else if(lookahead == '*') {
+                    it.next();//多读一个* 避免/*/通过
                     boolean valid = false;
                     while(it.hasNext()) {
                         char p = it.next();
