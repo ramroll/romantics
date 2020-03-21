@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Test;
 
 import java.io.FileNotFoundException;
 import java.io.UnsupportedEncodingException;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -73,6 +74,19 @@ public class LexerTests {
         var lexer = new Lexer();
         var tokens = lexer.analyse(source.chars().mapToObj(x -> (char)x));
         assertEquals(3, tokens.size());
+    }
+
+    @Test
+    public void test_deleteErrorComment() throws LexicalException {
+        var errorSource="/*/";
+        var lexer = new Lexer();
+        try{
+            List<Token> tokens = lexer.analyse(errorSource.chars().mapToObj(x ->(char)x));
+        }catch (Exception e){
+            return;
+        }
+
+        throw new LexicalException("error");
     }
 
     @Test

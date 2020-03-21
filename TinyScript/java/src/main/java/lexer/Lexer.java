@@ -32,6 +32,7 @@ public class Lexer {
                     continue;
                 }
                 else if(lookahead == '*') {
+                    it.next();//多读一个* 避免/*/通过
                     boolean valid = false;
                     while(it.hasNext()) {
                         char p = it.next();
