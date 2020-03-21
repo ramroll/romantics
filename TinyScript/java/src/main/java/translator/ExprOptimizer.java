@@ -1,4 +1,4 @@
-package translator.optimizer;
+package translator;
 
 import parser.ast.ASTNode;
 

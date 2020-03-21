@@ -2,40 +2,24 @@ package translator;
 
 import org.apache.commons.lang3.StringUtils;
 
-import javax.naming.directory.Attributes;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Hashtable;
 
 public class TAProgram {
 
-    private ArrayList<TACode> opcodes = new ArrayList<>();
-    private Hashtable<String, Address> labels = new Hashtable<>();
+    private ArrayList<TAInstruction> opcodes = new ArrayList<>();
+    private Hashtable<String, TAValue> labels = new Hashtable<>();
     private int labelCounter = 0;
-    private Hashtable<Integer, Address> lineLabels = new Hashtable<>();
+    private Hashtable<Integer, TAValue> lineLabels = new Hashtable<>();
 
-    public void add(TACode code) {
+    public void add(TAInstruction code) {
         opcodes.add(code);
     }
 
-    public ArrayList<TACode> getOpCodes() {
+    public ArrayList<TAInstruction> getOpCodes() {
         return opcodes;
     }
 
-
-
-
-
-    public TACode createIfCode(Address exprResult) {
-        var code = new TACode(TACodeTypes.IF_GOTO);
-        code.setArg1(exprResult);
-        opcodes.add(code);
-        return code;
-    }
-
-    public TACode lastOpCode() {
-        return this.opcodes.get(this.opcodes.size() - 1);
-    }
 
     @Override
     public String toString() {
@@ -46,18 +30,16 @@ public class TAProgram {
         return StringUtils.join(lines, "\n");
     }
 
-    public void bindLabelToNext(Address labelAddr) {
-        labelAddr.offset = this.opcodes.size();
-        this.lineLabels.put(labelAddr.offset, labelAddr);
-        this.labels.put(labelAddr.label, labelAddr);
-    }
-
-    public TACode addLabel() {
+    public TAInstruction addLabel() {
         var label = "L" + labelCounter++;
-        var taCode = new TACode(TACodeTypes.LABEL);
-        taCode.setResult(new Address(label));
+        var taCode = new TAInstruction(TAOpCodeType.LABEL, null, null, null, null);
+        taCode.setArg1(label);
         opcodes.add(taCode);
         return taCode;
+    }
+
+    public TAInstruction lastOpCode() {
+        return this.opcodes.get(opcodes.size()-1);
     }
 }
 

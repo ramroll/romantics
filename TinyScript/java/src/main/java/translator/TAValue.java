@@ -2,30 +2,20 @@ package translator;
 
 import lexer.Token;
 
-public class Address {
-
+/**
+ * 一个值或者变量的集合体
+ */
+public class TAValue {
 
     SymbolTable parent;
     int offset;
     Token lexeme;
     String label;
-    int value;
-    public Address(){}
+    public TAValue(){}
 
-    public Address(Token lexeme) {
+    public TAValue(Token lexeme) {
         this.lexeme = lexeme;
     }
-
-    public Address(String label) {
-        this.label = label;
-    }
-
-    public static Object fromValue(int value) {
-        var addr = new Address();
-        addr.value = value;
-        return addr;
-    }
-
 
     public void setParent(SymbolTable parent) {
         this.parent = parent;

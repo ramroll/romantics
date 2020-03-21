@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="translator.TransIfStmtTests" tests="3" skipped="0" failures="0" errors="0" timestamp="2020-03-21T14:19:07" hostname="DESKTOP-3FBV0PF" time="0.06">
+  <properties/>
+  <testcase name="testIfElseStmt()" classname="translator.TransIfStmtTests" time="0.045"/>
+  <testcase name="testIfStmt()" classname="translator.TransIfStmtTests" time="0.003"/>
+  <testcase name="testIfElseIf()" classname="translator.TransIfStmtTests" time="0.01"/>
+  <system-out><![CDATA[IF a ELSE_GOTO L0
+b = 1
+L0:
+p0 = a == 1
+IF p0 ELSE_GOTO L0
+b = 100
+GOTO L5
+L0:
+p1 = a == 2
+IF p1 ELSE_GOTO L1
+b = 500
+GOTO L4
+L1:
+p2 = a == 3
+IF p2 ELSE_GOTO L2
+p0 = a * 1000
+b = p0
+GOTO L3
+L2:
+b = -1
+L3:
+L4:
+L5:
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

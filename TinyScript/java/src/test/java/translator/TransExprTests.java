@@ -5,10 +5,7 @@ import org.junit.jupiter.api.Test;
 import parser.Parser;
 import parser.util.GraphvizHelpler;
 import parser.util.ParseException;
-import translator.optimizer.ExprOptimizer;
 
-import java.io.FileNotFoundException;
-import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -16,7 +13,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class TransExprTests {
 
-    void assertOpcodes(String[] lines, ArrayList<TACode> opcodes) {
+    void assertOpcodes(String[] lines, ArrayList<TAInstruction> opcodes) {
         for(int i = 0; i < opcodes.size(); i++) {
             var opcode = opcodes.get(i);
             var strVal = opcode.toString();
@@ -24,22 +21,6 @@ public class TransExprTests {
         }
     }
 
-    @Test
-    public void transFactorExpr() throws LexicalException, ParseException {
-        var source = "a";
-        var astNode = Parser.parse("a");
-        var expr = astNode.getChild(0);
-        var translator = new Translator();
-        var program = new TAProgram();
-        var symbolTable = new SymbolTable();
-        translator.translateExpr(program, expr, symbolTable);
-
-        System.out.println(program.toString());
-
-
-
-
-    }
 
     @Test
     public void transExpr() throws LexicalException, ParseException {

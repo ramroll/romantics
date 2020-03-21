@@ -1,6 +1,6 @@
 package translator;
 
-public enum TACodeTypes {
+public enum TAOpCodeType {
     COPY,
     GOTO,
     IF_GOTO,

@@ -2,33 +2,22 @@ package translator;
 
 import org.apache.commons.lang3.NotImplementedException;
 
-public class TACode {
+public class TAInstruction {
 
-    private Address arg1;
-    private Address arg2;
-    private Address result;
+    private Object arg1;
+    private Object arg2;
     private String op;
-    private TACodeTypes type;
+    private TAValue result;
+    private TAOpCodeType type;
     private String label = null;
 
-    public TACode(TACodeTypes type, Address result, String op, Address arg1, Address arg2) {
-        this.type = type;
+    public TAInstruction(TAOpCodeType type, TAValue result, String op, Object arg1, Object arg2) {
         this.op = op;
+        this.type = type;
         this.arg1 = arg1;
         this.arg2 = arg2;
         this.result = result;
     }
-
-    public TACode(TACodeTypes type) {
-        this.type = type;
-
-    }
-
-    public TACode(TACodeTypes type, Address arg1) {
-        this.type = type;
-        this.arg1 = arg1;
-    }
-
 
     @Override
     public String toString() {
@@ -48,17 +37,17 @@ public class TACode {
                     ) ;
                 }
             case IF_GOTO:
-                return String.format("IF %s ELSE_GOTO %s", this.arg1, this.arg2.label);
+                return String.format("IF %s ELSE_GOTO %s", this.arg1, this.arg2);
             case GOTO:
-                return String.format("GOTO %s", this.arg1.label);
+                return String.format("GOTO %s", (String)this.arg1);
             case LABEL:
-                return String.format(this.result.label + ":");
+                return String.format(this.arg1 + ":");
             case RETURN:
-                return "RETURN " + this.arg1.lexeme.getValue();
+                return "RETURN " + ((TAValue)this.arg1).lexeme.getValue();
             case PARAM:
-                return "PARAM" + this.arg1.lexeme.getValue();
+                return "PARAM " + ((TAValue)this.arg1).lexeme.getValue();
             case CALL:
-                return "CALL";
+                return "CALL " + ((TAValue)this.arg1).label;
 
         }
         throw new NotImplementedException("Unkonw opcode type:" + this.type);
@@ -66,25 +55,25 @@ public class TACode {
 
     }
 
-    public Address getResult() {
+    public TAValue getResult() {
         return result;
     }
 
-    public void setArg1(Address addr) {
-        this.arg1 = addr;
+    public void setArg1(Object arg) {
+        this.arg1 = arg;
     }
 
-    public Address getArg1() {
+    public Object getArg1() {
         return this.arg1;
     }
 
-    public void setArg2(Address addr) {
-        this.arg2 = addr;
+    public void setArg2(Object arg) {
+        this.arg2 = arg;
     }
 
-    public Address getArg2() {return this.arg2;}
+    public Object getArg2() {return this.arg2;}
 
-    public void setResult(Address address) {
+    public void setResult(TAValue address) {
         this.result = address;
 
     }
