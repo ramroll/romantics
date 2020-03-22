@@ -35,15 +35,15 @@ public class Expr extends ASTNode {
     //    E_(t) -> op(t) E(t) E_(t) | ε
 
     private static ASTNode E(int k, PeekTokenIterator it) throws ParseException {
-        if(k < table.size() - 1) {
-            return combine( it, () -> E( k+1, it), () -> E_(k, it));
-        } else {
-            return race(
-                    it,
-                    () -> combine( it, () -> F(it), () -> E_( k, it)),
-                    () -> combine( it, () -> U(it), () -> E_( k, it))
-            );
-        }
+            if(k < table.size() - 1) {
+                return combine( it, () -> E( k+1, it), () -> E_(k, it));
+            } else {
+                return race(
+                        it,
+                        () -> combine( it, () -> F(it), () -> E_( k, it)),
+                        () -> combine( it, () -> U(it), () -> E_( k, it))
+                );
+            }
     }
 
     private static ASTNode E_(int k, PeekTokenIterator it) throws ParseException {

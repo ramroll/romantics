@@ -113,6 +113,7 @@ public class Lexer {
         var file = new File(src);
         var fileStream = new FileInputStream(file);
         var inputStreamReader = new InputStreamReader(fileStream, "UTF-8");
+
         var br = new BufferedReader(inputStreamReader);
 
 
