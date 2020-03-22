@@ -58,6 +58,36 @@ describe("Stmts", () => {
 
   })
 
+  it("function", () => {
+    const it = Lexer.fromFile(path.resolve(__dirname, "../../example/function.ts"))
+    const functionStmt = Stmt.parse(it)
+
+    const args = functionStmt.getArgs()
+
+    assert.equal(args.getChild(0).getLexeme().getValue(), 'a')
+    assert.equal(args.getChild(1).getLexeme().getValue(), 'b')
+
+    const type = functionStmt.getFuncType()
+    assert.equal(type, "int")
+
+    const functionVariable = functionStmt.getFunctionVariable()
+    assert.equal(functionVariable.getLexeme().getValue(), "add")
+
+    const block = functionStmt.getBlock()
+    assert.equal(block.getChild(0) instanceof ReturnStmt, true)
+
+  })
+
+  it("function1", () => {
+    const it = Lexer.fromFile(path.resolve(__dirname, "../../example/recursion.ts"))
+    const functionStmt = Stmt.parse(it)
+
+    assert.equal(ParserUtils.toBFSString(functionStmt, 4), "func fact args block")
+    assert.equal(ParserUtils.toBFSString(functionStmt.getArgs(), 2), "args n")
+    assert.equal(ParserUtils.toBFSString(functionStmt.getBlock(), 3), "block if return")
+
+  })
+
 })
 
 function createTokenIt(src) {
