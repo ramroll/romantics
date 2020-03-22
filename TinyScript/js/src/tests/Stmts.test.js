@@ -1,14 +1,10 @@
 const Lexer = require("../lexer/Lexer");
 const arrayToGenerator = require("../common/arrayToGenerator");
 const PeekTokenIterator = require("../parser/util/PeekTokenIterator");
-const DeclareStmt = require("../parser/ast/DeclareStmt");
-const AssignStmt = require("../parser/ast/AssignStmt");
 const ParserUtils = require("../parser/util/ParserUtils");
-const ReturnStmt = require('../parser/ast/ReturnStmt')
-const IfStmt = require("../parser/ast/IFStmt")
-const Stmt = require("../parser/ast/Stmt")
 const path = require('path')
 const { assert } = require("chai");
+const {DeclareStmt, AssignStmt, IfStmt, Stmt, ReturnStmt} = require("../parser/ast/index")
 describe("Stmts", () => {
   it("declare", () => {
     const it = createTokenIt("var i = 100 * 2");
@@ -24,66 +20,41 @@ describe("Stmts", () => {
 
   it("ifStmt", () => {
     const it = createTokenIt(`if(a){
-      a = 1
+      var a = 1
     }`);
 
     const stmt = IfStmt.parse(it) 
     const expr = stmt.getExpr();
     const block = stmt.getBlock();
     const assignStmt = block.getChild(0);
+    const elseBlock = stmt.getChild(2)
 
     assert.equal(expr.getLexeme().getValue(), "a")
     assert.equal(assignStmt.getLexeme().getValue(), "=")
-
-  });
-
-  it('ifElseStmt', () => {
-      const it = createTokenIt(`if(a) {
-          a = 1
-        } else {
-          a = 2
-          a = a * 3
-        }`
-      )
-      var stmt = IfStmt.parse(it)
-      var expr = stmt.getExpr()
-      var block = stmt.getBlock()
-      var assignStmt = block.getChild(0)
-      var elseBlock = stmt.getChild(2)
-      var assignStmt2 = elseBlock.getChild(0)
-
-      assert.equal(expr.getLexeme().getValue(), "a")
-      assert.equal(assignStmt.getLexeme().getValue(), "=")
-      assert.equal(assignStmt2.getLexeme().getValue(), "=")
-      assert.equal(elseBlock.getChildren().length, 2)
-  })
-
-  it("function", () => {
-    const it = Lexer.fromFile(path.resolve(__dirname, "../../example/function.ts"))
-    const functionStmt = Stmt.parse( it )
-
-    const args = functionStmt.getArgs()
-    assert.equal(args.getChild(0).getLexeme().getValue(), "a")
-    assert.equal(args.getChild(1).getLexeme().getValue(), "b")
-
-    const type = functionStmt.getFuncType()
-    assert.equal(type, "int");
-
-    const functionVariable = functionStmt.getFunctionVariable();
-    assert.equal(functionVariable.getLexeme().getValue(), "add")
-
-    const block = functionStmt.getBlock();
-    assert.equal(block.getChild(0) instanceof ReturnStmt, true);
+    assert.equal(null, elseBlock)
 
   })
 
-  it('function1', () => {
-    const it = Lexer.fromFile(path.resolve(__dirname, "../../example/recursion.ts"));
-    const functionStmt = Stmt.parse( it );
+  it("ifElse", () => {
+    const it = createTokenIt(`if(a){
+      a = 1
+    } else {
+      a = 2
+      a = a * 3
+    }`)
 
-    assert.equal(ParserUtils.toBFSString(functionStmt, 4) , "func fact args block")
-    assert.equal(ParserUtils.toBFSString(functionStmt.getArgs(), 2), "args n");
-    assert.equal(ParserUtils.toBFSString(functionStmt.getBlock(), 3), "block if return");
+    const stmt = IfStmt.parse(it)
+    const expr = stmt.getExpr()
+    const block = stmt.getBlock()
+    const assignStmt = block.getChild(0)
+    const elseBlock = stmt.getChild(2)
+    const assignStmt2 = elseBlock.getChild(0)
+
+    assert.equal(expr.getLexeme().getValue(), "a")
+    assert.equal(assignStmt.getLexeme().getValue(), "=")
+    assert.equal(assignStmt2.getLexeme().getValue(), "=")
+    assert.equal(elseBlock.getChildren().length, 2)
+
 
   })
 

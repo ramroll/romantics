@@ -7,7 +7,7 @@ class PeekTokenIterator extends PeekIterator{
     }
 
     nextMatch(value) {
-        var token = this.next()
+        const token = this.next()
         if(token.getValue() !== value) {
             throw ParseException.fromToken(token)
         }
@@ -15,7 +15,7 @@ class PeekTokenIterator extends PeekIterator{
     }
 
     nextMatch1(type) {
-        var token = this.next()
+        const token = this.next()
         if(token.getType() !== type) {
             throw ParseException.fromToken(token)
         }

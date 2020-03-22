@@ -39,7 +39,7 @@ FunctionDeclareStmt.parse = (it) => {
     const args = FunctionArgs.parse(it)
     it.nextMatch(")")
     func.addChild(args)
-    var keyword = it.nextMatch1(TokenType.KEYWORD)
+    const keyword = it.nextMatch1(TokenType.KEYWORD)
     if(!keyword.isType()) {
         throw new ParseException(keyword)
     }
