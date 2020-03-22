@@ -15,7 +15,7 @@ class IfStmt extends Stmt {
   }
 
   getElseBlock() {
-    var block = this.getChild(2);
+    const block = this.getChild(2);
     if (block instanceof Block) {
       return block;
     }
@@ -23,7 +23,7 @@ class IfStmt extends Stmt {
   }
 
   getElseIfStmt() {
-    var ifStmt = this.getChild(2);
+    const ifStmt = this.getChild(2);
     if (ifStmt instanceof IfStmt) {
       return ifStmt;
     }

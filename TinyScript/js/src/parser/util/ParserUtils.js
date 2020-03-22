@@ -18,7 +18,7 @@ class ParserUtils {
         for(const child of node.getChildren()) {
             prts.push(ParserUtils.toPostfixExpression(child));
         }
-        var lexemeStr = node.getLexeme() != null ? node.getLexeme().getValue() : "";
+        const lexemeStr = node.getLexeme() != null ? node.getLexeme().getValue() : "";
         if(lexemeStr.length > 0) {
             return prts.join(" ") + " " + lexemeStr
         } else {
@@ -33,8 +33,11 @@ class ParserUtils {
         queue.push(root)
 
         let c = 0
+        //     a
+        //   b     c
+        // d  e  f   g
         while(queue.length > 0 && c++ < max) {
-            var node = queue.shift()
+            const node = queue.shift()
             list.push(node.getLabel())
             for(const child of node.getChildren()) {
                 queue.push(child);

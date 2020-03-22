@@ -11,8 +11,8 @@ module.exports = Factor;
 
 const { Variable, Scalar} = require("./index");
 Factor.parse = it => {
-  var token = it.peek();
-  var type = token.getType();
+  const token = it.peek();
+  const type = token.getType();
 
   if (type == TokenType.VARIABLE) {
     it.next();

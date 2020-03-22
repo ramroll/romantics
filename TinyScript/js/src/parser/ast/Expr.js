@@ -23,7 +23,7 @@ const { Factor, CallExpr } = require("./index");
  * left: E(k) -> E(k) op(k) E(k+1) | E(k+1)
  * right:
  *   E(k) -> E(k+1) E_(k)
- *     // var e = new Expr(); e.left = E(k+1); e.right = E_(k).child(0)
+ *     // const e = new Expr(); e.left = E(k+1); e.right = E_(k).child(0)
  *     // combine
  *   E_(k) -> op(k) E(k+1) E_(k) | ε
  *     // race

@@ -1,6 +1,9 @@
 const ASTNodeTypes = require('./ASTNodeTypes')
 const TokenType = require('../../lexer/TokenType')
+const ParseException = require('../util/ParseException')
 const {Stmt} = require('./index')
+
+// func v(args...) int Block
 class FunctionDeclareStmt extends Stmt {
     constructor() {
         super(ASTNodeTypes.FUNCTION_DECLARE_STMT, 'func')
@@ -25,27 +28,31 @@ class FunctionDeclareStmt extends Stmt {
 
 module.exports = FunctionDeclareStmt 
 
+
 const {Factor, FunctionArgs, Block} = require('./index')
-FunctionDeclareStmt.parse = (it) => {
-    it.nextMatch("func");
+FunctionDeclareStmt.parse = it => {
+    it.nextMatch('func')
 
     // func add() int {}
     const func = new FunctionDeclareStmt()
-    const lexeme = it.peek()
+
     const functionVariable = Factor.parse(it)
-    func.setLexeme(lexeme)
+    func.setLexeme(functionVariable.getLexeme())
     func.addChild(functionVariable)
-    it.nextMatch("(")
+    it.nextMatch('(')
     const args = FunctionArgs.parse(it)
-    it.nextMatch(")")
     func.addChild(args)
-    var keyword = it.nextMatch1(TokenType.KEYWORD)
+    it.nextMatch(')')
+
+    const keyword = it.nextMatch1(TokenType.KEYWORD)
     if(!keyword.isType()) {
-        throw new ParseException(keyword)
+        throw ParseException.fromToken(keyword)
     }
 
     functionVariable.setTypeLexeme(keyword)
     const block = Block.parse(it)
     func.addChild(block)
     return func
+
+
 }

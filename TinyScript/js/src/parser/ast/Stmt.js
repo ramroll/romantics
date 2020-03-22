@@ -8,8 +8,15 @@ class Stmt extends ASTNode {
 
 module.exports = Stmt
 
-const {AssignStmt, DeclareStmt, FunctionDeclareStmt, ReturnStmt, IfStmt, Expr} = require('./index')
 Stmt.parse = (it) => {
+    const {
+      AssignStmt,
+      DeclareStmt,
+      FunctionDeclareStmt,
+      ReturnStmt,
+      IfStmt,
+      Expr
+    } = require("./index");
     if(!it.hasNext()) {
         return null;
     }
@@ -19,7 +26,7 @@ Stmt.parse = (it) => {
 
     if(token.isVariable() && lookahead.getValue() === "=") {
         return AssignStmt.parse(it);
-    } else if(token.getValue() === "const") {
+    } else if(token.getValue() === "var") {
         return DeclareStmt.parse(it);
     } else if(token.getValue() === "func") {
         return FunctionDeclareStmt.parse(it)

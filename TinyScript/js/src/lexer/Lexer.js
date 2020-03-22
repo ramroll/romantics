@@ -3,8 +3,8 @@ const Token = require("./Token");
 const TokenType = require("./TokenType");
 const AlphabetHelper = require("./AlphabetHelper");
 const LexicalException = require("./LexicalException");
-const arrayToGenerator = require('../common/arrayToGenerator')
-const PeekTokenIterator = require('../parser/util/PeekTokenIterator')
+const arrayToGenerator = require("../common/arrayToGenerator");
+const PeekTokenIterator = require("../parser/util/PeekTokenIterator");
 const fs = require("fs");
 
 class Lexer {
@@ -19,7 +19,7 @@ class Lexer {
       }
       let lookahead = it.peek();
 
-      if (c == " " || c == "\n" ||c == "\r") {
+      if (c == " " || c == "\n" || c == "\r") {
         continue;
       }
 
@@ -27,6 +27,7 @@ class Lexer {
       if (c == "/") {
         if (lookahead == "/") {
           while (it.hasNext() && (c = it.next()) != "\n");
+          continue;
         } else if (lookahead == "*") {
           let valid = false;
           while (it.hasNext()) {
@@ -38,38 +39,12 @@ class Lexer {
             }
           }
 
-<<<<<<< HEAD
           if (!valid) {
             throw new LexicalException("comment not matched");
           }
           continue;
         }
       }
-=======
-            // 提取注释的程序
-            if(c == '/') {
-                if(lookahead == '/') {
-                    while(it.hasNext() && (c = it.next()) != '\n');
-                    continue;
-                } else if(lookahead == '*') {
-                    let valid = false
-                    while(it.hasNext()) {
-                        const p = it.next()
-                        if(p == '*' && it.peek() == '/') {
-                            valid = true
-                            it.next()
-                            break
-                        }
-                    }
-
-                    if(!valid) {
-                        throw new LexicalException("comment not matched")
-                    }
-                    continue
-                }
-
-            }
->>>>>>> master
 
       if (c == "{" || c == "}" || c == "(" || c == ")") {
         tokens.push(new Token(TokenType.BRACKET, c));
@@ -119,11 +94,11 @@ class Lexer {
   }
 
   static fromFile(src) {
-    const content = fs.readFileSync(src, 'utf-8')
-    var lexer = new Lexer()
+    const content = fs.readFileSync(src, "utf-8");
+    const lexer = new Lexer();
     return new PeekTokenIterator(
       arrayToGenerator(lexer.analyse(arrayToGenerator(content)))
-    )
+    );
   }
 }
 

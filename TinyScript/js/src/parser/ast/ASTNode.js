@@ -11,6 +11,7 @@ class ASTNode {
     }
 
     getChild(index) {
+        if(!this.children[index]) {return null}
         return this.children[index]
     }
 
