@@ -81,4 +81,8 @@ public class TAInstruction {
     public TAInstructionType getType() {
         return this.type;
     }
+
+    public String getOp() {
+        return this.op;
+    }
 }
