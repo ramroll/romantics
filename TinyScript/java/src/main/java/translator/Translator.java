@@ -10,6 +10,8 @@ public class Translator {
         var program = new TAProgram();
         var symbolTable = new SymbolTable();
 
+        program.setSymbolTable(symbolTable);
+
         for(var child : astNode.getChildren()) {
             translateStmt(program, child, symbolTable);
         }
@@ -39,15 +41,13 @@ public class Translator {
 
     private void translateReturnStmt(TAProgram program, ASTNode node, SymbolTable symbolTable) {
         var resultValue = translateExpr(program, node.getChild(0), symbolTable);
-        program.add(new TAInstruction(TAOpCodeType.RETURN, null, null, resultValue, null));
+        program.add(new TAInstruction(TAInstructionType.RETURN, null, null, resultValue, null));
     }
 
     private void translateFunctionDeclareStmt(TAProgram program, ASTNode node, SymbolTable parent) throws ParseException {
         var label = program.addLabel();
 
-        var symbol = new TAValue();
-        symbol.lexeme = node.getLexeme();
-        symbol.label = (String)label.getArg1();
+        var symbol = Symbol.createLabelSymbol((String)label.getArg1(), node.getLexeme());
 
         label.setArg2(node.getLexeme().getValue());
         var func = (FunctionDeclareStmt)node;
@@ -56,7 +56,7 @@ public class Translator {
         parent.addChild(symbolTable);
         symbolTable.addSymbol(symbol);
         for(var arg : args.getChildren()) {
-            symbolTable.createAddressByLexeme(arg.getLexeme());
+            symbolTable.createSymbolByLexeme(arg.getLexeme());
         }
 
         for(var child : func.getBlock().getChildren()) {
@@ -70,17 +70,17 @@ public class Translator {
         if(symbolTable.findSymbolByLexeme(lexeme) != null) {
             throw new ParseException("Syntax Error, Identifier " + lexeme.getValue() + " is already defined.");
         }
-        var assigned = symbolTable.createAddressByLexeme(node.getChild(0).getLexeme());
+        var assigned = symbolTable.createSymbolByLexeme(node.getChild(0).getLexeme());
         var expr = node.getChild(1);
         var addr = translateExpr(program, expr, symbolTable);
-        program.add(new TAInstruction(TAOpCodeType.COPY, assigned, "=", addr, null));
+        program.add(new TAInstruction(TAInstructionType.COPY, assigned, "=", addr, null));
     }
 
     private void translateAssignStmt(TAProgram program, ASTNode node, SymbolTable symbolTable) {
-        var assigned = symbolTable.createAddressByLexeme(node.getChild(0).getLexeme());
+        var assigned = symbolTable.createSymbolByLexeme(node.getChild(0).getLexeme());
         var expr = node.getChild(1);
         var addr = translateExpr(program, expr, symbolTable);
-        program.add(new TAInstruction(TAOpCodeType.COPY, assigned, "=", addr, null));
+        program.add(new TAInstruction(TAInstructionType.COPY, assigned, "=", addr, null));
 
     }
 
@@ -101,14 +101,14 @@ public class Translator {
     public void translateIfStmt(TAProgram program, IfStmt node, SymbolTable symbolTable) throws ParseException {
         var expr = node.getExpr();
         var exprAddr = translateExpr(program,expr,symbolTable);
-        var ifOpCode = new TAInstruction(TAOpCodeType.IF_GOTO, null, null, exprAddr, null);
+        var ifOpCode = new TAInstruction(TAInstructionType.IF_GOTO, null, null, exprAddr, null);
         program.add(ifOpCode);
 
         translateBlock(program, (Block)node.getBlock(), symbolTable);
 
         TAInstruction gotoInstruction = null;
         if(node.getChild(2) != null) {
-            gotoInstruction = new TAInstruction(TAOpCodeType.GOTO, null, null, null, null);
+            gotoInstruction = new TAInstruction(TAInstructionType.GOTO, null, null, null, null);
             program.add(gotoInstruction);
             var labelEndIf = program.addLabel();
             ifOpCode.setArg2(labelEndIf.getArg1());
@@ -136,13 +136,13 @@ public class Translator {
      * Expr1 -> Factor
      *  T: Expr1.addr = symbolTable.find(factor)
      */
-    public TAValue translateExpr(
+    public Symbol translateExpr(
             TAProgram program,
             ASTNode node,
             SymbolTable symbolTable) {
 
         if(node.isValueType()) {
-            var addr = symbolTable.createAddressByLexeme(node.getLexeme());
+            var addr = symbolTable.createSymbolByLexeme(node.getLexeme());
             node.setProp("addr", addr);
             return addr;
         }
@@ -160,18 +160,18 @@ public class Translator {
             }
 
             program.add(new TAInstruction(
-                    TAOpCodeType.COPY,
-                    (TAValue)(node.getProp("addr")),
+                    TAInstructionType.COPY,
+                    (Symbol)(node.getProp("addr")),
                     node.getLexeme().getValue(),
-                    (TAValue)(node.getChild(0).getProp("addr")),
-                    (TAValue)(node.getChild(1).getProp("addr"))
+                    (Symbol)(node.getChild(0).getProp("addr")),
+                    (Symbol)(node.getChild(1).getProp("addr"))
             ));
             return program.lastOpCode().getResult();
         }
         throw new NotImplementedException("Unexpected node type :" + node.getType());
     }
 
-    private TAValue translateCallExpr(TAProgram program, ASTNode node, SymbolTable symbolTable) {
+    private Symbol translateCallExpr(TAProgram program, ASTNode node, SymbolTable symbolTable) {
 
         var factor = node.getChild(0);
         var returnValue = symbolTable.createVariable();
@@ -179,10 +179,10 @@ public class Translator {
         for(int i = node.getChildren().size()-1; i >= 1; i--) {
             var expr = node.getChildren().get(i);
             var addr = translateExpr(program, (Expr)expr, symbolTable);
-            program.add(new TAInstruction(TAOpCodeType.PARAM, null, null, addr, null));
+            program.add(new TAInstruction(TAInstructionType.PARAM, null, null, addr, null));
         }
         var funcAddr = symbolTable.findSymbolByLexeme(factor.getLexeme());
-        program.add(new TAInstruction(TAOpCodeType.CALL, null, null, funcAddr, null));
+        program.add(new TAInstruction(TAInstructionType.CALL, null, null, funcAddr, null));
         return returnValue;
     }
 }

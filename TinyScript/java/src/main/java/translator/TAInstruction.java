@@ -7,11 +7,11 @@ public class TAInstruction {
     private Object arg1;
     private Object arg2;
     private String op;
-    private TAValue result;
-    private TAOpCodeType type;
+    private Symbol result;
+    private TAInstructionType type;
     private String label = null;
 
-    public TAInstruction(TAOpCodeType type, TAValue result, String op, Object arg1, Object arg2) {
+    public TAInstruction(TAInstructionType type, Symbol result, String op, Object arg1, Object arg2) {
         this.op = op;
         this.type = type;
         this.arg1 = arg1;
@@ -43,11 +43,11 @@ public class TAInstruction {
             case LABEL:
                 return String.format(this.arg1 + ":");
             case RETURN:
-                return "RETURN " + ((TAValue)this.arg1).lexeme.getValue();
+                return "RETURN " + ((Symbol)this.arg1).lexeme.getValue();
             case PARAM:
-                return "PARAM " + ((TAValue)this.arg1).lexeme.getValue();
+                return "PARAM " + ((Symbol)this.arg1).lexeme.getValue();
             case CALL:
-                return "CALL " + ((TAValue)this.arg1).label;
+                return "CALL " + ((Symbol)this.arg1).label;
 
         }
         throw new NotImplementedException("Unkonw opcode type:" + this.type);
@@ -55,7 +55,7 @@ public class TAInstruction {
 
     }
 
-    public TAValue getResult() {
+    public Symbol getResult() {
         return result;
     }
 
@@ -73,8 +73,12 @@ public class TAInstruction {
 
     public Object getArg2() {return this.arg2;}
 
-    public void setResult(TAValue address) {
+    public void setResult(Symbol address) {
         this.result = address;
 
+    }
+
+    public TAInstructionType getType() {
+        return this.type;
     }
 }

@@ -42,7 +42,7 @@ public class TransExprTests {
                 "p4 = p0 + p3",
                 "p5 = a + p4"
         };
-        assertOpcodes(expectedResults, program.getOpCodes());
+        assertOpcodes(expectedResults, program.getInstructions());
 
     }
 

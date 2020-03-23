@@ -9,22 +9,21 @@ import java.util.List;
 public class SymbolTable {
     private SymbolTable parent = null;
     private List<SymbolTable> children;
-    private List<TAValue> symbols;
+    private List<Symbol> symbols;
     private int tempIndex = 0;
-
+    private int offsetIndex = 0;
 
     public SymbolTable(){
         this.children = new ArrayList<>();
         this.symbols = new ArrayList<>();
     }
 
-    public void addSymbol(TAValue addr) {
-        this.symbols.add(addr);
-        addr.setParent(this);
-        addr.setOffset(this.symbols.size() - 1);
+    public void addSymbol(Symbol symbol) {
+        this.symbols.add(symbol);
+        symbol.setParent(this);
     }
 
-    public TAValue findSymbolByLexeme(Token lexeme) {
+    public Symbol findSymbolByLexeme(Token lexeme) {
         var symbol = this.symbols.stream().filter(x -> x.lexeme.getValue().equals(lexeme.getValue())).findFirst();
         if(!symbol.isEmpty()) {
             return symbol.get();
@@ -35,34 +34,30 @@ public class SymbolTable {
         return null;
     }
 
-    public TAValue createAddressByLexeme(Token lexeme) {
-        TAValue addr = null;
+    public Symbol createSymbolByLexeme(Token lexeme) {
+        Symbol symbol = null;
         if(lexeme.isScalar()) {
-            addr = new TAValue(lexeme);
+            symbol = Symbol.createImmediateSymbol(lexeme);
         } else {
-            addr = findSymbolByLexeme(lexeme);
-            if(addr == null) {
-                addr = new TAValue(lexeme);
+            symbol = findSymbolByLexeme(lexeme);
+            if(symbol == null) {
+                symbol = Symbol.createAddressSymbol(lexeme, this.offsetIndex++);
             }
-            this.addSymbol(addr);
         }
-        return addr;
+        this.addSymbol(symbol);
+        return symbol;
     }
 
-    public TAValue createVariable() {
+    public Symbol createVariable() {
         var lexeme = new Token(TokenType.VARIABLE, "p" + this.tempIndex ++);
-        var addr = new TAValue(lexeme);
-        this.addSymbol(addr);
-        return addr;
+        var symbol = Symbol.createAddressSymbol(lexeme, this.offsetIndex++);
+        this.addSymbol(symbol);
+        return symbol;
     }
 
     public void addChild(SymbolTable child) {
         child.parent = this;
         this.children.add(child);
-    }
-
-    public TAValue getSymbol(int i) {
-        return this.symbols.get(0);
     }
 
     public int size() {
