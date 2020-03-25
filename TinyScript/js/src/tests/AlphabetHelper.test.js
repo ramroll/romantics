@@ -15,7 +15,7 @@ describe("AlphabetHelper", () => {
         assert.equal(false, AlphabetHelper.isOperator(' '))
         assert.isFalse(AlphabetHelper.isOperator(','))
         assert.isFalse(AlphabetHelper.isOperator('.'))
-        assert.isTrue(true, AlphabetHelper.isOperator('-'))
+        assert.isTrue(AlphabetHelper.isOperator('-'))
         assert.equal(true, AlphabetHelper.isNumber('1'))
         assert.equal(true, AlphabetHelper.isNumber('9'))
         assert.equal(false, AlphabetHelper.isNumber('x'))
