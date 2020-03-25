@@ -8,9 +8,7 @@ import java.util.Hashtable;
 public class TAProgram {
 
     private ArrayList<TAInstruction> instructions = new ArrayList<>();
-    private Hashtable<String, Symbol> labels = new Hashtable<>();
     private int labelCounter = 0;
-    private Hashtable<Integer, Symbol> lineLabels = new Hashtable<>();
 
     public void add(TAInstruction code) {
         instructions.add(code);
@@ -42,6 +40,7 @@ public class TAProgram {
     public TAInstruction lastOpCode() {
         return this.instructions.get(instructions.size()-1);
     }
+
 
 
 

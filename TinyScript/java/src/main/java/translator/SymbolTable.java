@@ -4,6 +4,7 @@ import lexer.Token;
 import lexer.TokenType;
 
 import java.util.ArrayList;
+import java.util.Hashtable;
 import java.util.List;
 
 public class SymbolTable {
@@ -62,5 +63,14 @@ public class SymbolTable {
 
     public int size() {
         return this.symbols.size();
+    }
+
+
+    public void __restoreImmediateOffset(int offset) {
+        for(var symbol : this.symbols) {
+            if(symbol.getType() == SymbolType.IMMEDIATE_SYMBOL) {
+                symbol.offset = offset++;
+            }
+        }
     }
 }

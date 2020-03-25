@@ -10,11 +10,11 @@ public class Translator {
         var program = new TAProgram();
         var symbolTable = new SymbolTable();
 
-        program.setSymbolTable(symbolTable);
-
         for(var child : astNode.getChildren()) {
             translateStmt(program, child, symbolTable);
         }
+
+        symbolTable.restoreImmediateOffset();
         return program;
     }
 

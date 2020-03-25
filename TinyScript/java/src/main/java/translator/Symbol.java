@@ -31,6 +31,7 @@ public class Symbol {
 
     static Symbol createLabelSymbol(String label, Token lexeme) {
         var symbol = new Symbol(SymbolType.LABEL_SYMBOL);
+        symbol.label = label;
         symbol.lexeme = lexeme;
         return symbol;
     }
@@ -43,6 +44,10 @@ public class Symbol {
         this.offset = offset;
     }
 
+    public SymbolType getType(){
+        return this.type;
+    }
+
     @Override
     public String toString() {
         return lexeme.getValue();
@@ -50,5 +55,13 @@ public class Symbol {
 
     public void setLexeme(Token lexeme) {
         this.lexeme = lexeme;
+    }
+
+    public int getOffset() {
+        return this.offset;
+    }
+
+    public Token getLexeme() {
+        return this.lexeme;
     }
 }
