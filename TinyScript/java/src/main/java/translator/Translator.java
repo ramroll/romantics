@@ -14,7 +14,7 @@ public class Translator {
             translateStmt(program, child, symbolTable);
         }
 
-        symbolTable.restoreImmediateOffset();
+        program.setStaticSymbols(symbolTable);
         return program;
     }
 

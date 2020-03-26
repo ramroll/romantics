@@ -18,9 +18,15 @@ public class StaticSymbolTable {
         var lexval = symbol.getLexeme().getValue();
         if(!offsetMap.contains(lexval)) {
             offsetMap.put(lexval, symbol);
+            symbol.setOffset(offsetCounter++);
+            symbols.add(symbol);
         } else {
+            var sameSymbol = offsetMap.get(lexval);
+            symbol.setOffset(sameSymbol.offset);
         }
+    }
 
-
+    public int size(){
+        return this.symbols.size();
     }
 }

@@ -13,9 +13,9 @@ public class OpCode {
         this.value = value;
     }
 
-    public static final OpCode ADDI = new OpCode(AddressingType.IMMEDIATE, "ADDI", 0x01);
-    public static final OpCode SUBI = new OpCode(AddressingType.IMMEDIATE, "SUBI", 0x02);
-    public static final OpCode MULTI = new OpCode(AddressingType.IMMEDIATE, "MULTI", 0x03);
+    public static final OpCode ADD = new OpCode(AddressingType.IMMEDIATE, "ADDI", 0x01);
+    public static final OpCode SUB = new OpCode(AddressingType.IMMEDIATE, "SUBI", 0x02);
+    public static final OpCode MULT = new OpCode(AddressingType.IMMEDIATE, "MULTI", 0x03);
 
     public static final OpCode SW = new OpCode(AddressingType.OFFSET, "MULTI", 0x10);
     public static final OpCode LW = new OpCode(AddressingType.OFFSET, "MULTI", 0x11);

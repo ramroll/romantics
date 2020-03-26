@@ -4,13 +4,11 @@ import lexer.Token;
 import lexer.TokenType;
 
 import java.util.ArrayList;
-import java.util.Hashtable;
-import java.util.List;
 
 public class SymbolTable {
     private SymbolTable parent = null;
-    private List<SymbolTable> children;
-    private List<Symbol> symbols;
+    private ArrayList<SymbolTable> children;
+    private ArrayList<Symbol> symbols;
     private int tempIndex = 0;
     private int offsetIndex = 0;
 
@@ -65,12 +63,14 @@ public class SymbolTable {
         return this.symbols.size();
     }
 
-
-    public void __restoreImmediateOffset(int offset) {
-        for(var symbol : this.symbols) {
-            if(symbol.getType() == SymbolType.IMMEDIATE_SYMBOL) {
-                symbol.offset = offset++;
-            }
-        }
+    public ArrayList<Symbol> getSymbols(){
+        return this.symbols;
     }
+
+    public ArrayList<SymbolTable> getChildren(){
+        return this.children;
+    }
+
+
+
 }

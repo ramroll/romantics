@@ -2,6 +2,8 @@ package vm;
 
 import translator.*;
 
+import javax.imageio.plugins.tiff.TIFFField;
+
 public class OpCodeGen {
 
     public OpCodeProgram gen(TAProgram taProgram){
@@ -27,42 +29,28 @@ public class OpCodeGen {
         if(op == null) {
             var offset = arg1.getOffset();
             // case : a = 1
-            //   addi $s0, $0, b
+            //   lw $s0, b($static)
             //   sw $s0 a($sp)
-            //   $s0 <- b
-            //   $s0 -> a
-            if(arg1.getType() == SymbolType.IMMEDIATE_SYMBOL) {
-                var i1 = new Instruction(OpCode.ADDI);
-                i1.opList.add(Register.S0);
-                i1.opList.add(Register.ZERO);
-
-                // 因为是教学，这里只考虑整数的情况
-                i1.opList.add(new ImmediateNumber(
-                        Integer.parseInt(arg1.getLexeme().getValue()))
-                );
-
-                var i2 = Instruction.offsetInstruction(
-                        OpCode.SW, Register.S0, Register.SP, new Offset(result.getOffset()));
-
-                program.add(i1);
-                program.add(i2);
-            }
             // case : a = b
             //   lw $s0 b($sp)
             //   sw $s0 a($sp)
-            else if(arg1.getType() == SymbolType.ADDRESS_SYMBOL) {
-                var i1 = Instruction.offsetInstruction(
-                        OpCode.LW, Register.S0, Register.SP, new Offset(arg1.getOffset()));
-
-                var i2 = Instruction.offsetInstruction(
-                        OpCode.SW, Register.S0, Register.SP, new Offset(result.getOffset()));
-
-                program.add(i1);
-                program.add(i2);
-
-            }
-
+            program.add(Instruction.loadToRegister(Register.S0, arg1));
+            program.add(Instruction.saveToMemory(Register.S0, result));
         } else {
+            var arg2 = (Symbol)ta.getArg2();
+            program.add(Instruction.loadToRegister(Register.S0, arg1));
+            program.add(Instruction.loadToRegister(Register.S1, arg2));
+
+            switch (op) {
+                case "+":
+                    Instruction.add(Register.S0, Register.S0, Register.S2);
+                    Instruction.saveToMemory(Register.S2, result);
+                    break;
+                case "-":
+                    break;
+                case "*":
+                    break;
+            }
 
         }
     }
