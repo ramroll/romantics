@@ -11,6 +11,7 @@ public class Symbol {
     Token lexeme;
     String label;
     int offset;
+    int layerOffset = 0;
     SymbolType type;
     public Symbol(SymbolType type){
         this.type = type;
@@ -33,6 +34,16 @@ public class Symbol {
         var symbol = new Symbol(SymbolType.LABEL_SYMBOL);
         symbol.label = label;
         symbol.lexeme = lexeme;
+        return symbol;
+    }
+
+    public Symbol copy() {
+        var symbol = new Symbol(this.type);
+        symbol.lexeme = this.lexeme;
+        symbol.label = this.label;
+        symbol.offset = this.offset;
+        symbol.layerOffset = this.layerOffset;
+        symbol.type = this.type;
         return symbol;
     }
 
@@ -63,5 +74,13 @@ public class Symbol {
 
     public Token getLexeme() {
         return this.lexeme;
+    }
+
+    public void setLayerOffset(int offset) {
+        this.layerOffset = offset;
+    }
+
+    public int getLayerOffset(){
+        return this.layerOffset;
     }
 }

@@ -1,8 +1,6 @@
-package vm;
+package gen;
 
 import translator.*;
-
-import javax.imageio.plugins.tiff.TIFFField;
 
 public class OpCodeGen {
 

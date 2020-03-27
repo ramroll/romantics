@@ -1,4 +1,4 @@
-package vm;
+package gen;
 
 
 public class OpCode {

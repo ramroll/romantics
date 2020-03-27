@@ -1,5 +1,7 @@
 package translator;
 
+import lexer.Token;
+import lexer.TokenType;
 import org.apache.commons.lang3.NotImplementedException;
 import parser.ast.*;
 import parser.util.ParseException;
@@ -24,6 +26,13 @@ public class Translator {
      */
     public  void translateBlock(TAProgram program, Block block, SymbolTable parent) throws ParseException {
         var symbolTable = new SymbolTable();
+
+        /**
+         * 每个Block增加一个作用域链
+         */
+        var parentOffset = symbolTable.createVariable();
+        parentOffset.setLexeme(new Token(TokenType.INTEGER, symbolTable.localSize()+""));
+
         var pushRecord = new TAInstruction(TAInstructionType.SP, null, null, null, null);
         program.add(pushRecord);
         parent.addChild(symbolTable);
@@ -32,17 +41,20 @@ public class Translator {
         }
         var popRecord = new TAInstruction(TAInstructionType.SP, null, null, null, null);
 
+
         /**
          * 处理活动记录
          */
-        pushRecord.setArg1(symbolTable.size());
-        popRecord.setArg1(symbolTable.size());
-        program.add(pushRecord);
+        pushRecord.setArg1(-symbolTable.localSize());
+        popRecord.setArg1(symbolTable.localSize());
         program.add(popRecord);
     }
 
     public void translateStmt(TAProgram program, ASTNode node, SymbolTable symbolTable) throws ParseException {
         switch (node.getType()) {
+            case BLOCK:
+                translateBlock(program, (Block)node, symbolTable);
+                return;
             case IF_STMT:
                 translateIfStmt(program, (IfStmt)node, symbolTable);
                 return;
@@ -90,7 +102,7 @@ public class Translator {
 
     private void translateDeclareStmt(TAProgram program, ASTNode node, SymbolTable symbolTable) throws ParseException {
         var lexeme = node.getChild(0).getLexeme();
-        if(symbolTable.findSymbolByLexeme(lexeme) != null) {
+        if(symbolTable.exists(lexeme)) {
             throw new ParseException("Syntax Error, Identifier " + lexeme.getValue() + " is already defined.");
         }
         var assigned = symbolTable.createSymbolByLexeme(node.getChild(0).getLexeme());
@@ -197,7 +209,7 @@ public class Translator {
             var addr = translateExpr(program, (Expr)expr, symbolTable);
             program.add(new TAInstruction(TAInstructionType.PARAM, null, null, addr, i));
         }
-        var funcAddr = symbolTable.findSymbolByLexeme(factor.getLexeme());
+        var funcAddr = symbolTable.cloneFromSymbolTree(factor.getLexeme(), 0);
         program.add(new TAInstruction(TAInstructionType.CALL, null, null, funcAddr, null));
         return returnValue;
     }

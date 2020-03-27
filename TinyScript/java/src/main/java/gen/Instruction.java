@@ -1,4 +1,4 @@
-package vm;
+package gen;
 
 import translator.Symbol;
 import translator.SymbolType;
