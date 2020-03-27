@@ -18,6 +18,29 @@ public class Translator {
         return program;
     }
 
+    /**
+     * 语句块翻译
+     * @throws ParseException
+     */
+    public  void translateBlock(TAProgram program, Block block, SymbolTable parent) throws ParseException {
+        var symbolTable = new SymbolTable();
+        var pushRecord = new TAInstruction(TAInstructionType.SP, null, null, null, null);
+        program.add(pushRecord);
+        parent.addChild(symbolTable);
+        for(var child : block.getChildren()) {
+            translateStmt(program, child, symbolTable);
+        }
+        var popRecord = new TAInstruction(TAInstructionType.SP, null, null, null, null);
+
+        /**
+         * 处理活动记录
+         */
+        pushRecord.setArg1(symbolTable.size());
+        popRecord.setArg1(symbolTable.size());
+        program.add(pushRecord);
+        program.add(popRecord);
+    }
+
     public void translateStmt(TAProgram program, ASTNode node, SymbolTable symbolTable) throws ParseException {
         switch (node.getType()) {
             case IF_STMT:
@@ -84,13 +107,6 @@ public class Translator {
 
     }
 
-    public  void translateBlock(TAProgram program, Block block, SymbolTable parent) throws ParseException {
-        var symbolTable = new SymbolTable();
-        parent.addChild(symbolTable);
-        for(var child : block.getChildren()) {
-            translateStmt(program, child, symbolTable);
-        }
-    }
 
     /**
      * IF语句翻译成三地址代码
@@ -176,10 +192,10 @@ public class Translator {
         var factor = node.getChild(0);
         var returnValue = symbolTable.createVariable();
         var returnAddr = symbolTable.createVariable();
-        for(int i = node.getChildren().size()-1; i >= 1; i--) {
+        for(int i = 0; i < node.getChildren().size(); i++) {
             var expr = node.getChildren().get(i);
             var addr = translateExpr(program, (Expr)expr, symbolTable);
-            program.add(new TAInstruction(TAInstructionType.PARAM, null, null, addr, null));
+            program.add(new TAInstruction(TAInstructionType.PARAM, null, null, addr, i));
         }
         var funcAddr = symbolTable.findSymbolByLexeme(factor.getLexeme());
         program.add(new TAInstruction(TAInstructionType.CALL, null, null, funcAddr, null));

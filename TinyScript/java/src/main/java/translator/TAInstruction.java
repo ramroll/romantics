@@ -45,7 +45,9 @@ public class TAInstruction {
             case RETURN:
                 return "RETURN " + ((Symbol)this.arg1).lexeme.getValue();
             case PARAM:
-                return "PARAM " + ((Symbol)this.arg1).lexeme.getValue();
+                return "PARAM " +  ((Symbol)this.arg1).lexeme.getValue() + " " + this.arg2;
+            case SP:
+                return "SP " + this.arg1;
             case CALL:
                 return "CALL " + ((Symbol)this.arg1).label;
 

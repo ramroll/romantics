@@ -16,7 +16,7 @@ public class StaticSymbolTable {
 
     public void add(Symbol symbol){
         var lexval = symbol.getLexeme().getValue();
-        if(!offsetMap.contains(lexval)) {
+        if(!offsetMap.containsKey(lexval)) {
             offsetMap.put(lexval, symbol);
             symbol.setOffset(offsetCounter++);
             symbols.add(symbol);

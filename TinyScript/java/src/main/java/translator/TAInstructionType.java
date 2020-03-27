@@ -7,5 +7,6 @@ public enum TAInstructionType {
     LABEL,
     CALL,
     RETURN,
+    SP,
     PARAM;
 }

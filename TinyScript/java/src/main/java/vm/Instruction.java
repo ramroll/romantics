@@ -42,19 +42,23 @@ public class Instruction {
         return offsetInstruction(OpCode.SW, source, Register.SP, new Offset(result.getOffset()));
     }
 
-    public static Instruction add(Register result, Register a, Register b) {
-        var i = new Instruction(OpCode.ADD);
-        i.opList.add(result);
+    public static Instruction register(OpCode code, Register a, Register b, Register c) {
+        var i = new Instruction(code);
         i.opList.add(a);
-        i.opList.add(b);
+        if(b != null) {
+            i.opList.add(b);
+        }
+        if(c != null) {
+            i.opList.add(c);
+        }
         return i;
     }
 
-    public static Instruction sub(Register result, Register a, Register b) {
-        var i = new Instruction(OpCode.SUB);
-        i.opList.add(result);
-        i.opList.add(a);
-        i.opList.add(b);
-        return i;
+
+    public static Instruction immediate(OpCode code, Register r, ImmediateNumber number) {
+        var i = new Instruction(code);
+        i.opList.add(r);
+        i.opList.add(number);
+        return null;
     }
 }
