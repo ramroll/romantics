@@ -30,8 +30,8 @@ public class SymbolTests {
 
         var childChildTable = new SymbolTable();
         childTable.addChild(childChildTable);
-        assertEquals(true, childChildTable.exists(new Token(TokenType.VARIABLE, "a")));;
-        assertEquals(true, childTable.exists(new Token(TokenType.VARIABLE, "a")));;
+        assertEquals(true, childChildTable.exists(new Token(TokenType.VARIABLE, "a")));
+        assertEquals(true, childTable.exists(new Token(TokenType.VARIABLE, "a")));
 
     }
 

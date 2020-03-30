@@ -7,15 +7,16 @@ import parser.util.ParseException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class StaticSymbolTests {
+public class StaticTableTests {
+
+
     @Test
-    public void simple() throws LexicalException, ParseException {
+    public void staticTest() throws LexicalException, ParseException {
         var source = "if(a) { a = 1 } else { b = a + 1 * 5 }";
         var astNode = Parser.parse(source);
         var translator = new Translator();
         var program =  translator.translate(astNode);
 
         assertEquals(2, program.getStaticSymbolTable().size());
-
     }
 }

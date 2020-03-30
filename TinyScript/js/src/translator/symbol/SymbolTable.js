@@ -1,3 +1,5 @@
+const Token = require('../../lexer/Token')
+const TokenType = require('../../lexer/TokenType')
 const Symbol = require('./Symbol')
 
 class SymbolTable {
@@ -12,7 +14,7 @@ class SymbolTable {
     }
 
     addSymbol(symbol) {
-        this.symbols.add(symbol)
+        this.symbols.push(symbol)
         symbol.setParent(this)
     }
 
@@ -49,7 +51,7 @@ class SymbolTable {
         if(lexeme.isScalar()) {
             symbol = Symbol.createImmediateSymbol(lexeme)
         } else {
-            symbol = cloneFromSymbolTree(lexeme, 0)
+            symbol = this.cloneFromSymbolTree(lexeme, 0)
             if(symbol == null) {
                 symbol = Symbol.createAddressSymbol(lexeme, this.offsetIndex++)
             }
@@ -68,7 +70,7 @@ class SymbolTable {
     addChild(child) {
         child.parent = this
         child.level = this.level + 1
-        this.children.add(child)
+        this.children.push(child)
     }
 
     localSize() {
