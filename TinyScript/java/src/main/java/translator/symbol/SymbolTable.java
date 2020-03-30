@@ -91,5 +91,9 @@ public class SymbolTable {
     }
 
 
+    public void createLabel(String label, Token lexeme) {
+        var labelSymbol = Symbol.createLabelSymbol(label, lexeme);
+        this.addSymbol(labelSymbol);
 
+    }
 }

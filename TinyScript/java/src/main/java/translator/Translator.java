@@ -84,14 +84,14 @@ public class Translator {
     private void translateFunctionDeclareStmt(TAProgram program, ASTNode node, SymbolTable parent) throws ParseException {
         var label = program.addLabel();
 
-        var symbol = Symbol.createLabelSymbol((String)label.getArg1(), node.getLexeme());
+        var symbolTable = new SymbolTable();
+
 
         label.setArg2(node.getLexeme().getValue());
         var func = (FunctionDeclareStmt)node;
         var args = func.getArgs();
-        var symbolTable = new SymbolTable();
         parent.addChild(symbolTable);
-        symbolTable.addSymbol(symbol);
+        symbolTable.createLabel((String)label.getArg1(), node.getLexeme());
         for(var arg : args.getChildren()) {
             symbolTable.createSymbolByLexeme(arg.getLexeme());
         }

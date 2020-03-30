@@ -17,14 +17,14 @@ public class Symbol {
         this.type = type;
     }
 
-    static Symbol createAddressSymbol(Token lexeme, int offset){
+    public static Symbol createAddressSymbol(Token lexeme, int offset){
         var symbol = new Symbol(SymbolType.ADDRESS_SYMBOL);
         symbol.lexeme = lexeme;
         symbol.offset = offset;
         return symbol;
     }
 
-    static Symbol createImmediateSymbol(Token lexeme){
+    public static Symbol createImmediateSymbol(Token lexeme){
         var symbol = new Symbol(SymbolType.IMMEDIATE_SYMBOL);
         symbol.lexeme = lexeme;
         return symbol;
@@ -36,6 +36,7 @@ public class Symbol {
         symbol.lexeme = lexeme;
         return symbol;
     }
+
 
     public Symbol copy() {
         var symbol = new Symbol(this.type);
