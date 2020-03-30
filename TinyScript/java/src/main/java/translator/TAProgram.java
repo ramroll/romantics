@@ -1,9 +1,11 @@
 package translator;
 
 import org.apache.commons.lang3.StringUtils;
+import translator.symbol.StaticSymbolTable;
+import translator.symbol.SymbolTable;
+import translator.symbol.SymbolType;
 
 import java.util.ArrayList;
-import java.util.Hashtable;
 
 public class TAProgram {
 

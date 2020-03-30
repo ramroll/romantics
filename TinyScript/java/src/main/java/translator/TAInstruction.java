@@ -1,6 +1,7 @@
 package translator;
 
 import org.apache.commons.lang3.NotImplementedException;
+import translator.symbol.Symbol;
 
 public class TAInstruction {
 
@@ -22,7 +23,7 @@ public class TAInstruction {
     @Override
     public String toString() {
         switch (this.type) {
-            case COPY:
+            case ASSIGN:
                 if(arg2 != null) {
                     return String.format("%s = %s %s %s",
                             result,
@@ -36,20 +37,20 @@ public class TAInstruction {
                             arg1
                     ) ;
                 }
-            case IF_GOTO:
+            case IF:
                 return String.format("IF %s ELSE_GOTO %s", this.arg1, this.arg2);
             case GOTO:
                 return String.format("GOTO %s", (String)this.arg1);
             case LABEL:
                 return String.format(this.arg1 + ":");
             case RETURN:
-                return "RETURN " + ((Symbol)this.arg1).lexeme.getValue();
+                return "RETURN " + ((Symbol)this.arg1).getLexeme().getValue();
             case PARAM:
-                return "PARAM " +  ((Symbol)this.arg1).lexeme.getValue() + " " + this.arg2;
+                return "PARAM " +  ((Symbol)this.arg1).getLexeme().getValue() + " " + this.arg2;
             case SP:
                 return "SP " + this.arg1;
             case CALL:
-                return "CALL " + ((Symbol)this.arg1).label;
+                return "CALL " + ((Symbol)this.arg1).getLabel();
 
         }
         throw new NotImplementedException("Unkonw opcode type:" + this.type);

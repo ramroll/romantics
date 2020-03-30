@@ -1,9 +1,9 @@
 package translator;
 
 public enum TAInstructionType {
-    COPY,
+    ASSIGN,
     GOTO,
-    IF_GOTO,
+    IF,
     LABEL,
     CALL,
     RETURN,

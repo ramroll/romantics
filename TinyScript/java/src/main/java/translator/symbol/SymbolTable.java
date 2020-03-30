@@ -1,4 +1,4 @@
-package translator;
+package translator.symbol;
 
 import lexer.Token;
 import lexer.TokenType;

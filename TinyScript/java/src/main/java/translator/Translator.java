@@ -5,6 +5,8 @@ import lexer.TokenType;
 import org.apache.commons.lang3.NotImplementedException;
 import parser.ast.*;
 import parser.util.ParseException;
+import translator.symbol.Symbol;
+import translator.symbol.SymbolTable;
 
 public class Translator {
 
@@ -45,8 +47,8 @@ public class Translator {
         /**
          * 处理活动记录
          */
-        pushRecord.setArg1(-symbolTable.localSize());
-        popRecord.setArg1(symbolTable.localSize());
+        pushRecord.setArg1(-parent.localSize());
+        popRecord.setArg1(parent.localSize());
         program.add(popRecord);
     }
 
@@ -108,14 +110,14 @@ public class Translator {
         var assigned = symbolTable.createSymbolByLexeme(node.getChild(0).getLexeme());
         var expr = node.getChild(1);
         var addr = translateExpr(program, expr, symbolTable);
-        program.add(new TAInstruction(TAInstructionType.COPY, assigned, "=", addr, null));
+        program.add(new TAInstruction(TAInstructionType.ASSIGN, assigned, "=", addr, null));
     }
 
     private void translateAssignStmt(TAProgram program, ASTNode node, SymbolTable symbolTable) {
         var assigned = symbolTable.createSymbolByLexeme(node.getChild(0).getLexeme());
         var expr = node.getChild(1);
         var addr = translateExpr(program, expr, symbolTable);
-        program.add(new TAInstruction(TAInstructionType.COPY, assigned, "=", addr, null));
+        program.add(new TAInstruction(TAInstructionType.ASSIGN, assigned, "=", addr, null));
 
     }
 
@@ -129,7 +131,7 @@ public class Translator {
     public void translateIfStmt(TAProgram program, IfStmt node, SymbolTable symbolTable) throws ParseException {
         var expr = node.getExpr();
         var exprAddr = translateExpr(program,expr,symbolTable);
-        var ifOpCode = new TAInstruction(TAInstructionType.IF_GOTO, null, null, exprAddr, null);
+        var ifOpCode = new TAInstruction(TAInstructionType.IF, null, null, exprAddr, null);
         program.add(ifOpCode);
 
         translateBlock(program, (Block)node.getBlock(), symbolTable);
@@ -188,7 +190,7 @@ public class Translator {
             }
 
             program.add(new TAInstruction(
-                    TAInstructionType.COPY,
+                    TAInstructionType.ASSIGN,
                     (Symbol)(node.getProp("addr")),
                     node.getLexeme().getValue(),
                     (Symbol)(node.getChild(0).getProp("addr")),
@@ -203,7 +205,7 @@ public class Translator {
 
         var factor = node.getChild(0);
         var returnValue = symbolTable.createVariable();
-        var returnAddr = symbolTable.createVariable();
+        symbolTable.createVariable();
         for(int i = 0; i < node.getChildren().size(); i++) {
             var expr = node.getChildren().get(i);
             var addr = translateExpr(program, (Expr)expr, symbolTable);

@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 import parser.Parser;
 import parser.util.GraphvizHelpler;
 import parser.util.ParseException;
+import translator.symbol.SymbolTable;
 
 import java.util.ArrayList;
 

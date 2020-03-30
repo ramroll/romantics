@@ -1,4 +1,4 @@
-package translator;
+package translator.symbol;
 
 import java.util.ArrayList;
 import java.util.Hashtable;

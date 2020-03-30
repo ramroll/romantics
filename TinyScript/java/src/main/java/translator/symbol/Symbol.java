@@ -1,4 +1,4 @@
-package translator;
+package translator.symbol;
 
 import lexer.Token;
 
@@ -30,7 +30,7 @@ public class Symbol {
         return symbol;
     }
 
-    static Symbol createLabelSymbol(String label, Token lexeme) {
+    public static Symbol createLabelSymbol(String label, Token lexeme) {
         var symbol = new Symbol(SymbolType.LABEL_SYMBOL);
         symbol.label = label;
         symbol.lexeme = lexeme;
@@ -82,5 +82,9 @@ public class Symbol {
 
     public int getLayerOffset(){
         return this.layerOffset;
+    }
+
+    public String getLabel() {
+        return this.label;
     }
 }

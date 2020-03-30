@@ -1,6 +1,12 @@
 package gen;
 
+import gen.operand.Label;
+import gen.operand.Offset;
+import gen.operand.Register;
 import translator.*;
+import translator.symbol.Symbol;
+
+import java.util.Hashtable;
 
 public class OpCodeGen {
 
@@ -9,9 +15,11 @@ public class OpCodeGen {
 
         var taInstructions = taProgram.getInstructions();
 
+        var labelHash = new Hashtable<String, Integer>();
+
         for(var taInstruction : taInstructions) {
             switch(taInstruction.getType()) {
-                case COPY:
+                case ASSIGN:
                     genCopy(program, taInstruction);
                     break;
                 case GOTO:
@@ -26,19 +34,49 @@ public class OpCodeGen {
                 case SP:
                     genSp(program, taInstruction);
                     break;
+                case LABEL:
+                    labelHash.put((String) taInstruction.getArg1(), program.instructions.size());
+                    break;
                 case RETURN:
+                    genReturn(program, taInstruction);
+                    break;
 
             }
         }
 
+        this.relabel(program, labelHash);
         return program;
+    }
+
+    private void genReturn(OpCodeProgram program, TAInstruction taInstruction) {
+        var ret = taInstruction.getResult();
+        program.add(Instruction.loadToRegister(Register.S0, ret));
+        program.add(Instruction.offsetInstruction(
+                OpCode.SW ,Register.S0, Register.SP, new Offset(1)
+        ));
+    }
+
+    /**
+     * 重新计算Label的偏移量
+     * @param program
+     * @param labelHash
+     */
+    private void relabel(OpCodeProgram program, Hashtable<String, Integer> labelHash){
+        program.instructions.forEach(instruction -> {
+            if(instruction.getOpCode() == OpCode.JUMP || instruction.getOpCode() == OpCode.JR) {
+                var labelOperand = (Label)instruction.opList.get(0);
+                var label = labelOperand.getLabel();
+                var offset = labelHash.get(label);
+                labelOperand.setOffset(offset);
+            }
+        });
+
     }
 
     private void genSp(OpCodeProgram program, TAInstruction taInstruction) {
         var symbol = (Symbol)taInstruction.getArg1();
         program.add(Instruction.immediate(OpCode.ADDI, Register.SP,
                 new ImmediateNumber(Integer.parseInt(symbol.getLexeme().getValue()))));
-
     }
 
     private void genPass(OpCodeProgram program, TAInstruction taInstruction) {
@@ -70,27 +108,27 @@ public class OpCodeGen {
         var result = ta.getResult();
         var op = ta.getOp();
         var arg1 = (Symbol)ta.getArg1();
-        if(op == null) {
+        var arg2 = (Symbol)ta.getArg2();
+        if(arg2 == null) {
             program.add(Instruction.loadToRegister(Register.S0, arg1));
             program.add(Instruction.saveToMemory(Register.S0, result));
         } else {
-            var arg2 = (Symbol)ta.getArg2();
             program.add(Instruction.loadToRegister(Register.S0, arg1));
             program.add(Instruction.loadToRegister(Register.S1, arg2));
 
             switch (op) {
                 case "+":
-                    Instruction.register(OpCode.ADD, Register.S2, Register.S0, Register.S1);
+                    program.add(Instruction.register(OpCode.ADD, Register.S2, Register.S0, Register.S1));
                     break;
                 case "-":
-                    Instruction.register(OpCode.SUB, Register.S2, Register.S0, Register.S1);
+                    program.add(Instruction.register(OpCode.SUB, Register.S2, Register.S0, Register.S1));
                     break;
                 case "*":
-                    Instruction.register(OpCode.MULT, Register.S0, Register.S1,null);
-                    Instruction.register(OpCode.MFLO, Register.S2, null, null);
+                    program.add(Instruction.register(OpCode.MULT, Register.S0, Register.S1,null));
+                    program.add(Instruction.register(OpCode.MFLO, Register.S2, null, null));
                     break;
             }
-            Instruction.saveToMemory(Register.S2, result);
+            program.add(Instruction.saveToMemory(Register.S2, result));
         }
     }
 }

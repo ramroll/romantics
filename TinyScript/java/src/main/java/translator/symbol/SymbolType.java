@@ -1,4 +1,4 @@
-package translator;
+package translator.symbol;
 
 public enum SymbolType {
     ADDRESS_SYMBOL,

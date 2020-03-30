@@ -26,17 +26,16 @@ public class BlockTest {
 
         var program = translator.translate(ast);
 
-        System.out.println(program);
 
         assertEquals("a = 1\n" +
-                "SP -2\n" +
-                "p0 = a * 100\n" +
-                "b = p0\n" +
-                "SP 2\n" +
-                "SP -2\n" +
-                "p0 = a * 100\n" +
-                "b = p0\n" +
-                "SP 2", program.toString());
+                "SP -3\n" +
+                "p1 = a * 100\n" +
+                "b = p1\n" +
+                "SP 3\n" +
+                "SP -3\n" +
+                "p1 = a * 100\n" +
+                "b = p1\n" +
+                "SP 3", program.toString());
 
 
 

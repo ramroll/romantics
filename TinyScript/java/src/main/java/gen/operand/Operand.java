@@ -1,4 +1,4 @@
-package gen;
+package gen.operand;
 
 public class Operand {
 }
