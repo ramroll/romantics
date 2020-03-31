@@ -205,10 +205,10 @@ public class Translator {
         var factor = node.getChild(0);
         var returnValue = symbolTable.createVariable();
         symbolTable.createVariable();
-        for(int i = 0; i < node.getChildren().size(); i++) {
+        for(int i = 1; i < node.getChildren().size(); i++) {
             var expr = node.getChildren().get(i);
             var addr = translateExpr(program, expr, symbolTable);
-            program.add(new TAInstruction(TAInstructionType.PARAM, null, null, addr, i));
+            program.add(new TAInstruction(TAInstructionType.PARAM, null, null, addr, i-1));
         }
         var funcAddr = symbolTable.cloneFromSymbolTree(factor.getLexeme(), 0);
         program.add(new TAInstruction(TAInstructionType.CALL, null, null, funcAddr, null));

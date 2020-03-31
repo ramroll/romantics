@@ -60,7 +60,7 @@ describe("Stmts", () => {
 
   it("function", () => {
     const it = Lexer.fromFile(path.resolve(__dirname, "../../example/function.ts"))
-    const functionStmt = Stmt.parse(it)
+    const functionStmt = Stmt.parse(new PeekTokenIterator(it))
 
     const args = functionStmt.getArgs()
 
@@ -80,7 +80,7 @@ describe("Stmts", () => {
 
   it("function1", () => {
     const it = Lexer.fromFile(path.resolve(__dirname, "../../example/recursion.ts"))
-    const functionStmt = Stmt.parse(it)
+    const functionStmt = Stmt.parse(new PeekTokenIterator(it))
 
     assert.equal(ParserUtils.toBFSString(functionStmt, 4), "func fact args block")
     assert.equal(ParserUtils.toBFSString(functionStmt.getArgs(), 2), "args n")

@@ -40,17 +40,17 @@ public class TAInstruction {
             case IF:
                 return String.format("IF %s ELSE %s", this.arg1, this.arg2);
             case GOTO:
-                return String.format("GOTO %s", (String)this.arg1);
+                return String.format("GOTO %s", this.arg1);
             case LABEL:
                 return String.format(this.arg1 + ":");
             case RETURN:
-                return "RETURN " + ((Symbol)this.arg1).getLexeme().getValue();
+                return "RETURN " + this.arg1;
             case PARAM:
-                return "PARAM " +  ((Symbol)this.arg1).getLexeme().getValue() + " " + this.arg2;
+                return "PARAM " +  this.arg1 + " " + this.arg2;
             case SP:
                 return "SP " + this.arg1;
             case CALL:
-                return "CALL " + ((Symbol)this.arg1).getLabel();
+                return "CALL " + this.arg1;
 
         }
         throw new NotImplementedException("Unkonw opcode type:" + this.type);

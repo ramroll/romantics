@@ -58,13 +58,14 @@ class Symbol {
     }
 
     toString() {
-        return this.lexeme.getValue();
+        if(this.type === SymbolType.LABEL_SYMBOL) {
+            return this.label;
+        }
+        return this.lexeme.getValue()
     }
-
     setLexeme(lexeme) {
         this.lexeme = lexeme
     }
-
     getOffset() {
         return this.offset
     }

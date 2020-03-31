@@ -25,13 +25,13 @@ class TAInstruction {
       case TAInstructionType.LABEL:
         return `${this.arg1}:`
       case TAInstructionType.RETURN:
-        return `RETURN ${this.arg1.getLexeme().getValue()}`
+        return `RETURN ${this.arg1}`
       case TAInstructionType.PARAM:
-        return `PARAM ${this.arg1.getLexeme().getValue()} ${this.arg2}`
+        return `PARAM ${this.arg1} ${this.arg2}`
       case TAInstructionType.SP:
         return `SP ${this.arg1}`;
       case TAInstructionType.CALL:
-        return `CALL ${this.arg1.getLabel()}`
+        return `CALL ${this.arg1}`
 
     }
     throw new Error("Unkonw opcode type:" + this.type);

@@ -194,14 +194,13 @@ class Translator {
   }
 
   translateCallExpr(program, node, symbolTable) {
-
     const factor = node.getChild(0)
     const returnValue = symbolTable.createVariable()
     symbolTable.createVariable()
-    for (let i = 0; i < node.getChildren().length; i++) {
+    for (let i = 1; i < node.getChildren().length; i++) {
       const expr = node.getChildren()[i];
       const addr = this.translateExpr(program, expr, symbolTable);
-      program.add(new TAInstruction(TAInstructionType.PARAM, null, null, addr, i))
+      program.add(new TAInstruction(TAInstructionType.PARAM, null, null, addr, i-1))
     }
     const funcAddr = symbolTable.cloneFromSymbolTree(factor.getLexeme(), 0)
     program.add(new TAInstruction(TAInstructionType.CALL, null, null, funcAddr, null))

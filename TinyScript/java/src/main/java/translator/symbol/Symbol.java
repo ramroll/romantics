@@ -62,6 +62,9 @@ public class Symbol {
 
     @Override
     public String toString() {
+        if(this.type == SymbolType.LABEL_SYMBOL){
+            return this.label;
+        }
         return lexeme.getValue();
     }
 
