@@ -58,7 +58,7 @@ class Symbol {
     }
 
     toString() {
-        return lexeme.getValue();
+        return this.lexeme.getValue();
     }
 
     setLexeme(lexeme) {

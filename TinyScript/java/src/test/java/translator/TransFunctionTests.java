@@ -29,7 +29,22 @@ public class TransFunctionTests {
         var astNode = Parser.fromFile("./example/recursion.ts");
         var translator = new Translator();
         var program = translator.translate(astNode);
-        System.out.println(program);
+
+        var expect = "L0:\n" +
+                "p0 = n == 0\n" +
+                "IF p0 ELSE L1\n" +
+                "SP -2\n" +
+                "RETURN 1\n" +
+                "SP 2\n" +
+                "L1:\n" +
+                "PARAM fact 0\n" +
+                "p3 = n - 1\n" +
+                "PARAM p3 1\n" +
+                "CALL L0\n" +
+                "p4 = p1 * n\n" +
+                "RETURN p4";
+
+        assertEquals(expect, program.toString());
 
     }
 }

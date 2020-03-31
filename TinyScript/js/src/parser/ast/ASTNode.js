@@ -1,3 +1,4 @@
+const ASTNodeTypes = require('./ASTNodeTypes')
 class ASTNode {
     constructor(_type = null, _label = null){
         /* 树结构 */
@@ -8,6 +9,9 @@ class ASTNode {
         this.lexeme = null
         this.type = _type 
         this.label = _label
+
+        /* 属性 */
+        this._props = {}
     }
 
     getChild(index) {
@@ -28,6 +32,11 @@ class ASTNode {
         return this.lexeme
     }
 
+    getType(){
+        return this.type
+    }
+
+
     setLexeme(lexeme) {
         this.lexeme = lexeme
     }
@@ -37,10 +46,27 @@ class ASTNode {
         return this.children
     }
 
+    isValueType() {
+        return this.type == ASTNodeTypes.VARIABLE || this.type == ASTNodeTypes.SCALAR
+    }
+
     print(indent = 0) {
         console.log(`${"".padStart(indent * 2, " ")}${this.label}`)
         this.children.forEach(x => x.print(indent + 1))
     }
+
+    setProp(key, value) {
+        this._props[key] = value
+    }
+    getProp(key) {
+        if(this._props[key] === undefined) {
+            return null
+        }
+        return this._props[key]
+    }
+
+
+
 
 }
 

@@ -39,11 +39,6 @@ public class TAProgram {
     }
 
 
-    public TAInstruction lastOpCode() {
-        return this.instructions.get(instructions.size()-1);
-    }
-
-
     public void setStaticSymbols(SymbolTable symbolTable) {
         for(var symbol : symbolTable.getSymbols()) {
             if(symbol.getType() == SymbolType.IMMEDIATE_SYMBOL) {

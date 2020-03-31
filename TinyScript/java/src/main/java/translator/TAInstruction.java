@@ -38,7 +38,7 @@ public class TAInstruction {
                     ) ;
                 }
             case IF:
-                return String.format("IF %s ELSE_GOTO %s", this.arg1, this.arg2);
+                return String.format("IF %s ELSE %s", this.arg1, this.arg2);
             case GOTO:
                 return String.format("GOTO %s", (String)this.arg1);
             case LABEL:

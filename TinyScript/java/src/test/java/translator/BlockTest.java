@@ -28,14 +28,14 @@ public class BlockTest {
 
 
         assertEquals("a = 1\n" +
-                "SP -3\n" +
+                "SP -1\n" +
                 "p1 = a * 100\n" +
                 "b = p1\n" +
-                "SP 3\n" +
-                "SP -3\n" +
+                "SP 1\n" +
+                "SP -1\n" +
                 "p1 = a * 100\n" +
                 "b = p1\n" +
-                "SP 3", program.toString());
+                "SP 1", program.toString());
 
 
 

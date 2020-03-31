@@ -43,7 +43,6 @@ public class Translator {
         }
         var popRecord = new TAInstruction(TAInstructionType.SP, null, null, null, null);
 
-
         /**
          * 处理活动记录
          */
@@ -188,15 +187,15 @@ public class Translator {
             if(node.getProp("addr") == null) {
                 node.setProp("addr", symbolTable.createVariable());
             }
-
-            program.add(new TAInstruction(
+            var instruction = new TAInstruction(
                     TAInstructionType.ASSIGN,
                     (Symbol)(node.getProp("addr")),
                     node.getLexeme().getValue(),
                     (Symbol)(node.getChild(0).getProp("addr")),
                     (Symbol)(node.getChild(1).getProp("addr"))
-            ));
-            return program.lastOpCode().getResult();
+            );
+            program.add(instruction);
+            return instruction.getResult();
         }
         throw new NotImplementedException("Unexpected node type :" + node.getType());
     }
@@ -208,7 +207,7 @@ public class Translator {
         symbolTable.createVariable();
         for(int i = 0; i < node.getChildren().size(); i++) {
             var expr = node.getChildren().get(i);
-            var addr = translateExpr(program, (Expr)expr, symbolTable);
+            var addr = translateExpr(program, expr, symbolTable);
             program.add(new TAInstruction(TAInstructionType.PARAM, null, null, addr, i));
         }
         var funcAddr = symbolTable.cloneFromSymbolTree(factor.getLexeme(), 0);

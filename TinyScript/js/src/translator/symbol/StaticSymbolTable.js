@@ -10,8 +10,8 @@ class StaticSymbolTable {
         var lexval = symbol.getLexeme().getValue()
         if(!this.offsetMap.has(lexval)) {
             this.offsetMap.set(lexval, symbol)
-            symbol.setOffset(offsetCounter++)
-            this.symbols.add(symbol)
+            symbol.setOffset(this.offsetCounter++)
+            this.symbols.push(symbol)
         } else {
             var sameSymbol = this.offsetMap.get(lexval)
             symbol.setOffset(sameSymbol.offset)

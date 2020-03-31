@@ -37,7 +37,7 @@ class SymbolTable {
       let symbol = this.symbols
                 .find(x => x.lexeme.getValue() == lexeme.getValue())
 
-        if(!symbol) {
+        if(symbol) {
             return true
         }
         if(this.parent != null) {
