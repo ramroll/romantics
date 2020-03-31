@@ -15,6 +15,7 @@ Stmt.parse = (it) => {
       FunctionDeclareStmt,
       ReturnStmt,
       IfStmt,
+      Block,
       Expr
     } = require("./index");
     if(!it.hasNext()) {
@@ -34,7 +35,10 @@ Stmt.parse = (it) => {
         return ReturnStmt.parse(it);
     } else if(token.getValue() === "if") {
         return IfStmt.parse(it);
-    } else {
+    } else if(token.getValue() === '{') {
+        return Block.parse(it)
+    } 
+    else {
         return Expr.parse(it);
     }
 

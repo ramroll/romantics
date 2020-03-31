@@ -1,17 +1,18 @@
 package translator;
 
 import org.apache.commons.lang3.NotImplementedException;
+import translator.symbol.Symbol;
 
 public class TAInstruction {
 
     private Object arg1;
     private Object arg2;
     private String op;
-    private TAValue result;
-    private TAOpCodeType type;
+    private Symbol result;
+    private TAInstructionType type;
     private String label = null;
 
-    public TAInstruction(TAOpCodeType type, TAValue result, String op, Object arg1, Object arg2) {
+    public TAInstruction(TAInstructionType type, Symbol result, String op, Object arg1, Object arg2) {
         this.op = op;
         this.type = type;
         this.arg1 = arg1;
@@ -22,7 +23,7 @@ public class TAInstruction {
     @Override
     public String toString() {
         switch (this.type) {
-            case COPY:
+            case ASSIGN:
                 if(arg2 != null) {
                     return String.format("%s = %s %s %s",
                             result,
@@ -36,18 +37,20 @@ public class TAInstruction {
                             arg1
                     ) ;
                 }
-            case IF_GOTO:
-                return String.format("IF %s ELSE_GOTO %s", this.arg1, this.arg2);
+            case IF:
+                return String.format("IF %s ELSE %s", this.arg1, this.arg2);
             case GOTO:
-                return String.format("GOTO %s", (String)this.arg1);
+                return String.format("GOTO %s", this.arg1);
             case LABEL:
                 return String.format(this.arg1 + ":");
             case RETURN:
-                return "RETURN " + ((TAValue)this.arg1).lexeme.getValue();
+                return "RETURN " + this.arg1;
             case PARAM:
-                return "PARAM " + ((TAValue)this.arg1).lexeme.getValue();
+                return "PARAM " +  this.arg1 + " " + this.arg2;
+            case SP:
+                return "SP " + this.arg1;
             case CALL:
-                return "CALL " + ((TAValue)this.arg1).label;
+                return "CALL " + this.arg1;
 
         }
         throw new NotImplementedException("Unkonw opcode type:" + this.type);
@@ -55,7 +58,7 @@ public class TAInstruction {
 
     }
 
-    public TAValue getResult() {
+    public Symbol getResult() {
         return result;
     }
 
@@ -73,8 +76,16 @@ public class TAInstruction {
 
     public Object getArg2() {return this.arg2;}
 
-    public void setResult(TAValue address) {
+    public void setResult(Symbol address) {
         this.result = address;
 
+    }
+
+    public TAInstructionType getType() {
+        return this.type;
+    }
+
+    public String getOp() {
+        return this.op;
     }
 }

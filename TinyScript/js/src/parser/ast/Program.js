@@ -1,7 +1,8 @@
 const ASTNodeTypes = require('./ASTNodeTypes')
-class Program {
+const ASTNode = require('./ASTNode')
+class Program extends ASTNode{
     constructor(){
-        super()
+        super(ASTNodeTypes.PROGRAM, "program")
     }
 }
 

@@ -94,11 +94,9 @@ class Lexer {
   }
 
   static fromFile(src) {
-    const content = fs.readFileSync(src, "utf-8");
-    const lexer = new Lexer();
-    return new PeekTokenIterator(
-      arrayToGenerator(lexer.analyse(arrayToGenerator(content)))
-    );
+    const content = fs.readFileSync(src, "utf-8")
+    const lexer = new Lexer()
+    return arrayToGenerator(lexer.analyse(arrayToGenerator(content)))
   }
 }
 

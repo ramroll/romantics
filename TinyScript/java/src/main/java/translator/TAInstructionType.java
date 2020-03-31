@@ -1,11 +1,12 @@
 package translator;
 
-public enum TAOpCodeType {
-    COPY,
+public enum TAInstructionType {
+    ASSIGN,
     GOTO,
-    IF_GOTO,
+    IF,
     LABEL,
     CALL,
     RETURN,
+    SP,
     PARAM;
 }

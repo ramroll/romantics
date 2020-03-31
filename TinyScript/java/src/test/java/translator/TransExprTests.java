@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 import parser.Parser;
 import parser.util.GraphvizHelpler;
 import parser.util.ParseException;
+import translator.symbol.SymbolTable;
 
 import java.util.ArrayList;
 
@@ -42,7 +43,7 @@ public class TransExprTests {
                 "p4 = p0 + p3",
                 "p5 = a + p4"
         };
-        assertOpcodes(expectedResults, program.getOpCodes());
+        assertOpcodes(expectedResults, program.getInstructions());
 
     }
 
@@ -123,6 +124,7 @@ public class TransExprTests {
                 "a = p1";
         assertEquals(expected, code);
     }
+
 
 
 }

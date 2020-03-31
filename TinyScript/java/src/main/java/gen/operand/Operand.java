@@ -1,4 +1,4 @@
-package vm;
+package gen.operand;
 
 public class Operand {
 }

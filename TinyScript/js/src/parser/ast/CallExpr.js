@@ -2,7 +2,9 @@ const Expr = require('./Expr')
 const ASTNodeTypes = require("./ASTNodeTypes")
 class CallExpr extends Expr {
     constructor() {
-        super(ASTNodeTypes.CALL_EXPR, "call")
+        super()
+        this.type = ASTNodeTypes.CALL_EXPR
+        this.label = "call"
     }
 
 }
