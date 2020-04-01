@@ -2,6 +2,7 @@ package vm;
 
 import gen.Instruction;
 import gen.OpCode;
+import gen.operand.Offset;
 import gen.operand.Register;
 
 import java.util.ArrayList;
@@ -88,12 +89,25 @@ public class VirtualMachine {
                 registers[r0.getAddr()] = registers[Register.LO.getAddr()]
                 break;
             }
-            case 0x10: // SW
+            case 0x10: { // SW
+                var r0 = (Register) instruction.getOperand(0);
+                var r1 = (Register) instruction.getOperand(1);
+                var offset = (Offset) instruction.getOperand(2);
+                var R1VAL = registers[r1.getAddr()];
+                memory[(int) (R1VAL + offset.getOffset())] = registers[r0.getAddr()];
                 break;
-            case 0x11: //LW
+            }
+            case 0x11: { //LW
+                var r0 = (Register) instruction.getOperand(0);
+                var r1 = (Register) instruction.getOperand(1);
+                var offset = (Offset) instruction.getOperand(2);
+                var R1VAL = registers[r1.getAddr()];
+                registers[r0.getAddr()] = memory[(int) (R1VAL + offset.getOffset())];
                 break;
-            case 0x20: // JUMP
+            }
+            case 0x20 : { // JUMP
                 break;
+            }
             case 0x21: // JR
                 break;
         }
