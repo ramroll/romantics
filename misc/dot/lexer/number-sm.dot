@@ -1,0 +1,39 @@
+digraph G {
+
+  rankdir=LR;
+  #splines=line;
+  ranksep=1.5
+  node [shape=circle]
+  
+  end1,end2, end3, end4[shape=doublecircle, label="int", color=green, fontcolor=green]
+  end3, end4[label="float"]
+  error,error1,error2,error3[shape=doublecircle, label="Err", color=red, fontcolor=red]
+  
+  0->1[label="0"]
+  
+  1->1[label="0"]
+  1->2[label="1-9"]
+  2->2[label="0-9"]
+  1->4[label="."]
+  0->2[label="1-9"]
+  0->3[label="- or +"]
+  3->2[label="0-9"]
+  3->error3[label="other"]
+  3->5[label="."]
+  0->5[label="."]
+  5->20[label="0-9"]
+  5->error1[label="other"]
+  4->20[label="0-9"]
+  2->4[label="."]
+  20 -> 20[label="0-9"]  
+  
+  
+  
+  1->end1[label="any"]
+  2->end2[label="any"]
+  4->error[label="."]
+  4->end3[label="any"]
+  20->end4[label="any"]
+  20->error2[label="."]
+  
+}
