@@ -1,5 +1,6 @@
 package gen;
 
+import gen.operand.ImmediateNumber;
 import gen.operand.Label;
 import gen.operand.Offset;
 import gen.operand.Register;

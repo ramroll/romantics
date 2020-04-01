@@ -16,6 +16,7 @@ public class OpCode {
         codes[value] = this;
     }
 
+
     public static final OpCode ADD = new OpCode(AddressingType.REGISTER, "ADD", (byte) 0x01);
     public static final OpCode SUB = new OpCode(AddressingType.REGISTER, "SUB", (byte) 0x02);
     public static final OpCode MULT = new OpCode(AddressingType.REGISTER, "MULT", (byte) 0x03);

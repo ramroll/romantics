@@ -1,9 +1,6 @@
 package gen;
 
-import gen.operand.Label;
-import gen.operand.Offset;
-import gen.operand.Operand;
-import gen.operand.Register;
+import gen.operand.*;
 import org.apache.commons.lang3.StringUtils;
 import translator.symbol.Symbol;
 import translator.symbol.SymbolType;
@@ -169,5 +166,9 @@ public class Instruction {
                 break;
         }
         return code;
+    }
+
+    public Operand getOperand(int index) {
+        return this.opList.get(index);
     }
 }

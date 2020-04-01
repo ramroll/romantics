@@ -21,6 +21,8 @@ public class Register extends Operand {
     public static final Register S1 = new Register("S1", (byte) 11);
     public static final Register S2 = new Register("S1", (byte) 12);
 
+    public static final Register LO = new Register("LO", (byte) 20);
+
     public static Register fromAddr(long reg) {
         return registers[(int) reg];
     }
