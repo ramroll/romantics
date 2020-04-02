@@ -16,6 +16,7 @@ public class Register extends Operand {
     public static final Register PC = new Register("PC", (byte) 1);
     public static final Register SP = new Register("SP", (byte) 2);
     public static final Register STATIC = new Register("STATIC", (byte) 3);
+    public static final Register RA = new Register("RA", (byte)4);
 
     public static final Register S0 = new Register("S0", (byte) 10);
     public static final Register S1 = new Register("S1", (byte) 11);

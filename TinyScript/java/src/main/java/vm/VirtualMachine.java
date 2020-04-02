@@ -11,7 +11,7 @@ public class VirtualMachine {
 
     long registers[] = new long[31];
     long[] memory = new long[4096];
-    int instructionSize = 0;
+    int endProgramSection = 0;
 
     /**
      * 初始化
@@ -35,7 +35,7 @@ public class VirtualMachine {
         for(; i < opcodes.size(); i++) {
             memory[i] = opcodes.get(i);
         }
-        instructionSize = opcodes.size();
+        endProgramSection = i;
 
         /**
          * 栈指针
@@ -86,7 +86,7 @@ public class VirtualMachine {
 //                break;
             case 0x08: { // MFLO
                 var r0 = (Register) instruction.getOperand(0);
-                registers[r0.getAddr()] = registers[Register.LO.getAddr()]
+                registers[r0.getAddr()] = registers[Register.LO.getAddr()];
                 break;
             }
             case 0x10: { // SW
@@ -106,10 +106,17 @@ public class VirtualMachine {
                 break;
             }
             case 0x20 : { // JUMP
+                var r0 = (Offset) instruction.getOperand(0);
+                registers[Register.PC.getAddr()] += r0.getOffset();
                 break;
             }
-            case 0x21: // JR
+            case 0x21: { // JR
+                var r0 = (Offset) instruction.getOperand(0);
+                registers[Register.PC.getAddr()] += r0.getOffset();
+                // 将返回地址存入ra
+                registers[Register.RA.getAddr()] = registers[Register.PC.getAddr()];
                 break;
+            }
         }
 
     }
@@ -117,17 +124,28 @@ public class VirtualMachine {
 
     public void run() {
 
-
-        while(true) {
+        // 模拟CPU循环
+        //   fetch: 获取指令
+        //   decode: 解码
+        //   exec: 执行
+        //   PC++
+        while(registers[Register.PC.getAddr()] < endProgramSection) {
             var code = fetch();
             var instruction = decode(code);
             exec(instruction);
-
+            registers[Register.PC.getAddr()] += 1;
         }
-
-
-
     }
+
+
+    public long[] getMemroy() {
+        return memory;
+    }
+
+    public long[] getRegisters(){
+        return registers;
+    }
+
 
 
 
