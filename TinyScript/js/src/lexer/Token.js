@@ -289,6 +289,8 @@ class Token {
             state = 1;
           } else if (lookahead == ".") {
             state = 4;
+          } else if (AlphabetHelper.isNumber(lookahead)) {
+            state = 2;
           } else {
             return new Token(TokenType.INTEGER, s);
           }
