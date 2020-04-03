@@ -40,7 +40,9 @@ public class TransFunctionTests {
                 "L1:\n" +
                 "p3 = n - 1\n" +
                 "PARAM p3 0\n" +
+                "SP -5\n" +
                 "CALL L0\n" +
+                "SP 5\n" +
                 "p4 = p1 * n\n" +
                 "RETURN p4";
 
