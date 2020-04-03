@@ -203,7 +203,10 @@ public class Translator {
     private Symbol translateCallExpr(TAProgram program, ASTNode node, SymbolTable symbolTable) {
 
         var factor = node.getChild(0);
+
+
         var returnValue = symbolTable.createVariable();
+        // 返回地址
         symbolTable.createVariable();
         for(int i = 1; i < node.getChildren().size(); i++) {
             var expr = node.getChildren().get(i);
@@ -211,7 +214,12 @@ public class Translator {
             program.add(new TAInstruction(TAInstructionType.PARAM, null, null, addr, i-1));
         }
         var funcAddr = symbolTable.cloneFromSymbolTree(factor.getLexeme(), 0);
+        program.add(new TAInstruction(TAInstructionType.SP, null, null,
+                -symbolTable.localSize(), null));
         program.add(new TAInstruction(TAInstructionType.CALL, null, null, funcAddr, null));
+
+        program.add(new TAInstruction(TAInstructionType.SP, null, null,
+            symbolTable.localSize(),null));
         return returnValue;
     }
 }
