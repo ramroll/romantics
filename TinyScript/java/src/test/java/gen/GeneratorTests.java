@@ -52,7 +52,6 @@ public class GeneratorTests {
         var taProgram = translator.translate(astNode);
         var gen = new OpCodeGen();
         var program = gen.gen(taProgram);
-        System.out.println(program.toString());
     }
 
 }

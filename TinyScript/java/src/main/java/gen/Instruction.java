@@ -30,18 +30,13 @@ public class Instruction {
 
     }
 
-    public static Instruction loadToRegister(Register target,  Symbol arg1) {
+    public static Instruction loadToRegister(Register target,  int offset) {
         // 转成整数，目前只支持整数，其他需要大家自己扩展
-        if(arg1.getType() == SymbolType.IMMEDIATE_SYMBOL) {
-            return offsetInstruction(OpCode.LW, target, Register.STATIC,  new Offset(arg1.getOffset()));
-        } else {
-            return offsetInstruction(OpCode.LW, target, Register.SP, new Offset(arg1.getOffset()));
-        }
-
+        return offsetInstruction(OpCode.LW, target, Register.STATIC,  new Offset(offset));
     }
 
-    public static Instruction saveToMemory(Register source, Symbol result) {
-        return offsetInstruction(OpCode.SW, source, Register.SP, new Offset(result.getOffset()));
+    public static Instruction saveToMemory(Register source, int offset) {
+        return offsetInstruction(OpCode.SW, source, Register.SP, new Offset(offset));
     }
 
     public static Instruction register(OpCode code, Register a, Register b, Register c) {

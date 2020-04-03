@@ -4,6 +4,7 @@ import gen.operand.ImmediateNumber;
 import gen.operand.Label;
 import gen.operand.Offset;
 import gen.operand.Register;
+import org.apache.commons.lang3.NotImplementedException;
 import translator.*;
 import translator.symbol.Symbol;
 
@@ -41,7 +42,12 @@ public class OpCodeGen {
                 case RETURN:
                     genReturn(program, taInstruction);
                     break;
-
+                case IF: {
+                    genIf(program, taInstruction);
+                    break;
+                }
+                default:
+                    throw new NotImplementedException("Unknown type:" + taInstruction.getType());
             }
         }
 
@@ -49,9 +55,19 @@ public class OpCodeGen {
         return program;
     }
 
+    private void genIf(OpCodeProgram program, TAInstruction instruction) {
+        var exprAddr = (Symbol)instruction.getArg1();
+        var label = instruction.getArg2();
+        System.out.println(exprAddr);
+        System.out.println(label);
+        var i = Instruction.;
+        program.add(new Instruction())
+
+    }
+
     private void genReturn(OpCodeProgram program, TAInstruction taInstruction) {
-        var ret = taInstruction.getResult();
-        program.add(Instruction.loadToRegister(Register.S0, ret));
+        var ret = (Symbol)taInstruction.getArg1();
+        program.add(Instruction.loadToRegister(Register.S0, ret.getOffset()));
         program.add(Instruction.offsetInstruction(
                 OpCode.SW ,Register.S0, Register.SP, new Offset(1)
         ));
@@ -64,6 +80,7 @@ public class OpCodeGen {
      */
     private void relabel(OpCodeProgram program, Hashtable<String, Integer> labelHash){
         program.instructions.forEach(instruction -> {
+            System.out.println(instruction);
             if(instruction.getOpCode() == OpCode.JUMP || instruction.getOpCode() == OpCode.JR) {
                 var labelOperand = (Label)instruction.opList.get(0);
                 var label = labelOperand.getLabel();
@@ -75,15 +92,15 @@ public class OpCodeGen {
     }
 
     private void genSp(OpCodeProgram program, TAInstruction taInstruction) {
-        var symbol = (Symbol)taInstruction.getArg1();
+        var offset = (int)taInstruction.getArg1();
         program.add(Instruction.immediate(OpCode.ADDI, Register.SP,
-                new ImmediateNumber(Integer.parseInt(symbol.getLexeme().getValue()))));
+                new ImmediateNumber(offset)));
     }
 
     private void genPass(OpCodeProgram program, TAInstruction taInstruction) {
         var arg1 = (Symbol)taInstruction.getArg1();
         var no = (int)taInstruction.getArg2();
-        program.add(Instruction.loadToRegister(Register.S0, arg1));
+        program.add(Instruction.loadToRegister(Register.S0, arg1.getOffset()));
         // PASS a
         // 写入下一个活动记录(因此是负数offset)
         // 下一个活动记录0位置是返回值,1位置是返回地址(因此需要+2)
@@ -91,9 +108,9 @@ public class OpCodeGen {
     }
 
     void genCall(OpCodeProgram program, TAInstruction ta){
-        var label = (String)ta.getArg1();
+        var label = (Symbol)ta.getArg1();
         var i = new Instruction(OpCode.JR);
-        i.opList.add(new Label(label));
+        i.opList.add(new Label(label.getLabel()));
         program.add(i);
     }
 
@@ -111,11 +128,11 @@ public class OpCodeGen {
         var arg1 = (Symbol)ta.getArg1();
         var arg2 = (Symbol)ta.getArg2();
         if(arg2 == null) {
-            program.add(Instruction.loadToRegister(Register.S0, arg1));
-            program.add(Instruction.saveToMemory(Register.S0, result));
+            program.add(Instruction.loadToRegister(Register.S0, arg1.getOffset()));
+            program.add(Instruction.saveToMemory(Register.S0, result.getOffset()));
         } else {
-            program.add(Instruction.loadToRegister(Register.S0, arg1));
-            program.add(Instruction.loadToRegister(Register.S1, arg2));
+            program.add(Instruction.loadToRegister(Register.S0, arg1.getOffset()));
+            program.add(Instruction.loadToRegister(Register.S1, arg2.getOffset()));
 
             switch (op) {
                 case "+":
@@ -129,7 +146,7 @@ public class OpCodeGen {
                     program.add(Instruction.register(OpCode.MFLO, Register.S2, null, null));
                     break;
             }
-            program.add(Instruction.saveToMemory(Register.S2, result));
+            program.add(Instruction.saveToMemory(Register.S2, result.getOffset()));
         }
     }
 }
