@@ -29,6 +29,7 @@ public class TransFunctionTests {
         var astNode = Parser.fromFile("./example/recursion.ts");
         var translator = new Translator();
         var program = translator.translate(astNode);
+        System.out.println(program.toString());
 
         var expect = "L0:\n" +
                 "p0 = n == 0\n" +
