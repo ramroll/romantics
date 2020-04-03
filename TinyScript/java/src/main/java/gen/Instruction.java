@@ -39,6 +39,14 @@ public class Instruction {
         return offsetInstruction(OpCode.SW, source, Register.SP, new Offset(offset));
     }
 
+    public static Instruction bne(Register a, Register b, String label) {
+        var i = new Instruction(OpCode.BNE);
+        i.opList.add(a);
+        i.opList.add(b);
+        i.opList.add(new Label(label));
+        return i;
+    }
+
     public static Instruction register(OpCode code, Register a, Register b, Register c) {
         var i = new Instruction(code);
         i.opList.add(a);

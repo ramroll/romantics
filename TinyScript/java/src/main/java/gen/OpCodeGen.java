@@ -8,6 +8,7 @@ import org.apache.commons.lang3.NotImplementedException;
 import translator.*;
 import translator.symbol.Symbol;
 
+import javax.print.DocFlavor;
 import java.util.Hashtable;
 
 public class OpCodeGen {
@@ -49,7 +50,13 @@ public class OpCodeGen {
                 default:
                     throw new NotImplementedException("Unknown type:" + taInstruction.getType());
             }
+            if(program.instructions.size() > 0) {
+
+            var last = (program.instructions.get(program.instructions.size()-1));
+            System.out.println("last" + last + taInstruction.getType());
+            }
         }
+
 
         this.relabel(program, labelHash);
         return program;
@@ -58,11 +65,7 @@ public class OpCodeGen {
     private void genIf(OpCodeProgram program, TAInstruction instruction) {
         var exprAddr = (Symbol)instruction.getArg1();
         var label = instruction.getArg2();
-        System.out.println(exprAddr);
-        System.out.println(label);
-        var i = Instruction.;
-        program.add(new Instruction())
-
+        program.add(Instruction.bne(Register.S0, Register.ZERO, label.toString()));
     }
 
     private void genReturn(OpCodeProgram program, TAInstruction taInstruction) {
@@ -80,7 +83,6 @@ public class OpCodeGen {
      */
     private void relabel(OpCodeProgram program, Hashtable<String, Integer> labelHash){
         program.instructions.forEach(instruction -> {
-            System.out.println(instruction);
             if(instruction.getOpCode() == OpCode.JUMP || instruction.getOpCode() == OpCode.JR) {
                 var labelOperand = (Label)instruction.opList.get(0);
                 var label = labelOperand.getLabel();

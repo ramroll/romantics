@@ -27,6 +27,8 @@ public class OpCode {
 
     public static final OpCode MFLO = new OpCode(AddressingType.REGISTER, "MFLO", (byte) 0x08);
 
+    public static final OpCode BNE = new OpCode(AddressingType.OFFSET, "BNE", (byte) 0x09);
+
 
 
     public static final OpCode SW = new OpCode(AddressingType.OFFSET, "SW", (byte) 0x10);
