@@ -14,6 +14,7 @@ class Lexer {
 
     while (it.hasNext()) {
       let c = it.next();
+      console.log(c)
       if (c == "\0") {
         break;
       }
