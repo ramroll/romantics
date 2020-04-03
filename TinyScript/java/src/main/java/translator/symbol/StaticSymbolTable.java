@@ -1,5 +1,7 @@
 package translator.symbol;
 
+import org.apache.commons.lang3.StringUtils;
+
 import java.util.ArrayList;
 import java.util.Hashtable;
 public class StaticSymbolTable {
@@ -28,5 +30,15 @@ public class StaticSymbolTable {
 
     public int size(){
         return this.symbols.size();
+    }
+
+    @Override
+    public String toString() {
+
+        var list = new ArrayList<String>();
+        for(int i = 0; i < this.symbols.size(); i++) {
+            list.add(i+":" + this.symbols.get(i).toString());
+        }
+        return StringUtils.join(list, "\n");
     }
 }
