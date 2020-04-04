@@ -1,6 +1,7 @@
 package gen;
 
 import gen.operand.*;
+import org.apache.commons.lang3.NotImplementedException;
 import org.apache.commons.lang3.StringUtils;
 import translator.symbol.Symbol;
 import translator.symbol.SymbolType;
@@ -30,13 +31,18 @@ public class Instruction {
 
     }
 
-    public static Instruction loadToRegister(Register target,  int offset) {
+    public static Instruction loadToRegister(Register target,  Symbol arg) {
         // 转成整数，目前只支持整数，其他需要大家自己扩展
-        return offsetInstruction(OpCode.LW, target, Register.STATIC,  new Offset(offset));
+        if(arg.getType() == SymbolType.ADDRESS_SYMBOL) {
+            return offsetInstruction(OpCode.LW, target, Register.SP,  new Offset(arg.getOffset()));
+        } else if(arg.getType() == SymbolType.IMMEDIATE_SYMBOL) {
+            return offsetInstruction(OpCode.LW, target, Register.STATIC,  new Offset(arg.getOffset()));
+        }
+        throw new NotImplementedException("Cannot load type " + arg.getType() + " symbol to register");
     }
 
-    public static Instruction saveToMemory(Register source, int offset) {
-        return offsetInstruction(OpCode.SW, source, Register.SP, new Offset(offset));
+    public static Instruction saveToMemory(Register source, Symbol arg) {
+        return offsetInstruction(OpCode.SW, source, Register.SP, new Offset(arg.getOffset()));
     }
 
     public static Instruction bne(Register a, Register b, String label) {
@@ -64,8 +70,9 @@ public class Instruction {
         var i = new Instruction(code);
         i.opList.add(r);
         i.opList.add(number);
-        return null;
+        return i;
     }
+
 
     public OpCode getOpCode() {
         return this.code;

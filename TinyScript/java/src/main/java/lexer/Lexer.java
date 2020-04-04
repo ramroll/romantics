@@ -90,7 +90,6 @@ public class Lexer {
                 continue;
             }
 
-
             throw new LexicalException(c);
         } // end while
         return tokens;

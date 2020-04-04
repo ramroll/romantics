@@ -29,29 +29,30 @@ public class GeneratorTests {
         var program = generator.gen(taProgram);
         assertEquals("LW S0 STATIC 2\n" +
                 "LW S1 STATIC 3\n" +
-                "ADD S1 S0 S1\n" +
-                "SW S1 SP 1\n" +
+                "ADD S2 S0 S1\n" +
+                "SW S2 SP 1\n" +
                 "LW S0 STATIC 1\n" +
                 "LW S1 SP 1\n" +
                 "MULT S0 S1\n" +
-                "MFLO S1\n" +
-                "SW S1 SP 2\n" +
+                "MFLO S2\n" +
+                "SW S2 SP 2\n" +
                 "LW S0 STATIC 0\n" +
                 "LW S1 SP 2\n" +
                 "MULT S0 S1\n" +
-                "MFLO S1\n" +
-                "SW S1 SP 3\n" +
+                "MFLO S2\n" +
+                "SW S2 SP 3\n" +
                 "LW S0 SP 3\n" +
                 "SW S0 SP 0", program.toString());
     }
 
     @Test
     public void funcEvaluate() throws FileNotFoundException, ParseException, LexicalException, UnsupportedEncodingException {
-        var astNode = Parser.fromFile("./example/recursion.ts");
+        var astNode = Parser.fromFile("./example/add.ts");
         var translator = new Translator();
         var taProgram = translator.translate(astNode);
         var gen = new OpCodeGen();
         var program = gen.gen(taProgram);
+        System.out.println(program.toString());
     }
 
 }

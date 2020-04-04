@@ -71,11 +71,14 @@ public class Translator {
             case RETURN_STMT:
                 translateReturnStmt(program, node, symbolTable);
                 return;
+            case CALL_EXPR:
+                translateCallExpr(program, node, symbolTable);
+                return;
         }
         throw new NotImplementedException("Translator not impl. for " + node.getType());
     }
 
-    private void translateReturnStmt(TAProgram program, ASTNode node, SymbolTable symbolTable) {
+    private void translateReturnStmt(TAProgram program, ASTNode node, SymbolTable symbolTable) throws ParseException {
         var resultValue = translateExpr(program, node.getChild(0), symbolTable);
         program.add(new TAInstruction(TAInstructionType.RETURN, null, null, resultValue, null));
     }
@@ -90,7 +93,7 @@ public class Translator {
         var func = (FunctionDeclareStmt)node;
         var args = func.getArgs();
         parent.addChild(symbolTable);
-        symbolTable.createLabel((String)label.getArg1(), node.getLexeme());
+        parent.createLabel((String)label.getArg1(), node.getLexeme());
         for(var arg : args.getChildren()) {
             symbolTable.createSymbolByLexeme(arg.getLexeme());
         }
@@ -112,7 +115,7 @@ public class Translator {
         program.add(new TAInstruction(TAInstructionType.ASSIGN, assigned, "=", addr, null));
     }
 
-    private void translateAssignStmt(TAProgram program, ASTNode node, SymbolTable symbolTable) {
+    private void translateAssignStmt(TAProgram program, ASTNode node, SymbolTable symbolTable) throws ParseException {
         var assigned = symbolTable.createSymbolByLexeme(node.getChild(0).getLexeme());
         var expr = node.getChild(1);
         var addr = translateExpr(program, expr, symbolTable);
@@ -168,7 +171,7 @@ public class Translator {
     public Symbol translateExpr(
             TAProgram program,
             ASTNode node,
-            SymbolTable symbolTable) {
+            SymbolTable symbolTable) throws ParseException {
 
         if(node.isValueType()) {
             var addr = symbolTable.createSymbolByLexeme(node.getLexeme());
@@ -200,7 +203,7 @@ public class Translator {
         throw new NotImplementedException("Unexpected node type :" + node.getType());
     }
 
-    private Symbol translateCallExpr(TAProgram program, ASTNode node, SymbolTable symbolTable) {
+    private Symbol translateCallExpr(TAProgram program, ASTNode node, SymbolTable symbolTable) throws ParseException {
 
         var factor = node.getChild(0);
 
@@ -214,6 +217,9 @@ public class Translator {
             program.add(new TAInstruction(TAInstructionType.PARAM, null, null, addr, i-1));
         }
         var funcAddr = symbolTable.cloneFromSymbolTree(factor.getLexeme(), 0);
+        if(funcAddr == null) {
+            throw new ParseException("function " + factor.getLexeme().getValue() + " not found");
+        }
         program.add(new TAInstruction(TAInstructionType.SP, null, null,
                 -symbolTable.localSize(), null));
         program.add(new TAInstruction(TAInstructionType.CALL, null, null, funcAddr, null));

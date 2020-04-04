@@ -20,4 +20,9 @@ public class Label extends Operand {
     public String getLabel() {
         return this.label;
     }
+
+    @Override
+    public String toString() {
+        return this.label;
+    }
 }

@@ -7,7 +7,9 @@ import java.util.Hashtable;
 
 public class OpCodeProgram {
 
+    Integer entry = null;
     ArrayList<Instruction> instructions = new ArrayList<>();
+    Hashtable<Integer, String> comments = new Hashtable<>();
     public void add(Instruction i) {
         this.instructions.add(i);
     }
@@ -15,9 +17,15 @@ public class OpCodeProgram {
     @Override
     public String toString() {
         ArrayList<String> prts = new ArrayList<>();
-        System.out.println(instructions.size());
-        for(var instruction : instructions) {
-            prts.add(instruction.toString());
+        for(int i = 0; i < instructions.size(); i++) {
+            if(this.comments.containsKey(i)) {
+                prts.add("#" + this.comments.get(i));
+            }
+            String str = instructions.get(i).toString();
+            if(this.entry != null && i == this.entry) {
+                str = "MAIN:" + str;
+            }
+            prts.add(str);
         }
         return StringUtils.join(prts, "\n");
     }
@@ -32,4 +40,11 @@ public class OpCodeProgram {
 
     }
 
+    public void setEntry(int entry) {
+        this.entry = entry;
+    }
+
+    public void addComment(String comment) {
+        this.comments.put(this.instructions.size(), comment);
+    }
 }

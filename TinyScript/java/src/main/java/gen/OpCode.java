@@ -27,7 +27,8 @@ public class OpCode {
 
     public static final OpCode MFLO = new OpCode(AddressingType.REGISTER, "MFLO", (byte) 0x08);
 
-    public static final OpCode BNE = new OpCode(AddressingType.OFFSET, "BNE", (byte) 0x09);
+    public static final OpCode EQ = new OpCode(AddressingType.OFFSET, "EQ", (byte) 0x09);
+    public static final OpCode BNE = new OpCode(AddressingType.OFFSET, "BNE", (byte) 0x15);
 
 
 
@@ -37,6 +38,7 @@ public class OpCode {
 
     public static final OpCode JUMP = new OpCode(AddressingType.JUMP, "JUMP", (byte) 0x20);
     public static final OpCode JR = new OpCode(AddressingType.JUMP, "JR", (byte) 0x21);
+    public static final OpCode RETURN = new OpCode(AddressingType.JUMP, "RETURN", (byte) 0x22);
 
     public static OpCode fromByte(byte byteOpcode) {
         return codes[byteOpcode];
