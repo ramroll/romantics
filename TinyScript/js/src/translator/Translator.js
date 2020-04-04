@@ -20,57 +20,70 @@ class Translator {
     return program
   }
 
-  /**
-   * 语句块翻译
-   * @throws ParseException
-   */
-  translateBlock(program, block, parent) {
-    const symbolTable = new SymbolTable()
-
-    /**
-     * 每个Block增加一个作用域链
-     */
-    const parentOffset = symbolTable.createVariable()
-    parentOffset.setLexeme(new Token(TokenType.INTEGER, symbolTable.localSize() + ""))
-
-    const pushRecord = new TAInstruction(TAInstructionType.SP, null, null, null, null)
-    program.add(pushRecord);
-    parent.addChild(symbolTable);
-    for (const child of block.getChildren()) {
-      this.translateStmt(program, child, symbolTable);
-    }
-    var popRecord = new TAInstruction(TAInstructionType.SP, null, null, null, null);
-
-    /**
-     * 处理活动记录
-     */
-    pushRecord.setArg1(-parent.localSize());
-    popRecord.setArg1(parent.localSize());
-    program.add(popRecord);
-  }
 
   translateStmt(program, node, symbolTable) {
     switch (node.getType()) {
-      case ASTNodeTypes.BLOCK:
-        this.translateBlock(program, node, symbolTable)
-        return
-      case ASTNodeTypes.IF_STMT:
-        this.translateIfStmt(program, node, symbolTable)
-        return
       case ASTNodeTypes.ASSIGN_STMT:
-        this.translateAssignStmt(program, node, symbolTable)
-        return
+        this.translateAssignStmt(program, node, symbolTable);
+        return;
       case ASTNodeTypes.DECLARE_STMT:
-        this.translateDeclareStmt(program, node, symbolTable)
-        return
+        this.translateDeclareStmt(program, node, symbolTable);
+        return;
+      case ASTNodeTypes.BLOCK:
+        this.translateBlock(program, node, symbolTable);
+        return;
+      case ASTNodeTypes.IF_STMT:
+        this.translateIfStmt(program, node, symbolTable);
+        return;
       case ASTNodeTypes.FUNCTION_DECLARE_STMT:
-        this.translateFunctionDeclareStmt(program, node, symbolTable)
-        return
+        this.translateFunctionDeclareStmt(program, node, symbolTable);
+        return;
       case ASTNodeTypes.RETURN_STMT:
-        this.translateReturnStmt(program, node, symbolTable)
-        return
+        this.translateReturnStmt(program, node, symbolTable);
+        return;
+      case ASTNodeTypes.CALL_EXPR:
+        this.translateCallExpr(program, node, symbolTable);
+        return;
     }
-    throw new Error("Translator not impl. for " + node.getType());
+    throw new Error("Translator not impl. for " + node.getType())
+  }
+
+  translateFunctionDeclareStmt(program, node, parent) {
+    const label = program.addLabel()
+    const symbolTable = new SymbolTable()
+    label.setArg2(node.getLexeme().getValue())
+
+    const args = node.getArgs()
+    parent.addChild(symbolTable)
+
+    symbolTable.createLabel(label.getArg1(), node.getLexeme())
+
+    for(const arg of args.getChildren()) {
+      symbolTable.createSymbolByLexeme(arg.getLexeme())
+    }
+
+    for(const child of node.getBlock().getChildren()) {
+      this.translateStmt(program, child, symbolTable)
+    }
+
+  }
+
+  translateCallExpr(program, node, symbolTable) {
+    // print()
+    const factor = node.getChild(0)
+    const returnValue = symbolTable.createVariable()
+    symbolTable.createVariable()
+
+    for(let i = 1; i < node.getChildren().length; i++) {
+      const expr = node.getChild(i)
+      const addr = this.translateExpr(program, expr, symbolTable)
+      program.add(new TAInstruction(TAInstructionType.PARAM, null ,null, addr, i-1))
+    }
+    const funcAddr = symbolTable.cloneFromSymbolTree(factor.getLexeme(), 0)
+    program.add(new TAInstruction(TAInstructionType.SP, null ,null, -symbolTable.localSize(), null))
+    program.add(new TAInstruction(TAInstructionType.CALL, null, null, funcAddr, null))
+    program.add(new TAInstruction(TAInstructionType.SP, null ,null, symbolTable.localSize(), null))
+    return returnValue
   }
 
   translateReturnStmt(program, node, symbolTable) {
@@ -78,21 +91,75 @@ class Translator {
     program.add(new TAInstruction(TAInstructionType.RETURN, null, null, resultValue, null))
   }
 
-  translateFunctionDeclareStmt(program, node, parent) {
-    const label = program.addLabel()
+  translateBlock(program, node, parent) {
     const symbolTable = new SymbolTable()
-    label.setArg2(node.getLexeme().getValue())
-    var func = node
-    var args = func.getArgs()
     parent.addChild(symbolTable)
-    symbolTable.createLabel(label.getArg1(), node.getLexeme())
-    for (const arg of args.getChildren()) {
-      symbolTable.createSymbolByLexeme(arg.getLexeme())
-    }
 
-    for (const child of func.getBlock().getChildren()) {
+
+    const parentOffset = symbolTable.createVariable()
+    parentOffset.setLexeme(new Token(TokenType.INTEGER, parent.localSize() + ""))
+
+
+    program.add(new TAInstruction(
+      TAInstructionType.SP,
+      null,
+      null,
+      -parent.localSize(),
+      null
+    ))
+
+    for(const child of node.getChildren()) {
       this.translateStmt(program, child, symbolTable)
     }
+
+    program.add(new TAInstruction(
+      TAInstructionType.SP,
+      null,
+      null,
+      parent.localSize(),
+      null
+    ))
+  }
+
+
+  translateIfStmt(program, node, symbolTable){
+    const expr = node.getExpr()
+    const exprAddr = this.translateExpr(program, expr, symbolTable)
+    const ifInstruction = new TAInstruction(TAInstructionType.IF, 
+      null, null, exprAddr, null
+    )
+
+    program.add(ifInstruction)
+
+    this.translateBlock(program, node.getBlock(), symbolTable)
+
+
+    let gotoInstruction = null
+    if(node.getChild(2)) {
+      gotoInstruction = new TAInstruction(TAInstructionType.GOTO, 
+        null, null, null, null
+        )
+      program.add(gotoInstruction)
+      const labelEndIf = program.addLabel()
+      ifInstruction.setArg2(labelEndIf.getArg1())
+    }
+
+    if(node.getElseBlock()) {
+      this.translateBlock(program, node.getElseBlock(), symbolTable)
+    } else if(node.getElseIfStmt()) {
+      this.translateIfStmt(program, node.getElseIfStmt(), symbolTable)
+    }
+
+    // if(expr) {... GOTO } else {...}
+    const labelEnd = program.addLabel()
+
+    if(node.getChild(2)) {
+      gotoInstruction.setArg1(labelEnd.getArg1())
+    } else {
+      ifInstruction.setArg2(labelEnd.getArg1())
+    }
+
+
 
   }
 
@@ -113,43 +180,6 @@ class Translator {
     const addr = this.translateExpr(program, expr, symbolTable)
     program.add(new TAInstruction(TAInstructionType.ASSIGN, assigned, "=", addr, null))
   }
-
-
-  /**
-   * IF语句翻译成三地址代码
-   * 1. 表达式
-   * 2. 语句块
-   * 3. else Tail处理
-   */
-  translateIfStmt(program, node, symbolTable) {
-    const expr = node.getExpr()
-    const exprAddr = this.translateExpr(program, expr, symbolTable)
-    const ifOpCode = new TAInstruction(TAInstructionType.IF, null, null, exprAddr, null)
-    program.add(ifOpCode)
-    this.translateBlock(program, node.getBlock(), symbolTable)
-
-    let gotoInstruction = null;
-    if (node.getChild(2) != null) {
-      gotoInstruction = new TAInstruction(TAInstructionType.GOTO, null, null, null, null)
-      program.add(gotoInstruction)
-      const labelEndIf = program.addLabel()
-      ifOpCode.setArg2(labelEndIf.getArg1())
-    }
-
-    if (node.getElseBlock() != null) {
-      this.translateBlock(program, node.getElseBlock(), symbolTable)
-    } else if (node.getElseIfStmt() != null) {
-      this.translateIfStmt(program, node.getElseIfStmt(), symbolTable)
-    }
-
-    const labelEnd = program.addLabel()
-    if (node.getChild(2) == null) {
-      ifOpCode.setArg2(labelEnd.getArg1())
-    } else {
-      gotoInstruction.setArg1(labelEnd.getArg1())
-    }
-  }
-
 
 
   /**
@@ -193,19 +223,7 @@ class Translator {
     throw new Error("Unexpected node type :" + node.getType());
   }
 
-  translateCallExpr(program, node, symbolTable) {
-    const factor = node.getChild(0)
-    const returnValue = symbolTable.createVariable()
-    symbolTable.createVariable()
-    for (let i = 1; i < node.getChildren().length; i++) {
-      const expr = node.getChildren()[i];
-      const addr = this.translateExpr(program, expr, symbolTable);
-      program.add(new TAInstruction(TAInstructionType.PARAM, null, null, addr, i-1))
-    }
-    const funcAddr = symbolTable.cloneFromSymbolTree(factor.getLexeme(), 0)
-    program.add(new TAInstruction(TAInstructionType.CALL, null, null, funcAddr, null))
-    return returnValue
-  }
+
 }
 
 module.exports = Translator
