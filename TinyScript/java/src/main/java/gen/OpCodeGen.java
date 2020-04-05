@@ -40,7 +40,7 @@ public class OpCodeGen {
                     genSp(program, taInstruction);
                     break;
                 case LABEL:
-                    if(taInstruction.getArg2().equals("main")) {
+                    if(taInstruction.getArg2() != null && taInstruction.getArg2().equals("main")) {
                         program.setEntry(program.instructions.size());
                     }
                     labelHash.put((String) taInstruction.getArg1(), program.instructions.size());
@@ -92,8 +92,9 @@ public class OpCodeGen {
      */
     private void relabel(OpCodeProgram program, Hashtable<String, Integer> labelHash){
         program.instructions.forEach(instruction -> {
-            if(instruction.getOpCode() == OpCode.JUMP || instruction.getOpCode() == OpCode.JR) {
-                var labelOperand = (Label)instruction.opList.get(0);
+            if(instruction.getOpCode() == OpCode.JUMP || instruction.getOpCode() == OpCode.JR || instruction.getOpCode() == OpCode.BNE) {
+                var idx = instruction.getOpCode()==OpCode.BNE?2 : 0;
+                var labelOperand = (Label)instruction.opList.get(idx);
                 var label = labelOperand.getLabel();
                 var offset = labelHash.get(label);
                 labelOperand.setOffset(offset);
@@ -119,10 +120,8 @@ public class OpCodeGen {
         var no = (int)taInstruction.getArg2();
         program.add(Instruction.loadToRegister(Register.S0, arg1));
         // PASS a
-        // 写入下一个活动记录(因此是负数offset)
-        // 下一个活动记录0位置是返回值,1位置是返回地址(因此需要+2)
         program.add(Instruction.offsetInstruction(OpCode.SW, Register.S0, Register.SP,
-                new Offset(-(no+2))));
+                new Offset(-(no))));
     }
 
     void genFuncBegin(OpCodeProgram program, TAInstruction ta) {

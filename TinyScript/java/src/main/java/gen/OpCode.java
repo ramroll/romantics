@@ -27,7 +27,7 @@ public class OpCode {
 
     public static final OpCode MFLO = new OpCode(AddressingType.REGISTER, "MFLO", (byte) 0x08);
 
-    public static final OpCode EQ = new OpCode(AddressingType.OFFSET, "EQ", (byte) 0x09);
+    public static final OpCode EQ = new OpCode(AddressingType.REGISTER, "EQ", (byte) 0x09);
     public static final OpCode BNE = new OpCode(AddressingType.OFFSET, "BNE", (byte) 0x15);
 
 

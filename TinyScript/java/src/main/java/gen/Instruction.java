@@ -106,7 +106,6 @@ public class Instruction {
 
     public static Instruction fromByCode(int code) throws GeneratorException {
 
-        System.out.println("code:" + code);
         byte byteOpcode = (byte) ( (code & MASK_OPCODE) >>> 26);
         var opcode = OpCode.fromByte(byteOpcode);
         var i = new Instruction(opcode);

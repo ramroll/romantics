@@ -8,6 +8,8 @@ import parser.util.ParseException;
 import translator.symbol.Symbol;
 import translator.symbol.SymbolTable;
 
+import java.util.ArrayList;
+
 public class Translator {
 
     public TAProgram translate(ASTNode astNode) throws ParseException {
@@ -47,20 +49,10 @@ public class Translator {
         var parentOffset = symbolTable.createVariable();
         parentOffset.setLexeme(new Token(TokenType.INTEGER, symbolTable.localSize()+""));
 
-        var pushRecord = new TAInstruction(TAInstructionType.SP, null, null, null, null);
-        program.add(pushRecord);
         parent.addChild(symbolTable);
         for(var child : block.getChildren()) {
             translateStmt(program, child, symbolTable);
         }
-        var popRecord = new TAInstruction(TAInstructionType.SP, null, null, null, null);
-
-        /**
-         * 处理活动记录
-         */
-        pushRecord.setArg1(-parent.localSize());
-        popRecord.setArg1(parent.localSize());
-        program.add(popRecord);
     }
 
     public void translateStmt(TAProgram program, ASTNode node, SymbolTable symbolTable) throws ParseException {
@@ -225,12 +217,20 @@ public class Translator {
         var factor = node.getChild(0);
 
 
-        var returnValue = symbolTable.createVariable();
+
+        var list = new ArrayList<TAInstruction>();
         for(int i = 1; i < node.getChildren().size(); i++) {
             var expr = node.getChildren().get(i);
             var addr = translateExpr(program, expr, symbolTable);
-            program.add(new TAInstruction(TAInstructionType.PARAM, null, null, addr, i-1));
+            list.add(new TAInstruction(TAInstructionType.PARAM, null, null, addr, i - 1));
         }
+
+        for(var instruction : list) {
+            instruction.setArg2( symbolTable.localSize() + (int)instruction.getArg2() + 2);
+            program.add(instruction);
+        }
+
+        var returnValue = symbolTable.createVariable();
         var funcAddr = symbolTable.cloneFromSymbolTree(factor.getLexeme(), 0);
         if(funcAddr == null) {
             throw new ParseException("function " + factor.getLexeme().getValue() + " not found");

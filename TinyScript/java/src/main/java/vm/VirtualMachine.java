@@ -49,7 +49,6 @@ public class VirtualMachine {
 
     private int fetch() {
         var PC = registers[Register.PC.getAddr()];
-        System.out.println("fetch:" + PC);
         return memory[(int) PC];
     }
 
@@ -70,6 +69,7 @@ public class VirtualMachine {
                 registers[r0.getAddr()] = registers[r1.getAddr()] + registers[r2.getAddr()];
                 break;
             }
+            case 0x09:
             case 0x02: { // SUB
                 var r0 = (Register) instruction.getOperand(0);
                 var r1 = (Register) instruction.getOperand(1);
@@ -118,6 +118,15 @@ public class VirtualMachine {
                 registers[r0.getAddr()] = memory[(int) (R1VAL + offset.getOffset())];
                 break;
             }
+            case 0x15 : { // BNE
+                var r0 = (Register)instruction.getOperand(0);
+                var r1 = (Register)instruction.getOperand(1);
+                var offset = (Offset)instruction.getOperand(2);
+                if(registers[r0.getAddr()] != registers[r1.getAddr()]) {
+                    registers[Register.PC.getAddr()] = offset.getOffset() + startProgram - 1;
+                }
+                break;
+            }
             case 0x20 : { // JUMP
                 var r0 = (Offset) instruction.getOperand(0);
                 registers[Register.PC.getAddr()] = r0.getOffset() + startProgram - 1;
@@ -136,10 +145,10 @@ public class VirtualMachine {
                     // match返回值
                 }
                 var spVal = registers[Register.SP.getAddr()];
-                System.out.println("Return:" + memory[spVal]);
                 registers[Register.PC.getAddr()] = memory[spVal];
                 break;
             }
+
         }
 
     }
@@ -149,6 +158,7 @@ public class VirtualMachine {
         var instruction = decode(code);
         exec(instruction);
         registers[Register.PC.getAddr()] += 1;
+        System.out.println(registers[Register.PC.getAddr()] + "|" + endProgramSection);
         return registers[Register.PC.getAddr()] < endProgramSection;
     }
 
