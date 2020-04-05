@@ -57,27 +57,41 @@ public class GeneratorTests {
         var taProgram = translator.translate(astNode);
         var gen = new OpCodeGen();
         var program = gen.gen(taProgram);
-        var expected ="#p0 = a + b\n" +
-                "LW S0 SP 0\n" +
-                "LW S1 SP 1\n" +
+        System.out.println(program);
+        var expected ="#FUNC_BEGIN\n" +
+                "SW RA SP 0\n" +
+                "#p1 = a + b\n" +
+                "LW S0 SP -1\n" +
+                "LW S1 SP -2\n" +
                 "ADD S2 S0 S1\n" +
-                "SW S2 SP 2\n" +
-                "#RETURN p0\n" +
-                "LW S0 SP 2\n" +
+                "SW S2 SP -3\n" +
+                "#RETURN p1\n" +
+                "LW S0 SP -3\n" +
                 "SW S0 SP 1\n" +
                 "RETURN \n" +
-                "#PARAM 10 0\n" +
-                "MAIN:LW S0 STATIC 0\n" +
-                "SW S0 SP -2\n" +
-                "#PARAM 20 1\n" +
-                "LW S0 STATIC 1\n" +
+                "#FUNC_BEGIN\n" +
+                "MAIN:SW RA SP 0\n" +
+                "#PARAM 10 3\n" +
+                "LW S0 STATIC 0\n" +
                 "SW S0 SP -3\n" +
+                "#PARAM 20 4\n" +
+                "LW S0 STATIC 1\n" +
+                "SW S0 SP -4\n" +
                 "#SP -2\n" +
-                "ADDI SP -2\n" +
+                "SUBI SP 2\n" +
                 "#CALL L0\n" +
                 "JR L0\n" +
                 "#SP 2\n" +
-                "ADDI SP 2\n";
+                "ADDI SP 2\n" +
+                "#RETURN null\n" +
+                "SW S0 SP 1\n" +
+                "RETURN \n" +
+                "#SP -1\n" +
+                "SUBI SP 1\n" +
+                "#CALL L1\n" +
+                "JR L1\n" +
+                "#SP 1\n" +
+                "ADDI SP 1";
         assertEquals(expected, program.toString());
     }
 

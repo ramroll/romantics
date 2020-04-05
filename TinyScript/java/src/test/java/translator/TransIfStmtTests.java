@@ -22,9 +22,7 @@ public class TransIfStmtTests {
 
         var program = translator.translate(astNode);
         var expected = "IF a ELSE L0\n" +
-                "SP -1\n" +
                 "b = 1\n" +
-                "SP 1\n" +
                 "L0:";
         assertEquals(expected, program.toString());
 
@@ -44,14 +42,10 @@ public class TransIfStmtTests {
 
         var program = translator.translate(astNode);
         var expected = "IF a ELSE L0\n" +
-                "SP -1\n" +
                 "b = 1\n" +
-                "SP 1\n" +
                 "GOTO L1\n" +
                 "L0:\n" +
-                "SP -1\n" +
                 "b = 2\n" +
-                "SP 1\n" +
                 "L1:";
         assertEquals(expected, program.toString());
     }
@@ -65,29 +59,21 @@ public class TransIfStmtTests {
 
         var expectd = "p0 = a == 1\n" +
                 "IF p0 ELSE L0\n" +
-                "SP -2\n" +
                 "b = 100\n" +
-                "SP 2\n" +
                 "GOTO L5\n" +
                 "L0:\n" +
                 "p1 = a == 2\n" +
                 "IF p1 ELSE L1\n" +
-                "SP -3\n" +
                 "b = 500\n" +
-                "SP 3\n" +
                 "GOTO L4\n" +
                 "L1:\n" +
                 "p2 = a == 3\n" +
                 "IF p2 ELSE L2\n" +
-                "SP -4\n" +
                 "p1 = a * 1000\n" +
                 "b = p1\n" +
-                "SP 4\n" +
                 "GOTO L3\n" +
                 "L2:\n" +
-                "SP -4\n" +
                 "b = -1\n" +
-                "SP 4\n" +
                 "L3:\n" +
                 "L4:\n" +
                 "L5:";
