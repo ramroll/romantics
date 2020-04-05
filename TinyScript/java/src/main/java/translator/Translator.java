@@ -8,6 +8,8 @@ import parser.util.ParseException;
 import translator.symbol.Symbol;
 import translator.symbol.SymbolTable;
 
+import java.util.ArrayList;
+
 public class Translator {
 
     public TAProgram translate(ASTNode astNode) throws ParseException {
@@ -19,6 +21,18 @@ public class Translator {
         }
 
         program.setStaticSymbols(symbolTable);
+
+        var main = new Token(TokenType.VARIABLE, "main");
+        if(symbolTable.exists(main)) {
+            symbolTable.createVariable(); // 返回值
+            program.add(new TAInstruction(TAInstructionType.SP, null, null,
+                    -symbolTable.localSize(), null));
+            program.add(new TAInstruction(
+                    TAInstructionType.CALL, null, null,
+                    symbolTable.cloneFromSymbolTree(main, 0),null ));
+            program.add(new TAInstruction(TAInstructionType.SP, null, null,
+                    symbolTable.localSize(), null));
+        }
         return program;
     }
 
@@ -35,20 +49,10 @@ public class Translator {
         var parentOffset = symbolTable.createVariable();
         parentOffset.setLexeme(new Token(TokenType.INTEGER, symbolTable.localSize()+""));
 
-        var pushRecord = new TAInstruction(TAInstructionType.SP, null, null, null, null);
-        program.add(pushRecord);
         parent.addChild(symbolTable);
         for(var child : block.getChildren()) {
             translateStmt(program, child, symbolTable);
         }
-        var popRecord = new TAInstruction(TAInstructionType.SP, null, null, null, null);
-
-        /**
-         * 处理活动记录
-         */
-        pushRecord.setArg1(-parent.localSize());
-        popRecord.setArg1(parent.localSize());
-        program.add(popRecord);
     }
 
     public void translateStmt(TAProgram program, ASTNode node, SymbolTable symbolTable) throws ParseException {
@@ -71,12 +75,18 @@ public class Translator {
             case RETURN_STMT:
                 translateReturnStmt(program, node, symbolTable);
                 return;
+            case CALL_EXPR:
+                translateCallExpr(program, node, symbolTable);
+                return;
         }
         throw new NotImplementedException("Translator not impl. for " + node.getType());
     }
 
-    private void translateReturnStmt(TAProgram program, ASTNode node, SymbolTable symbolTable) {
-        var resultValue = translateExpr(program, node.getChild(0), symbolTable);
+    private void translateReturnStmt(TAProgram program, ASTNode node, SymbolTable symbolTable) throws ParseException {
+        Symbol resultValue = null;
+        if(node.getChild(0) != null) {
+            resultValue = translateExpr(program, node.getChild(0), symbolTable);
+        }
         program.add(new TAInstruction(TAInstructionType.RETURN, null, null, resultValue, null));
     }
 
@@ -85,12 +95,14 @@ public class Translator {
 
         var symbolTable = new SymbolTable();
 
+        program.add(new TAInstruction(TAInstructionType.FUNC_BEGIN, null, null, null, null));
+        symbolTable.createVariable(); // 返回地址
 
         label.setArg2(node.getLexeme().getValue());
         var func = (FunctionDeclareStmt)node;
         var args = func.getArgs();
         parent.addChild(symbolTable);
-        symbolTable.createLabel((String)label.getArg1(), node.getLexeme());
+        parent.createLabel((String)label.getArg1(), node.getLexeme());
         for(var arg : args.getChildren()) {
             symbolTable.createSymbolByLexeme(arg.getLexeme());
         }
@@ -112,7 +124,7 @@ public class Translator {
         program.add(new TAInstruction(TAInstructionType.ASSIGN, assigned, "=", addr, null));
     }
 
-    private void translateAssignStmt(TAProgram program, ASTNode node, SymbolTable symbolTable) {
+    private void translateAssignStmt(TAProgram program, ASTNode node, SymbolTable symbolTable) throws ParseException {
         var assigned = symbolTable.createSymbolByLexeme(node.getChild(0).getLexeme());
         var expr = node.getChild(1);
         var addr = translateExpr(program, expr, symbolTable);
@@ -168,7 +180,7 @@ public class Translator {
     public Symbol translateExpr(
             TAProgram program,
             ASTNode node,
-            SymbolTable symbolTable) {
+            SymbolTable symbolTable) throws ParseException {
 
         if(node.isValueType()) {
             var addr = symbolTable.createSymbolByLexeme(node.getLexeme());
@@ -200,18 +212,35 @@ public class Translator {
         throw new NotImplementedException("Unexpected node type :" + node.getType());
     }
 
-    private Symbol translateCallExpr(TAProgram program, ASTNode node, SymbolTable symbolTable) {
+    private Symbol translateCallExpr(TAProgram program, ASTNode node, SymbolTable symbolTable) throws ParseException {
 
         var factor = node.getChild(0);
-        var returnValue = symbolTable.createVariable();
-        symbolTable.createVariable();
+
+
+
+        var list = new ArrayList<TAInstruction>();
         for(int i = 1; i < node.getChildren().size(); i++) {
             var expr = node.getChildren().get(i);
             var addr = translateExpr(program, expr, symbolTable);
-            program.add(new TAInstruction(TAInstructionType.PARAM, null, null, addr, i-1));
+            list.add(new TAInstruction(TAInstructionType.PARAM, null, null, addr, i - 1));
         }
+
+        for(var instruction : list) {
+            instruction.setArg2( symbolTable.localSize() + (int)instruction.getArg2() + 2);
+            program.add(instruction);
+        }
+
+        var returnValue = symbolTable.createVariable();
         var funcAddr = symbolTable.cloneFromSymbolTree(factor.getLexeme(), 0);
+        if(funcAddr == null) {
+            throw new ParseException("function " + factor.getLexeme().getValue() + " not found");
+        }
+        program.add(new TAInstruction(TAInstructionType.SP, null, null,
+                -symbolTable.localSize(), null));
         program.add(new TAInstruction(TAInstructionType.CALL, null, null, funcAddr, null));
+
+        program.add(new TAInstruction(TAInstructionType.SP, null, null,
+            symbolTable.localSize(),null));
         return returnValue;
     }
 }

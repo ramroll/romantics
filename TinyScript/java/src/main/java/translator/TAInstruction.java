@@ -1,6 +1,7 @@
 package translator;
 
 import org.apache.commons.lang3.NotImplementedException;
+import org.apache.commons.lang3.StringUtils;
 import translator.symbol.Symbol;
 
 public class TAInstruction {
@@ -43,6 +44,8 @@ public class TAInstruction {
                 return String.format("GOTO %s", this.arg1);
             case LABEL:
                 return String.format(this.arg1 + ":");
+            case FUNC_BEGIN:
+                return "FUNC_BEGIN";
             case RETURN:
                 return "RETURN " + this.arg1;
             case PARAM:

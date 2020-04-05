@@ -1,11 +1,14 @@
 package gen;
 
+import gen.operand.ImmediateNumber;
 import gen.operand.Label;
 import gen.operand.Offset;
 import gen.operand.Register;
+import org.apache.commons.lang3.NotImplementedException;
 import translator.*;
 import translator.symbol.Symbol;
 
+import javax.print.DocFlavor;
 import java.util.Hashtable;
 
 public class OpCodeGen {
@@ -18,6 +21,8 @@ public class OpCodeGen {
         var labelHash = new Hashtable<String, Integer>();
 
         for(var taInstruction : taInstructions) {
+
+            program.addComment(taInstruction.toString());
             switch(taInstruction.getType()) {
                 case ASSIGN:
                     genCopy(program, taInstruction);
@@ -35,25 +40,49 @@ public class OpCodeGen {
                     genSp(program, taInstruction);
                     break;
                 case LABEL:
+                    if(taInstruction.getArg2() != null && taInstruction.getArg2().equals("main")) {
+                        program.setEntry(program.instructions.size());
+                    }
                     labelHash.put((String) taInstruction.getArg1(), program.instructions.size());
                     break;
                 case RETURN:
                     genReturn(program, taInstruction);
                     break;
-
+                case FUNC_BEGIN:
+                    genFuncBegin(program, taInstruction);
+                    break;
+                case IF: {
+                    genIf(program, taInstruction);
+                    break;
+                }
+                default:
+                    throw new NotImplementedException("Unknown type:" + taInstruction.getType());
             }
+
         }
 
         this.relabel(program, labelHash);
+
         return program;
     }
 
+    private void genIf(OpCodeProgram program, TAInstruction instruction) {
+//        var exprAddr = (Symbol)instruction.getArg1();
+        var label = instruction.getArg2();
+        program.add(Instruction.bne(Register.S2, Register.ZERO, (String) label));
+    }
+
     private void genReturn(OpCodeProgram program, TAInstruction taInstruction) {
-        var ret = taInstruction.getResult();
-        program.add(Instruction.loadToRegister(Register.S0, ret));
+        var ret = (Symbol)taInstruction.getArg1();
+        if(ret != null) {
+            program.add(Instruction.loadToRegister(Register.S0, ret));
+        }
         program.add(Instruction.offsetInstruction(
                 OpCode.SW ,Register.S0, Register.SP, new Offset(1)
         ));
+
+        var i = new Instruction(OpCode.RETURN);
+        program.add(i);
     }
 
     /**
@@ -63,8 +92,9 @@ public class OpCodeGen {
      */
     private void relabel(OpCodeProgram program, Hashtable<String, Integer> labelHash){
         program.instructions.forEach(instruction -> {
-            if(instruction.getOpCode() == OpCode.JUMP || instruction.getOpCode() == OpCode.JR) {
-                var labelOperand = (Label)instruction.opList.get(0);
+            if(instruction.getOpCode() == OpCode.JUMP || instruction.getOpCode() == OpCode.JR || instruction.getOpCode() == OpCode.BNE) {
+                var idx = instruction.getOpCode()==OpCode.BNE?2 : 0;
+                var labelOperand = (Label)instruction.opList.get(idx);
                 var label = labelOperand.getLabel();
                 var offset = labelHash.get(label);
                 labelOperand.setOffset(offset);
@@ -74,9 +104,15 @@ public class OpCodeGen {
     }
 
     private void genSp(OpCodeProgram program, TAInstruction taInstruction) {
-        var symbol = (Symbol)taInstruction.getArg1();
-        program.add(Instruction.immediate(OpCode.ADDI, Register.SP,
-                new ImmediateNumber(Integer.parseInt(symbol.getLexeme().getValue()))));
+        var offset = (int)taInstruction.getArg1();
+        if(offset > 0) {
+            program.add(Instruction.immediate(OpCode.ADDI, Register.SP,
+                    new ImmediateNumber(offset)));
+        }
+        else {
+            program.add(Instruction.immediate(OpCode.SUBI, Register.SP,
+                    new ImmediateNumber(-offset)));
+        }
     }
 
     private void genPass(OpCodeProgram program, TAInstruction taInstruction) {
@@ -84,16 +120,21 @@ public class OpCodeGen {
         var no = (int)taInstruction.getArg2();
         program.add(Instruction.loadToRegister(Register.S0, arg1));
         // PASS a
-        // 写入下一个活动记录(因此是负数offset)
-        // 下一个活动记录0位置是返回值,1位置是返回地址(因此需要+2)
-        program.add(Instruction.offsetInstruction(OpCode.SW, Register.S0, Register.SP, new Offset(-(no+2))));
+        program.add(Instruction.offsetInstruction(OpCode.SW, Register.S0, Register.SP,
+                new Offset(-(no))));
+    }
+
+    void genFuncBegin(OpCodeProgram program, TAInstruction ta) {
+        var i = Instruction.offsetInstruction(OpCode.SW, Register.RA, Register.SP, new Offset(0));
+        program.add(i);
     }
 
     void genCall(OpCodeProgram program, TAInstruction ta){
-        var label = (String)ta.getArg1();
+        var label = (Symbol)ta.getArg1();
         var i = new Instruction(OpCode.JR);
-        i.opList.add(new Label(label));
+        i.opList.add(new Label(label.getLabel()));
         program.add(i);
+
     }
 
     void genGoto(OpCodeProgram program, TAInstruction ta) {
@@ -102,6 +143,7 @@ public class OpCodeGen {
         // label对应的位置在relabel阶段计算
         i.opList.add(new Label(label));
         program.add(i);
+
     }
 
     void genCopy(OpCodeProgram program, TAInstruction ta) {
@@ -126,6 +168,9 @@ public class OpCodeGen {
                 case "*":
                     program.add(Instruction.register(OpCode.MULT, Register.S0, Register.S1,null));
                     program.add(Instruction.register(OpCode.MFLO, Register.S2, null, null));
+                    break;
+                case "==" :
+                    program.add(Instruction.register(OpCode.EQ, Register.S2, Register.S1, Register.S0));
                     break;
             }
             program.add(Instruction.saveToMemory(Register.S2, result));

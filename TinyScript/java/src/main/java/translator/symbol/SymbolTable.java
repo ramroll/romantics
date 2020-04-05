@@ -55,13 +55,20 @@ public class SymbolTable {
         Symbol symbol = null;
         if(lexeme.isScalar()) {
             symbol = Symbol.createImmediateSymbol(lexeme);
+            this.addSymbol(symbol);
         } else {
-            symbol = cloneFromSymbolTree(lexeme, 0);
-            if(symbol == null) {
-                symbol = Symbol.createAddressSymbol(lexeme, this.offsetIndex++);
+            var _symbol = this.symbols.stream().filter(x -> x.getLexeme().getValue().equals(lexeme.getValue())).findFirst();
+            if (_symbol.isEmpty()) {
+                symbol = cloneFromSymbolTree(lexeme, 0);
+                if(symbol == null) {
+                    symbol = Symbol.createAddressSymbol(lexeme, this.offsetIndex++);
+                }
+                this.addSymbol(symbol);
+            } else {
+                symbol = _symbol.get();
             }
+
         }
-        this.addSymbol(symbol);
         return symbol;
     }
 

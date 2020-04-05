@@ -22,18 +22,20 @@ describe("translate-func", () => {
     const translator = new Translator()
     const program = translator.translate(astNode)
 
-    const expect =  "L0:\n" +
-      "p0 = n == 0\n" +
-      "IF p0 ELSE L1\n" +
-      "SP -2\n" +
-      "RETURN 1\n" +
-      "SP 2\n" +
-      "L1:\n" +
-      "p3 = n - 1\n" +
-      "PARAM p3 0\n" +
-      "CALL L0\n" +
-      "p4 = p1 * n\n" +
-      "RETURN p4";
+    const expect =  `L0:
+p0 = n == 0
+IF p0 ELSE L1
+SP -2
+RETURN 1
+SP 2
+L1:
+p3 = n - 1
+PARAM p3 0
+SP -5
+CALL L0
+SP 5
+p4 = p1 * n
+RETURN p4`;
 
       console.log(program.toString())
     assert.equal(program.toString(), expect)

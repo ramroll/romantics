@@ -23,6 +23,7 @@ public class AlphabetHelperTests {
         assertEquals(true, AlphabetHelper.isOperator('+'));
         assertEquals(true, AlphabetHelper.isOperator('/'));
         assertEquals(true, AlphabetHelper.isOperator('='));
+        assertEquals(true, AlphabetHelper.isOperator(','));
         assertEquals(false, AlphabetHelper.isOperator('a'));
 
     }

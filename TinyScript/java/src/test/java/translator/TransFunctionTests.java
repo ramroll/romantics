@@ -18,8 +18,9 @@ public class TransFunctionTests {
         var translator = new Translator();
         var program = translator.translate(astNode);
         var expect = "L0:\n" +
-                "p0 = a + b\n" +
-                "RETURN p0";
+                "FUNC_BEGIN\n" +
+                "p1 = a + b\n" +
+                "RETURN p1";
         assertEquals(expect, program.toString());
 
     }
@@ -29,18 +30,20 @@ public class TransFunctionTests {
         var astNode = Parser.fromFile("./example/recursion.ts");
         var translator = new Translator();
         var program = translator.translate(astNode);
+        System.out.println(program.toString());
 
         var expect = "L0:\n" +
-                "p0 = n == 0\n" +
-                "IF p0 ELSE L1\n" +
-                "SP -2\n" +
+                "FUNC_BEGIN\n" +
+                "p1 = n == 0\n" +
+                "IF p1 ELSE L1\n" +
                 "RETURN 1\n" +
-                "SP 2\n" +
                 "L1:\n" +
-                "p3 = n - 1\n" +
-                "PARAM p3 0\n" +
+                "p2 = n - 1\n" +
+                "PARAM p2 6\n" +
+                "SP -5\n" +
                 "CALL L0\n" +
-                "p4 = p1 * n\n" +
+                "SP 5\n" +
+                "p4 = p3 * n\n" +
                 "RETURN p4";
 
         assertEquals(expect, program.toString());
