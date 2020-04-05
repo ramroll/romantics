@@ -19,6 +19,18 @@ public class Translator {
         }
 
         program.setStaticSymbols(symbolTable);
+
+        var main = new Token(TokenType.VARIABLE, "main");
+        if(symbolTable.exists(main)) {
+            symbolTable.createVariable(); // 返回值
+            program.add(new TAInstruction(TAInstructionType.SP, null, null,
+                    -symbolTable.localSize(), null));
+            program.add(new TAInstruction(
+                    TAInstructionType.CALL, null, null,
+                    symbolTable.cloneFromSymbolTree(main, 0),null ));
+            program.add(new TAInstruction(TAInstructionType.SP, null, null,
+                    symbolTable.localSize(), null));
+        }
         return program;
     }
 
@@ -79,7 +91,10 @@ public class Translator {
     }
 
     private void translateReturnStmt(TAProgram program, ASTNode node, SymbolTable symbolTable) throws ParseException {
-        var resultValue = translateExpr(program, node.getChild(0), symbolTable);
+        Symbol resultValue = null;
+        if(node.getChild(0) != null) {
+            resultValue = translateExpr(program, node.getChild(0), symbolTable);
+        }
         program.add(new TAInstruction(TAInstructionType.RETURN, null, null, resultValue, null));
     }
 
@@ -88,6 +103,8 @@ public class Translator {
 
         var symbolTable = new SymbolTable();
 
+        program.add(new TAInstruction(TAInstructionType.FUNC_BEGIN, null, null, null, null));
+        symbolTable.createVariable(); // 返回地址
 
         label.setArg2(node.getLexeme().getValue());
         var func = (FunctionDeclareStmt)node;
@@ -209,8 +226,6 @@ public class Translator {
 
 
         var returnValue = symbolTable.createVariable();
-        // 返回地址
-        symbolTable.createVariable();
         for(int i = 1; i < node.getChildren().size(); i++) {
             var expr = node.getChildren().get(i);
             var addr = translateExpr(program, expr, symbolTable);

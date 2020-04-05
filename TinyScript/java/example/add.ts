@@ -4,4 +4,5 @@ func add(int a, int b) int {
 
 func main()  void {
   add(10, 20)
+  return
 }

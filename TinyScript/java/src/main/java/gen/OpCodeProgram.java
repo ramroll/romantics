@@ -1,6 +1,7 @@
 package gen;
 
 import org.apache.commons.lang3.StringUtils;
+import translator.TAProgram;
 
 import java.util.ArrayList;
 import java.util.Hashtable;
@@ -30,8 +31,8 @@ public class OpCodeProgram {
         return StringUtils.join(prts, "\n");
     }
 
-    public ArrayList<Long> toByteCodes() {
-        var codes = new ArrayList<Long>();
+    public ArrayList<Integer> toByteCodes() {
+        var codes = new ArrayList<Integer>();
 
         for(var instruction : instructions) {
             codes.add(instruction.toByteCode());
@@ -46,5 +47,18 @@ public class OpCodeProgram {
 
     public void addComment(String comment) {
         this.comments.put(this.instructions.size(), comment);
+    }
+
+    public Integer getEntry() {
+        return this.entry;
+
+    }
+
+    public ArrayList<Integer> getStaticArea(TAProgram taProgram) {
+        var list = new ArrayList<Integer>();
+        for(var symbol : taProgram.getStaticSymbolTable().getSymbols()) {
+            list.add(Integer.parseInt(symbol.getLexeme().getValue()));
+        }
+        return list;
     }
 }

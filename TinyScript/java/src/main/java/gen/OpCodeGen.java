@@ -48,6 +48,9 @@ public class OpCodeGen {
                 case RETURN:
                     genReturn(program, taInstruction);
                     break;
+                case FUNC_BEGIN:
+                    genFuncBegin(program, taInstruction);
+                    break;
                 case IF: {
                     genIf(program, taInstruction);
                     break;
@@ -58,8 +61,8 @@ public class OpCodeGen {
 
         }
 
-
         this.relabel(program, labelHash);
+
         return program;
     }
 
@@ -71,7 +74,9 @@ public class OpCodeGen {
 
     private void genReturn(OpCodeProgram program, TAInstruction taInstruction) {
         var ret = (Symbol)taInstruction.getArg1();
-        program.add(Instruction.loadToRegister(Register.S0, ret));
+        if(ret != null) {
+            program.add(Instruction.loadToRegister(Register.S0, ret));
+        }
         program.add(Instruction.offsetInstruction(
                 OpCode.SW ,Register.S0, Register.SP, new Offset(1)
         ));
@@ -99,8 +104,14 @@ public class OpCodeGen {
 
     private void genSp(OpCodeProgram program, TAInstruction taInstruction) {
         var offset = (int)taInstruction.getArg1();
-        program.add(Instruction.immediate(OpCode.ADDI, Register.SP,
-                new ImmediateNumber(offset)));
+        if(offset > 0) {
+            program.add(Instruction.immediate(OpCode.ADDI, Register.SP,
+                    new ImmediateNumber(offset)));
+        }
+        else {
+            program.add(Instruction.immediate(OpCode.SUBI, Register.SP,
+                    new ImmediateNumber(-offset)));
+        }
     }
 
     private void genPass(OpCodeProgram program, TAInstruction taInstruction) {
@@ -110,7 +121,13 @@ public class OpCodeGen {
         // PASS a
         // 写入下一个活动记录(因此是负数offset)
         // 下一个活动记录0位置是返回值,1位置是返回地址(因此需要+2)
-        program.add(Instruction.offsetInstruction(OpCode.SW, Register.S0, Register.SP, new Offset(-(no+2))));
+        program.add(Instruction.offsetInstruction(OpCode.SW, Register.S0, Register.SP,
+                new Offset(-(no+2))));
+    }
+
+    void genFuncBegin(OpCodeProgram program, TAInstruction ta) {
+        var i = Instruction.offsetInstruction(OpCode.SW, Register.RA, Register.SP, new Offset(0));
+        program.add(i);
     }
 
     void genCall(OpCodeProgram program, TAInstruction ta){
@@ -118,6 +135,7 @@ public class OpCodeGen {
         var i = new Instruction(OpCode.JR);
         i.opList.add(new Label(label.getLabel()));
         program.add(i);
+
     }
 
     void genGoto(OpCodeProgram program, TAInstruction ta) {
@@ -126,6 +144,7 @@ public class OpCodeGen {
         // label对应的位置在relabel阶段计算
         i.opList.add(new Label(label));
         program.add(i);
+
     }
 
     void genCopy(OpCodeProgram program, TAInstruction ta) {

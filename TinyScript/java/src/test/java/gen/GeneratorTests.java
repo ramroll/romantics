@@ -27,21 +27,26 @@ public class GeneratorTests {
                         "3:1", taProgram.getStaticSymbolTable().toString());
         var generator = new OpCodeGen();
         var program = generator.gen(taProgram);
-        assertEquals("LW S0 STATIC 2\n" +
+        System.out.println(program);
+        assertEquals("#p0 = 5 + 1\n" +
+                "LW S0 STATIC 2\n" +
                 "LW S1 STATIC 3\n" +
                 "ADD S2 S0 S1\n" +
-                "SW S2 SP 1\n" +
+                "SW S2 SP -1\n" +
+                "#p1 = 2 * p0\n" +
                 "LW S0 STATIC 1\n" +
-                "LW S1 SP 1\n" +
+                "LW S1 SP -1\n" +
                 "MULT S0 S1\n" +
                 "MFLO S2\n" +
-                "SW S2 SP 2\n" +
+                "SW S2 SP -2\n" +
+                "#p2 = 3 * p1\n" +
                 "LW S0 STATIC 0\n" +
-                "LW S1 SP 2\n" +
+                "LW S1 SP -2\n" +
                 "MULT S0 S1\n" +
                 "MFLO S2\n" +
-                "SW S2 SP 3\n" +
-                "LW S0 SP 3\n" +
+                "SW S2 SP -3\n" +
+                "#a = p2\n" +
+                "LW S0 SP -3\n" +
                 "SW S0 SP 0", program.toString());
     }
 
@@ -52,7 +57,28 @@ public class GeneratorTests {
         var taProgram = translator.translate(astNode);
         var gen = new OpCodeGen();
         var program = gen.gen(taProgram);
-        System.out.println(program.toString());
+        var expected ="#p0 = a + b\n" +
+                "LW S0 SP 0\n" +
+                "LW S1 SP 1\n" +
+                "ADD S2 S0 S1\n" +
+                "SW S2 SP 2\n" +
+                "#RETURN p0\n" +
+                "LW S0 SP 2\n" +
+                "SW S0 SP 1\n" +
+                "RETURN \n" +
+                "#PARAM 10 0\n" +
+                "MAIN:LW S0 STATIC 0\n" +
+                "SW S0 SP -2\n" +
+                "#PARAM 20 1\n" +
+                "LW S0 STATIC 1\n" +
+                "SW S0 SP -3\n" +
+                "#SP -2\n" +
+                "ADDI SP -2\n" +
+                "#CALL L0\n" +
+                "JR L0\n" +
+                "#SP 2\n" +
+                "ADDI SP 2\n";
+        assertEquals(expected, program.toString());
     }
 
 }

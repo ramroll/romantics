@@ -41,4 +41,8 @@ public class StaticSymbolTable {
         }
         return StringUtils.join(list, "\n");
     }
+
+    public ArrayList<Symbol> getSymbols() {
+        return this.symbols;
+    }
 }

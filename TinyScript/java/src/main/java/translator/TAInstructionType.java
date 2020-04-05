@@ -8,5 +8,6 @@ public enum TAInstructionType {
     CALL,
     RETURN,
     SP,
-    PARAM;
+    PARAM,
+    FUNC_BEGIN
 }
