@@ -70,14 +70,14 @@ digraph G {
   800[label="!"]
   801[label="!="]
   8 -> 800[label="any"]
-  8 -> 801[label="!"]
+  8 -> 801[label="="]
 
   0 -> 9[label="&"]
   900[label="&"]
   901[label="&="]
   902[label="&&"]
   9 -> 900[label="any"]
-  9 -> 901[label="&"]
+  9 -> 901[label="="]
   9 -> 902[label="&&"]
 
   0 -> 10[label="|"]
@@ -85,22 +85,22 @@ digraph G {
   1001[label="|="]
   1002[label="||"]
   10 -> 1000[label="any"]
-  10 -> 1001[label="|"]
-  10 -> 1002[label="||"]
+  10 -> 1001[label="="]
+  10 -> 1002[label="|"]
 
 
   0 -> 11[label="^"]
   1100[label="^"]
   1101[label="^="]
   11 -> 1100[label="any"]
-  11 -> 1101[label="^"]
+  11 -> 1101[label="="]
 
 
   0 -> 12[label="%"]
   1200[label="%"]
   1201[label="%="]
   12 -> 1200[label="any"]
-  12 -> 1201[label="%"]
+  12 -> 1201[label="="]
   
   13[label=","]
   0 -> 13[label=","]
