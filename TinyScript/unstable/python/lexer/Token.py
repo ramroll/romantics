@@ -274,7 +274,7 @@ class Token:
                self._type == STRING or self._type == BOOLEAN
 
     def isValue(self):
-        return self.isScalar()
+        return self.isScalar() or self.isVariable()
 
     def toString(self):
         return "type {}, value {}".format(self._type.type, self._value.value)

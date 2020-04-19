@@ -33,6 +33,14 @@ class TestPeekIterator(TestCase):
         it.putBack()
         self.assertEqual(it.next(), 'b')
         self.assertEqual(it.next(), 'c')
+        self.assertEqual(it.peek(),it.next())
+
+        it = PeekIterator((i for i in "a+b"), '\0')
+        c = it.next()
+        lookahead = it.peek()
+        it.putBack()
+        self.assertEqual(it.peek(), 'a')
+
 
     def test_end_token(self):
         it = PeekIterator((i for i in "abcdefg"), '\0')

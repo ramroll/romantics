@@ -31,11 +31,25 @@ class TestLexer(TestCase):
         self.assertToken(tokens[9], "-", TokenType.OPERATOR)
         self.assertToken(tokens[10], "21", TokenType.INTEGER)
 
-        source1 = "(a+b)*1.22"
-        it1 = (i for i in source1)
-        tokens1 = lexer.analyse(it1)
-        self.assertEqual(7, len(tokens1))
-        self.assertToken(tokens1[0], "(", TokenType.BRACKET)
+        source = "(a+b)*1.22"
+        it = (i for i in source)
+        token = lexer.analyse(it)
+        self.assertEqual(7, len(token))
+        self.assertToken(token[0], "(", TokenType.BRACKET)
+
+        source = """
+            func foo(a,b){
+                print(a+b) // two sum
+                /*  multi lines comment
+                    whatever written here will not be parsed
+                */
+            }
+        """
+        it = (i for i in source)
+        token = lexer.analyse(it)
+        self.assertEqual(15, len(token))
+        self.assertToken(token[0], "func", TokenType.KEYWORD)
+        print(token)
 
     def assertToken(self, token, value, type):
         self.assertEqual(token.getValue(), value)

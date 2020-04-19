@@ -18,7 +18,7 @@ class PeekIterator:
 
     def peek(self):
         if len(self.stackPutBacks) > 0:
-            return self.stackPutBacks[0]
+            return self.stackPutBacks[-1]
         val = self.next()
         self.putBack()
         return val
@@ -38,13 +38,13 @@ class PeekIterator:
                 val = next(self.it)
             except StopIteration:
                 #before
-                tmp = self.endToken
-                self.endToken = None
-                return tmp
+                # tmp = self.endToken
+                # self.endToken = None
+                # return tmp
 
                 #after
-                # val = self.endToken
-                # self.endToken = None
+                val = self.endToken
+                self.endToken = None
 
         # process cache
         while len(self.queueCache) > CACHE_SIZE - 1:
