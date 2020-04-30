@@ -321,7 +321,7 @@ public class Token {
                         throw new LexicalException(lookahead);
                     }
                     else if(AlphabetHelper.isNumber(lookahead)) {
-                        state = 20;
+                        state = 4;
                     }
                     else {
                         return new Token(TokenType.FLOAT, s);
@@ -329,22 +329,12 @@ public class Token {
                     break;
                 case 5:
                     if(AlphabetHelper.isNumber(lookahead)) {
-                        state = 20;
+                        state = 4;
                     }
                     else {
                         throw new LexicalException(lookahead);
                     }
-                    break;
-                case 20:
-                    if(AlphabetHelper.isNumber(lookahead)) {
-                        state = 20;
-                    }
-                    else if(lookahead == '.') {
-                        throw new LexicalException(lookahead);
-                    }
-                    else {
-                        return new Token(TokenType.FLOAT, s);
-                    }
+                    break;               
 
             }
 
