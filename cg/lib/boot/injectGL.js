@@ -1,7 +1,7 @@
 export default function injectGL(gl) {
 
   gl.uniformAny = (program, locationName, ...args) => {
-    console.log("---Set Uniform--")
+    console.debug("---Set Uniform--")
     const location = gl.getUniformLocation(program, locationName)
     if(args.length === 1) {
       const v = args[0]

@@ -10,7 +10,7 @@ function main() {
         {
           name: "a_position",
           size: 2,
-          data: primitives.d2_f(100, 100, 100, 150, 30),
+          data: primitives.d2_rect(100, 100, 200, 200),
           type : "VERTEX" 
         },
       ],

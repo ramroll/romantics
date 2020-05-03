@@ -12,7 +12,7 @@ export class Scene{
   }
 
   prepare(){
-    console.log('--- prepare scene --')
+    console.debug('--- prepare scene --')
     for(let model of this.models) {
       model.prepare()
     }    
@@ -20,7 +20,7 @@ export class Scene{
 
   render(){
 
-    console.log('--- render scene --')
+    console.debug('--- render scene --')
     const gl = this.gl
     const program = this.program
     gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);

@@ -1,0 +1,17 @@
+.control-panel {
+  position : absolute;
+  top : 0;
+  right : 0;
+  z-index: 100;
+}
+
+.panel-item {
+  display : flex;
+  flex-direction: row;
+  align-items: center;
+  padding : 10px;
+}
+
+.panel-item label {
+  padding-right : 10px;
+}

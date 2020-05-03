@@ -1,4 +1,4 @@
-export const F = (x, y, width, height, thickness) => {
+export const d2_f = (x, y, width, height, thickness) => {
 
   return [
     // left column
