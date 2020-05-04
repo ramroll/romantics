@@ -1,30 +1,32 @@
 import RenderContext from '../RenderContext'
 import { GLArrayBuffer } from './GLArrayBuffer'
+import _ from 'lodash'
+import { GLUniform } from './GLUniform'
+import StateManager from './StateManager'
+
 export class Model {
 
-  constructor(){
+  constructor({initialState, data}){
     this.gl = RenderContext.getGL() 
     this.program = RenderContext.getProgram()
-    this.size = 0
-    this.state = {
-      buffers : [],
-      uniforms : []
-    }
+
+    /*
+     *  GL uniforms and buffers
+     */
     this.buffers = []
-    this.mutators = []
+    this.uniforms = []
+
+    this.initialState = initialState
+    this.initialize(data(this.gl))
   }
 
-  mutator(mutator){
-    this.mutators.push(mutator)
-  }
+  initialize( rawData ) {
+    this.stateManager = new StateManager(rawData)
+    const {buffers, uniforms }= this.stateManager.getData()
 
-  prepare(){
-    for(let mutator of this.mutators) {
-      this.state = {...this.state, ...mutator(this.state)}
-    }
-
-    for(let meta of this.state.buffers) {
-      const {name, data, type, size} = meta
+    for(let key in buffers) {
+      const {data, type, size} = buffers[key] 
+      const name = key
       
       switch(type) {
         case 'VERTEX' : {
@@ -32,36 +34,53 @@ export class Model {
           buffer.useAsVertexBuffer()
           this.buffers.push(buffer)
           buffer.prepare()
-          break;
+          break
         }
         default : {
           throw "unkonw buffer type : " + type
         }
       }
     }
-  }
 
-  apply() {
-    this.applyUniforms()
-    this.applyArrayBuffers()
-  }
-
-
-  applyArrayBuffers() {
-    for(let buffer of this.buffers) {
-      buffer.apply()
+    for(let key in uniforms) {
+      this.uniforms.push(new GLUniform(key, uniforms[key]))
     }
   }
 
+  setState(obj) {
+    this.stateManager.setState(obj)
+  }
+
+  applyUpdate = (update) => {
+    const { path, value } = update
+    const [cat, name, key] = path
+    if (cat === 'buffers') {
+      this.buffers.find(x => x.name === name).update(key, value)
+    } else if (cat === 'uniforms') {
+      this.uniforms.find(x => x.name === name).update(key, value)
+    }
+  }
+
+  mutate(){
+    this.stateManager.eval().forEach(this.applyUpdate)
+  }
+
+  applyArrayBuffers() {
+    this.buffers.forEach(x => x.apply())
+  }
+
   applyUniforms() {
-    for(let uniform of this.state.uniforms) {
-      const [name, ...arg] = uniform
-      this.gl.uniformAny(this.program, name, ...arg)
+    const {uniforms} = this.stateManager.getData()
+    for(let uniform of this.uniforms) {
+      uniform.updator(uniforms[uniform.name].value)
     }
   }
 
 
   render(){
+    this.applyUniforms()
+    this.applyArrayBuffers()
+
     let size = 0
     for(let buffer of this.buffers) {
       if(buffer.isVertexBuffer()) {

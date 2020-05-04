@@ -1,0 +1,4 @@
+{
+  "mochaExplorer.files": "lib/tests/**/*.test.js",
+  "mochaExplorer.require": "@babel/register"
+}

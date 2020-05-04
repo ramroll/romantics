@@ -1,6 +1,6 @@
 import React, {useState, useRef, useEffect} from 'react'
 import './slider.css'
-
+import _ from 'lodash'
 
 const useMouseDrag = () => {
 
