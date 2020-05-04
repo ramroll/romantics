@@ -27,7 +27,7 @@ function main() {
       }
     }
   })
-  let x = 0, y = 0
+
   /* 设置控制面板 */
   const canvas = document.getElementById('canvas')
   const widget = new Widget([
