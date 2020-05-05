@@ -29,6 +29,16 @@ export class GLArrayBuffer{
     );
   }
 
+
+  update(key, value) {
+    if(key === 'data') {
+      this.data = value 
+      this.prepare()
+      return
+    } 
+    throw "unsupported operation update " + key
+  }
+
   apply(){
     this.gl.enableVertexAttribArray(this.position)
     this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.buffer)

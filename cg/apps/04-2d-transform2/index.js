@@ -10,7 +10,7 @@ function main() {
         buffers: {
           a_position: {
             size: 2,
-            data: ({x, y}) => primitives.d2_f(x, y, 100, 150, 30),
+            data: primitives.d2_f(0, 0, 100, 150, 30),
             type: "VERTEX"
           },
         },
@@ -23,6 +23,9 @@ function main() {
             type: 'VECTOR',
             value: [gl.canvas.width, gl.canvas.height]
           },
+          u_translation: ({x, y}) => {
+            return { value: [x, y], type : 'VECTOR' }
+          }
         },
       }
     }
@@ -35,7 +38,7 @@ function main() {
       type : "slider",
       range : [0, canvas.width],
       onChange : (value) => {
-        model.setState({x:value})
+        model.setState({x : value})
       },
       label : "x"
     },
@@ -43,7 +46,7 @@ function main() {
       type : "slider",
       range : [0, canvas.height],
       onChange : (value) => {
-        model.setState({y:value})
+        model.setState({y : value})
       },
       label : "y"
     },

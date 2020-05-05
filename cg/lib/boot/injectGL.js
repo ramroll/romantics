@@ -1,7 +1,7 @@
 export default function injectGL(gl) {
 
   gl.uniformAny = (program, locationName, ...args) => {
-    console.debug("---Set Uniform--")
+    console.debug("---Set Uniform--", program, locationName, args.length)
     const location = gl.getUniformLocation(program, locationName)
     if(args.length === 1) {
       const v = args[0]
@@ -21,8 +21,10 @@ export default function injectGL(gl) {
         return
       } else if(args.length === 3) {
         gl.uniform3f(location, ...args)
+        return
       } else if(args.length === 4) {
         gl.uniform4f(location, ...args)
+        return
       }
     }
 

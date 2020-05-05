@@ -11,13 +11,6 @@ export class Scene{
     this.models.push(model)
   }
 
-  prepare(){
-    console.debug('--- prepare scene --')
-    for(let model of this.models) {
-      model.prepare()
-    }    
-  }
-
   render(){
 
     console.debug('--- render scene --')
@@ -30,7 +23,7 @@ export class Scene{
     gl.useProgram(program);
 
     for(let model of this.models) {
-      model.apply()
+      model.mutate()
       model.render()
     }
 
