@@ -1,8 +1,20 @@
 {
   "compilerOptions": {
-    "target": "ES6",
+    "target": "ESNext",
+    "module": "CommonJS",
     "allowJs": true,
-    "allowUmdGlobalAccess": true
+    "allowSyntheticDefaultImports": true,
+    "baseUrl": "./",
+    "paths": {
+      "*": ["types/*"]
+    }
   },
-  "exclude": ["**/__tests__/**/*.test.ts"]
+  "include": [
+    "src/**/*.ts",
+    "types/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules/**",
+    "**/__tests__/**/*.test.ts"
+  ]
 }
