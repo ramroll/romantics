@@ -1,0 +1,8 @@
+{
+  "compilerOptions": {
+    "target": "ES6",
+    "allowJs": true,
+    "allowUmdGlobalAccess": true
+  },
+  "exclude": ["**/__tests__/**/*.test.ts"]
+}
