@@ -2,7 +2,7 @@
 import LinkedList = require('linkedlist')
 const CACHE_SIZE = 10
 
-export interface IPeekIterator<T> {
+interface IPeekIterator<T> {
   it: Generator<T>
   endToken: T
   stackPutBacks: LinkedList<T>
@@ -16,7 +16,7 @@ export interface IPeekIterator<T> {
 /**
  * 流处理
  */
-class PeekIterator<T> implements IPeekIterator<T> {
+class PeekIterator<T=string> implements IPeekIterator<T> {
   it: Generator<T, any, unknown>
   endToken: T
   stackPutBacks: LinkedList<T>
