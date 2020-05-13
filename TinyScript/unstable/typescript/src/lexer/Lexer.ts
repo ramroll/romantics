@@ -11,6 +11,7 @@ import fs from 'fs'
  * @output Array<Token>
  */
 class Lexer {
+  // 关键点：生成Token的有限状态机
   analyse(source: string): Array<Token<string>> {
     const tokens: Array<Token<string>> = []
     const it = new PeekIterator(arrayToGenerator([...source]), '\0')

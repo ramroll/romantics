@@ -32,7 +32,7 @@ interface IToken<T> {
   isVariable(): boolean
   toString(): string
 }
-export class Token<T> implements IToken<T> {
+export class Token<T=string> implements IToken<T> {
   type: TokenType;
   value: T;
   constructor(type: TokenType, value: T) {
