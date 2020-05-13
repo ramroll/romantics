@@ -142,7 +142,7 @@ export class Token<T> implements IToken<T> {
             return new Token(TokenType.OPERATOR, s + lookahead)
           } else {
             it.putBack()
-            return new Token(TokenType.OPERATOR, '+')
+            return new Token(TokenType.OPERATOR, s)
           }
         case 3:
         case 4:
