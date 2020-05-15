@@ -9,20 +9,17 @@ ax = fig.gca(projection='3d')
 # ax.set_aspect(1)
 
 # draw cube
-r = [-1, 1]
-for s, e in combinations(np.array(list(product(r, r, r))), 2):
-    if np.sum(np.abs(s-e)) == r[1]-r[0]:
-        print(s, e)
-        ax.plot3D(*zip(s, e), color="b")
+# r = [-1, 1]
+# for s, e in combinations(np.array(list(product(r, r, r))), 2):
+#     if np.sum(np.abs(s-e)) == r[1]-r[0]:
+#         ax.plot3D(*zip(s, e), color="b")
 
 # draw sphere
 u, v = np.mgrid[0:2*np.pi:20j, 0:np.pi:10j]
-print(u)
-print(v)
 x = np.cos(u)*np.sin(v)
 y = np.sin(u)*np.sin(v)
 z = np.cos(v)
-ax.plot_wireframe(x, y, z, color="r")
+ax.plot_wireframe(x, y, z, color="b")
 
 # draw a point
 ax.scatter([0], [0], [0], color="g", s=100)
@@ -46,5 +43,5 @@ class Arrow3D(FancyArrowPatch):
 
 a = Arrow3D([0, 1], [0, 1], [0, 1], mutation_scale=20,
             lw=1, arrowstyle="-|>", color="k")
-ax.add_artist(a)
+# ax.add_artist(a)
 plt.show()
