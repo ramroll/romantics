@@ -31,7 +31,7 @@ const useMouseDrag = () => {
               const move = diff / 140 + startMove.current
               if(move <= 0) return 0
               if(move > 1) return 1
-              return move
+              return Math.round( move * 500 ) / 500
               
             })
           }

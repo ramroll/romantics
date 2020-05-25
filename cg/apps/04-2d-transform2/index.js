@@ -1,44 +1,25 @@
-import { Model, loop, primitives, Scene } from "../../lib";
+import { Model, loop, primitives } from "../../lib";
 import Widget from '../../lib/widget'
+import RenderContext from '../../lib/RenderContext'
 
 function main() {
-
-  const model = new Model({
-    initialState:{x:0, y:0},
-    data: (gl) => {
-      return {
-        buffers: {
-          a_position: {
-            size: 2,
-            data: primitives.d2_f(0, 0, 100, 150, 30),
-            type: "VERTEX"
-          },
-        },
-        uniforms: {
-          u_color: {
-            type: 'VECTOR',
-            value: [Math.random(), Math.random(), Math.random(), 1.0]
-          },
-          u_resolution: {
-            type: 'VECTOR',
-            value: [gl.canvas.width, gl.canvas.height]
-          },
-          u_translation: ({x, y}) => {
-            return { value: [x, y], type : 'VECTOR' }
-          }
-        },
-      }
-    }
-  })
-
+  
+  const gl = RenderContext.getGL()
+  const mesh = primitives.d2_f(100, 100, 100, 150, 30)
+  const model = new Model(mesh)
+  model.setVectorUniform('u_color', [Math.random(), Math.random(), Math.random(), 1.0])
+  model.setVectorUniform('u_resolution', [gl.canvas.width, gl.canvas.height])
   /* 设置控制面板 */
   const canvas = document.getElementById('canvas')
+
+  const translation = [0, 0]
   const widget = new Widget([
     {
       type : "slider",
       range : [0, canvas.width],
       onChange : (value) => {
-        model.setState({x : value})
+        translation[0] = value
+        model.setVectorUniform('u_translation', translation)
       },
       label : "x"
     },
@@ -46,18 +27,16 @@ function main() {
       type : "slider",
       range : [0, canvas.height],
       onChange : (value) => {
-        model.setState({y : value})
+        translation[1] = value
+        model.setVectorUniform('u_translation', translation)
       },
       label : "y"
     },
   ])
-
-  const scene = new Scene()
-  scene.add(model)
   widget.render()
 
   loop(() => {
-    scene.render()
+    model.draw()
   })
 }
 

@@ -1,6 +1,7 @@
+import { Mesh } from '../model/Mesh'
 export const d2_rect = (x, y, width, height) => {
 
-  return [
+  const data = [
     x, y,
     x + width, y,
     x, y + height,
@@ -8,4 +9,6 @@ export const d2_rect = (x, y, width, height) => {
     x + width, y + height,
     x + width, y 
   ]
+
+  return new Mesh({vertexes : data, dimension : 2})
 }
