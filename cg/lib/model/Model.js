@@ -22,10 +22,28 @@ export class Model {
     }
   }
 
+  setMatrixUniform(name, value) {
+    const position = this.gl.getUniformLocation(this.program, name)
+    if(value.length === 4) {
+      this.gl.uniformMatrix2fv(position, false, value)
+    } else if(value.length === 9) {
+      this.gl.uniformMatrix3fv(position, false, value)
+    } else if(value.length === 16) {
+      this.gl.uniformMatrix4fv(position, false, value)
+
+    }
+
+  }
+
   draw(){
     const gl = this.gl
-    gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
-    gl.clear(gl.COLOR_BUFFER_BIT);
+    gl.enable(gl.DEPTH_TEST)
+    gl.depthFunc(gl.LEQUAL)
+    gl.clearColor(0.5, 0.5, 0.5, 0.9)
+    gl.clearDepth(1.0)
+
+    gl.viewport(0.0, 0.0, canvas.width, canvas.height)
+    gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT)
     this.mesh.draw()
   }
 

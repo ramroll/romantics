@@ -1,4 +1,3 @@
-import injectGL from './injectGL'
 export const initGL = () => {
   const canvas = document.getElementById('canvas')
   const gl = canvas.getContext('webgl')
@@ -6,6 +5,5 @@ export const initGL = () => {
     throw "gl initialize fail."
   }
 
-  injectGL(gl)
   return gl
 }
