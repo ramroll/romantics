@@ -16,17 +16,6 @@
       
       
       void main() {
-         // [0, 1]
-         // vec3 zeroToOne = a_position / vec3(100, 100, 100);
-      
-         // [0, 2]
-         // vec3 zeroToTwo = zeroToOne * 2.0;
-      
-         // [-1, 1] 
-         // vec3 clipSpace = zeroToTwo - 1.0;
-      
-         // gl_Position = u_project * u_view * u_rotatey * u_rotatez * vec4(clipSpace,  1);
-         //gl_Position = vec4(a_position, 1);
          gl_Position = u_project * u_view * u_rotatey * u_rotatez * vec4(a_position, 1);
          v_color = a_color;
       }

@@ -12,15 +12,14 @@ function main() {
 
   const aspect = gl.canvas.width / gl.canvas.height
   function draw(){
-    console.log( matrix.ortho(Math.PI * 0.6, aspect, 10, 100) )
     model.setMatrixUniform('u_rotatez', matrix.rotateZ(angle))
     model.setMatrixUniform('u_rotatey', matrix.rotateY(angle))
-    model.setMatrixUniform('u_project', matrix.ortho(Math.PI * 0.6, aspect, 1, 20))
+    model.setMatrixUniform('u_project', matrix.perspective(Math.PI * 0.6, aspect, 1, 100))
     model.setMatrixUniform('u_view', [
       1,0,0,0,
       0,1,0,0,
       0,0,1,0,
-      0,0,-2,1
+      0,0,-3,1
     ])
     model.draw()
     angle+=0.01
