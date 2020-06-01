@@ -1,16 +1,11 @@
 import { Model, loop, shape} from "../../lib";
 import Widget from '../../lib/widget'
 import RenderContext from '../../lib/RenderContext'
-import { identity3d, translate2d, multiply3d } from "../../lib/matrix";
+import { identity3d, translate2d, multiply3d, rotate2d, scale2d } from "../../lib/matrix";
 
 function main() {
   
   const gl = RenderContext.getGL()
-  // const worldMatrix = [
-  //   2/gl.canvas.width, 0, -1, 
-  //   0, 2/gl.canvas.height, -1,
-  //   0, 0, 1
-  // ]
   const worldMatrix = [
     2/gl.canvas.width, 0, 0,
     0, -2/gl.canvas.height,0,
@@ -25,6 +20,8 @@ function main() {
   /* 设置控制面板 */
 
   let translate = [0, 0]
+  let rotate = 0
+  let scale = 1.0
 
 
   const widget = new Widget([
@@ -44,13 +41,45 @@ function main() {
       },
       label : "y"
     },
+    {
+      type : 'slider',
+      range : [0, 2 * Math.PI],
+      onChange : (value) => {
+        rotate = value
+      },
+      label : "r"
+
+    },
+    {
+      type : 'slider',
+      range : [0.1, 3],
+      onChange : (value) => {
+        scale = value
+      },
+      label : "s" 
+    }
   ])
   widget.render()
 
   loop(() => {
     let uMatrix = identity3d()
     const matTranslate = translate2d(translate[0], translate[1])
-    uMatrix = multiply3d(uMatrix, matTranslate)
+    const matRotate = rotate2d(rotate)
+    const matScale = scale2d(scale, scale)
+    // 思考尝试使用不同的顺序的到的结果为什么不一样？
+    // uMatrix = multiply3d(uMatrix, matTranslate, matScale, matRotate)
+    // uMatrix = multiply3d(uMatrix, matScale, matTranslate, matRotate)
+    const matBeforeRotate = translate2d(-50, -75)
+    const matAfterRotate = translate2d(50, 75)
+    console.log(matBeforeRotate)
+    uMatrix = multiply3d(
+      uMatrix, 
+      matBeforeRotate, 
+      matRotate, 
+      matAfterRotate, 
+      matScale, 
+      matTranslate
+    )
     model.setUntiMatrix(uMatrix)
     model.draw()
   })
