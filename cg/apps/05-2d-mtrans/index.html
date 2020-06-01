@@ -9,7 +9,7 @@
       attribute vec2 a_position;
 
       uniform vec2 u_resolution;
-      uniform mat3 u_model;
+      uniform mat3 u_mdel;
       
       void main() {
          vec2 position = (u_model * vec3(a_position, 1)).xy;
