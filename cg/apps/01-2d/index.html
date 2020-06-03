@@ -11,7 +11,9 @@
       
       void main() {
          // convert the rectangle points from pixels to 0.0 to 1.0
-         vec2 zeroToOne = a_position / u_resolution;
+
+         mat2 T = mat2(1.0, 3.0, 2.0, 1.0);
+         vec2 zeroToOne = T * a_position / u_resolution;
       
          // convert from 0->1 to 0->2
          vec2 zeroToTwo = zeroToOne * 2.0;

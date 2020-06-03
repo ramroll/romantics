@@ -1,5 +1,6 @@
 import { Model, shape, matrix} from '../../lib'
 import RenderContext from '../../lib/RenderContext'
+import Widget from '../../lib/widget'
 
 function main() {
 
@@ -11,19 +12,21 @@ function main() {
   let zNear = 1.0
   let zFar = 100.0
   let fov = Math.PI * 0.6 
-  let zPos = 10
+  let zPos = 3 
   const widget = new Widget([
     {
       type : "slider",
-      range : [0, 100],
+      range : [-10, 20],
+      defaultValue : zNear,
       onChange : (value) => {
-        zNear = value 
+        zNear = value
       },
       label : "zNear"
     },
     {
       type : "slider",
-      range : [0, 100],
+      range : [10, 1000],
+      defaultValue : zFar,
       onChange : (value) => {
         zFar = value
       },
@@ -31,6 +34,7 @@ function main() {
     },
     {
       type : 'slider',
+      defaultValue : fov,
       range : [0, Math.PI],
       onChange : (value) => {
         fov = value
@@ -39,12 +43,13 @@ function main() {
 
     },
     {
-      type : 'zpos',
-      range : [0, 100],
+      type : 'slider',
+      defaultValue :zPos,
+      range : [1, 10],
       onChange : (value) => {
         zPos = value
       },
-      label : "s" 
+      label : "zpos" 
     }
   ])
   widget.render()

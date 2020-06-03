@@ -1,9 +1,9 @@
 import { identity3d } from "./identity";
 
-export function rotate2d(deg) {
+export function rotate2d(a) {
   return [
-    Math.cos(deg), Math.sin(deg), 0,
-    -Math.sin(deg), Math.cos(deg), 0,
+    Math.cos(a), Math.sin(a), 0,
+    -Math.sin(a), Math.cos(a), 0,
     0, 0, 1
   ]
 }

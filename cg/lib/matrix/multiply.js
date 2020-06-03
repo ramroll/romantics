@@ -28,6 +28,7 @@ export function multiply(a, b, m, p) {
   return r
 } 
 
+
 export function multiply3d(...matrixes) {
   return matrixes.reduce((a, b) => multiply(a, b, 3, 3), identity3d())
 }

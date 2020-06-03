@@ -71,14 +71,14 @@ function main() {
     // uMatrix = multiply3d(uMatrix, matScale, matTranslate, matRotate)
     const matBeforeRotate = translate2d(-50, -75)
     const matAfterRotate = translate2d(50, 75)
-    console.log(matBeforeRotate)
+    // console.log(matBeforeRotate)
     uMatrix = multiply3d(
       uMatrix, 
       matBeforeRotate, 
       matRotate, 
       matAfterRotate, 
       matScale, 
-      matTranslate
+      matTranslate,
     )
     model.setUntiMatrix(uMatrix)
     model.draw()

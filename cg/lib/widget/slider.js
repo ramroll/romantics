@@ -2,9 +2,9 @@ import React, {useState, useRef, useEffect} from 'react'
 import './slider.css'
 import _ from 'lodash'
 
-const useMouseDrag = () => {
+const useMouseDrag = (initialMove) => {
 
-  const [move, setMove] = useState(0)
+  const [move, setMove] = useState(initialMove)
   const [dragging, setDragging] = useState(false)
   const x = useRef(null)
   const startMove = useRef(0)
@@ -50,10 +50,13 @@ const useMouseDrag = () => {
   }
 }
 
-export default ({range, onChange}) => {
-  const {barHandlers, sliderHandlers, move} = useMouseDrag()
+export default ({range, onChange, defaultValue = range[0]}) => {
+
+  const {barHandlers, sliderHandlers, move} = useMouseDrag(() => {
+    return (defaultValue - range[0]) / (range[1] - range[0])
+  })
   useEffect(() => {
-    onChange && onChange(move * range[1] + range[0])
+    onChange && onChange(move * (range[1]-range[0]) + range[0])
   }, [move])
   return (
     <div className="slider">
