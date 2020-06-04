@@ -63,12 +63,12 @@ function main() {
     model.setMatrixUniform('u_project', 
       matrix.perspective(fov, aspect, zNear, zFar))
     model.setVectorUniform('u_zpos', [0, 0, zPos])
-    model.setMatrixUniform('u_view', [
-      1,0,0,0,
-      0,1,0,0,
-      0,0,1,0,
-      0,0,-3,1
-    ])
+    // model.setMatrixUniform('u_view', [
+    //   1,0,0,0,
+    //   0,1,0,0,
+    //   0,0,1,0,
+    //   0,0,-3,1
+    // ])
     model.draw()
     angle+=0.01
     requestAnimationFrame(draw)

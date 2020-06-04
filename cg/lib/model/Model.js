@@ -1,15 +1,18 @@
-import { identity3d } from '../matrix'
+import { identity3d, identity4d, multiplynd } from '../matrix'
 import RenderContext from '../RenderContext'
 export class Model {
 
-  constructor(mesh){
+  constructor(mesh, dimensions = 3){
     this.mesh = mesh
-    this.worldMatrix = identity3d() 
-    this.unitMatrix = identity3d()
+    this.worldMatrix = dimensions === 3 ? identity4d() 
+      : identity3d()
+    this.unitMatrix = dimensions === 3 ? identity4d()
+      : identity3d()
     this.gl = RenderContext.getGL()
     this.program = RenderContext.getProgram()
     this.gl.useProgram(this.program)
-0
+    this.children = []
+
   }
 
 
@@ -41,20 +44,27 @@ export class Model {
 
   setWorldMatrix(worldMatrix) {
     this.worldMatrix = worldMatrix
+    this.children.forEach(child => {
+      child.setWorldMatrix(worldMatrix)
+    })
   }
 
-  draw(){
-    const gl = this.gl
+  addChild(model){
+    model.parent = this
+    this.children.push(model)
+  }
 
+
+  draw(){
     this.setMatrixUniform('u_unit', this.unitMatrix)
     this.setMatrixUniform('u_world', this.worldMatrix)
 
-    gl.enable(gl.DEPTH_TEST)
-    gl.depthFunc(gl.LEQUAL)
-    gl.clearDepth(1.0)
-    gl.viewport(0.0, 0.0, canvas.width, canvas.height)
-    gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT)
-    this.mesh.draw()
+    if(this.mesh) {
+      this.mesh.draw()
+    }
+
+    this.children.forEach(child => child.draw())
+
   }
 
 }

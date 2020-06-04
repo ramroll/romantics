@@ -1,4 +1,4 @@
-import {identity3d, identity4d} from './identity'
+import {identity3d, identity4d, identity2d} from './identity'
 /**
  * m*n 和 p*q的两个矩阵相乘
  * 复杂度：O(m*n*q) n == p
@@ -34,5 +34,20 @@ export function multiply3d(...matrixes) {
 }
 
 export function multiply4d(...matrixes) {
-  return matrixes.reduce((a, b) => multiply(a, b, 3, 3), identity4d())
+  return matrixes.reduce((a, b) => multiply(a, b, 4, 4), identity4d())
+}
+
+export function multiplynd(...matrixes) {
+  const n = Math.sqrt(matrixes[0].length)
+  let i = null
+  if(n == 2) {
+    i = identity2d()
+  } else if(n === 3) {
+    i = identity3d()
+  } else if(n === 4) {
+    i = identity4d()
+  } else {
+    throw "not support."
+  }
+  return matrixes.reduce((a, b) => multiply(a, b, n, n), i)
 }
