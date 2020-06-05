@@ -1,7 +1,7 @@
 import { Mesh } from "../model/Mesh"
 
 export const d3_f = () => {
-  const vertexes = [
+  const vertices = [
     0, 0, 0,
     0, 150, 0,
     30, 0, 0,
@@ -260,5 +260,5 @@ export const d3_f = () => {
     160, 160, 220
   ].map(v => v/255)
 
-  return new Mesh({vertexes, colors})
+  return new Mesh({vertices, colors})
 }

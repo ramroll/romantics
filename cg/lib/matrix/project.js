@@ -9,14 +9,24 @@
 // }
 
 export function perspective(fov, aspect, zNear, zFar) {
-  const f = 1/Math.tan(fov*0.5)
-  const inv = 1 / (zNear - zFar)
-  const m = [
-    f/aspect, 0, 0, 0 ,
+  // const f = 1/Math.tan(fov*0.5)
+  // const inv = 1 / (zNear - zFar)
+  // const m = [
+  //   f/aspect, 0, 0, 0 ,
+  //   0, f, 0, 0,
+  //   0, 0, (zNear + zFar) * inv, 1,
+  //   0, 0, 2*zNear*zFar * inv, 0
+  // ]
+  // return m
+
+  var f = Math.tan(Math.PI * 0.5 - 0.5 * fov);
+  var rangeInv = 1.0 / (zNear- zFar);
+
+  return [
+    f / aspect, 0, 0, 0,
     0, f, 0, 0,
-    0, 0, (zNear + zFar) * inv, -1,
-    0, 0, 2*zNear*zFar * inv, 0
-  ]
-  return m
+    0, 0, (zNear + zFar) * rangeInv, -1,
+    0, 0, zNear * zFar * rangeInv * 2, 0
+  ];
 
 }

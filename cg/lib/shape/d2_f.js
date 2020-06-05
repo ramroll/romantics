@@ -27,5 +27,5 @@ export const d2_f = (x, y, width, height, thickness) => {
     x + width * 2 / 3, y + thickness * 3,
   ]
 
-  return new Mesh({vertexes : data, dimension : 2})
+  return new Mesh({vertices : data, dimension : 2})
 }

@@ -4,9 +4,9 @@ import GLVertexBuffer from './GLVertexBuffer'
 
 export class Mesh {
 
-  constructor({vertexes, indices = null, dimension = 3, colors = null}){
+  constructor({vertices, indices = null, dimension = 3, colors = null}){
     this.dimension = dimension
-    this.vertexes = vertexes
+    this.vertices = vertices
     this.indices = indices
     this.colors = colors
     this.gl = RenderContext.getGL()
@@ -14,7 +14,7 @@ export class Mesh {
 
     this.vertexBuffer = new GLVertexBuffer(
       'a_position', 
-      new Float32Array(vertexes), 
+      new Float32Array(vertices), 
       dimension
     )
 
@@ -55,7 +55,7 @@ export class Mesh {
       gl.drawArrays(
         gl.TRIANGLES,
         0,
-        this.vertexes.length / this.dimension
+        this.vertices.length / this.dimension
       )
     }
   }

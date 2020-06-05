@@ -62,6 +62,11 @@ function main() {
   widget.render()
 
   loop(() => {
+    gl.enable(gl.DEPTH_TEST)
+    gl.depthFunc(gl.LEQUAL)
+    gl.clearDepth(1.0)
+    gl.viewport(0.0, 0.0, canvas.width, canvas.height)
+    gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT)
     let uMatrix = identity3d()
     const matTranslate = translate2d(translate[0], translate[1])
     const matRotate = rotate2d(rotate)

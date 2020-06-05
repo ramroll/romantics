@@ -2,7 +2,7 @@ import { Mesh } from "../model/Mesh"
 
 export const d3_cube = (d) => {
 
-  const vertexes = [
+  const vertices = [
     -1, -1, -1, 1, -1, -1, 1, 1, -1, -1, 1, -1,
     -1, -1, 1, 1, -1, 1, 1, 1, 1, -1, 1, 1,
     -1, -1, -1, -1, 1, -1, -1, 1, 1, -1, -1, 1,
@@ -28,5 +28,5 @@ export const d3_cube = (d) => {
     0,1,0, 0,1,0, 0,1,0, 0,1,0
   ]
 
-  return new Mesh({vertexes, indices, colors})
+  return new Mesh({vertices, indices, colors})
 }

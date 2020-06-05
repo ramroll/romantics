@@ -10,5 +10,5 @@ export const d2_rect = (x, y, width, height) => {
     x + width, y 
   ]
 
-  return new Mesh({vertexes : data, dimension : 2})
+  return new Mesh({vertices : data, dimension : 2})
 }
