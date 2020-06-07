@@ -46,8 +46,8 @@ export class Mat4{
   }
 
   lookAt(x, y, z, ax, ay, az) {
-    this.mat = multiply4d(this.mat, translate(-x, -y, -z))
-    this.mat = this.rotate(-ax, -ay, -az)
+    this.translate(-x, -y, -z)
+    this.rotate(-ax, -ay, -az)
     return this
   }
 }
