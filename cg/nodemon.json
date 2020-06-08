@@ -1,0 +1,4 @@
+{
+  "watch": ["index.html", "webpack.config.js", "apps/**/*.html"],
+  "exec": "webpack-dev-server"
+}

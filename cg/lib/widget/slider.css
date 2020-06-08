@@ -1,0 +1,29 @@
+.slider {
+  user-select: none;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  -webkit-user-drag: none;
+  
+}
+
+.slider-slot {
+  background-color: #23ff33;
+  position: relative;
+  width : 150px;
+  height: 10px;;
+}
+
+.slider-bar {
+  position: absolute;
+  left : 0;
+  top : -10px;
+  height : 30px;
+  width : 15px;
+  background-color : grey;
+  cursor : pointer;
+}
+
+.slider-value {
+  width : 100px;
+}
