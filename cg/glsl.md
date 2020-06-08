@@ -49,6 +49,14 @@ vec4 d = a.rgrr;
 // d = (1.0, 2.0, 1.0, 1.0) 
 ```
 
+`stpq`也拥有这个能力
+```
+vec4 a = vec4(1.0, 2.0, 3.0, 4.0);
+
+vec4 d = a.stss;
+// d = (1.0, 2.0, 1.0, 1.0) 
+```
+
 ## 矩阵
 
 - mat2 2*2矩阵
@@ -113,6 +121,16 @@ struct Light
 ```
 上面代码创造了一个结构体类型`Light`，并且定义了一个变量`foo`属于结构体类型`Light`
 
+```
+struct Data
+{
+  float first;
+  vec2 second;
+};
+
+Data dataValue = Data(1.4, vec2(16.0, 22.5));
+```
+上面演示了结构体构造过程。
 
 ## 类型严格
 
