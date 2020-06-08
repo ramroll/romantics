@@ -7,24 +7,25 @@
     <div id="widget-panel"></div>
     <script type="notjs" id='vertex-shader'>
       attribute vec3 a_position;
-      attribute vec3 a_color;
       uniform mat4 u_world;
       uniform mat4 u_unit;
-      varying vec3 v_color;
+
+      attribute vec2 a_texcoord;
+      varying vec2 v_texcord;
       
       void main() {
         gl_Position = u_world * u_unit * vec4(a_position, 1);
-        v_color = a_color;
+        v_texcord = a_texcoord;
       }
     </script>
 
     <script id='fragment-shader' type="notjs">
       precision mediump float;
-
-      varying vec3 v_color;
+      varying vec2 v_texcord;
+      uniform sampler2D u_texture;
 
       void main() {
-        gl_FragColor = vec4(v_color, 1);
+        gl_FragColor = texture2D(u_texture, v_texcord);
       }
     </script>
 

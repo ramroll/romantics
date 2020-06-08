@@ -1,6 +1,6 @@
 import { Mesh } from "../model/Mesh"
 
-export const d3_cube = (d) => {
+export const d3_cube = (useColor, useTexture = false) => {
 
   const vertices = [
     -1, -1, -1, 1, -1, -1, 1, 1, -1, -1, 1, -1,
@@ -28,5 +28,14 @@ export const d3_cube = (d) => {
     0,1,0, 0,1,0, 0,1,0, 0,1,0
   ]
 
-  return new Mesh({vertices, indices, colors})
+  const texCoord = [
+    0,0,0,1,1,1,1,0,
+    0,0,1,0,1,1,0,1,
+    0,0,0,1,1,1,1,0,
+    0,0,0,1,1,1,1,0,
+    0,0,0,1,1,1,1,0,
+    0,0,0,1,1,1,1,0,
+  ]
+
+  return new Mesh({ vertices, indices, colors: useColor && colors, texCoord : useTexture && texCoord })
 }

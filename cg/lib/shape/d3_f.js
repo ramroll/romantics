@@ -1,6 +1,6 @@
 import { Mesh } from "../model/Mesh"
 
-export const d3_f = () => {
+export const d3_f = (useColors = true) => {
   const vertices = [
     0, 0, 0,
     0, 150, 0,
@@ -260,5 +260,5 @@ export const d3_f = () => {
     160, 160, 220
   ].map(v => v/255)
 
-  return new Mesh({vertices, colors})
+  return new Mesh({vertices, colors : useColors && colors })
 }

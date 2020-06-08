@@ -37,7 +37,7 @@ export class Mat4{
   }
 
   scale(sx, sy, sz) {
-    this.mat = multiply4d(this.mat, scale3d(sz, sy, sz))
+    this.mat = multiply4d(this.mat, scale3d(sx, sy, sz))
     return this
   }
 

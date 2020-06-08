@@ -1,5 +1,6 @@
 import { identity3d, identity4d, multiplynd } from '../matrix'
 import RenderContext from '../RenderContext'
+import { ImageTexture } from './ImageTexture'
 export class Model {
 
   constructor(mesh, dimensions = 3){
@@ -52,6 +53,10 @@ export class Model {
   addChild(model){
     model.parent = this
     this.children.push(model)
+  }
+
+  addTextureImage(src) {
+    new ImageTexture(src)
   }
 
 
