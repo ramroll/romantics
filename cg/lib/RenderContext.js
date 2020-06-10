@@ -25,7 +25,7 @@ export default class RenderContext {
 
   static getTiming(){
     this.init()
-    return RenderContext.timingP
+    return RenderContext.timing
   }
 
   static getProgram(){
