@@ -1,12 +1,27 @@
 import { Mesh } from "../model/Mesh"
 
-export const d3_cube = (useColor, useTexture = false) => {
+export const d3_cube = (useColor = true, useTexture = false) => {
 
+  
+  const texCoords = [
+    0,0,0,1,.25,1,.25,0,
+    .25,0,.5,0,.5,1,.5,0,
+    .75,0,.75,1,0,.5,.5,0,
+    0,0,.75,0,.75,1,0,1,
+    0,0,0,1,1,1,1,0,
+    0,0,0,1,1,1,1,0,
+  ]
   const vertices = [
-    -1, -1, -1, 1, -1, -1, 1, 1, -1, -1, 1, -1,
-    -1, -1, 1, 1, -1, 1, 1, 1, 1, -1, 1, 1,
+    // 左
     -1, -1, -1, -1, 1, -1, -1, 1, 1, -1, -1, 1,
+    // 前
+    -1, -1, 1, 1, -1, 1, 1, 1, 1, -1, 1, 1,
+    // 右边
     1, -1, -1, 1, 1, -1, 1, 1, 1, 1, -1, 1,
+
+    // 后 
+    -1, -1, -1, 1, -1, -1, 1, 1, -1, -1, 1, -1,
+
     -1, -1, -1, -1, -1, 1, 1, -1, 1, 1, -1, -1,
     -1, 1, -1, -1, 1, 1, 1, 1, 1, 1, 1, -1,
   ]
@@ -28,14 +43,19 @@ export const d3_cube = (useColor, useTexture = false) => {
     0,1,0, 0,1,0, 0,1,0, 0,1,0
   ]
 
-  const texCoord = [
-    0,0,0,1,1,1,1,0,
-    0,0,1,0,1,1,0,1,
-    0,0,0,1,1,1,1,0,
-    0,0,0,1,1,1,1,0,
-    0,0,0,1,1,1,1,0,
-    0,0,0,1,1,1,1,0,
-  ]
 
-  return new Mesh({ vertices, indices, colors: useColor && colors, texCoord : useTexture && texCoord })
+
+  // const texCoords = [
+  //   0,0,0,2,2,2,2,0,
+  //   0,0,2,0,2,2,0,2,
+  //   0,0,0,2,2,2,2,0,
+  //   0,0,0,2,2,2,2,0,
+  //   0,0,0,2,2,2,2,0,
+  //   0,0,0,2,2,2,2,0,
+  // ]
+
+
+  return new Mesh({ vertices, indices, 
+    colors: useColor && colors, 
+    texCoords : useTexture && texCoords })
 }

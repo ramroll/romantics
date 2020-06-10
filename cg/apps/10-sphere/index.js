@@ -4,13 +4,13 @@ import { Mat4 } from '../../lib/matrix'
 
 function main() {
   const gl = RenderContext.getGL()
-  const mesh = shape.d3_sphere()
+  const mesh = shape.d3_sphere(1)
   const model = new Model(mesh)
 
   const aspect = gl.canvas.width / gl.canvas.height
-  // model.addTextureImage('/texture01.jpg')
+  model.addTextureImage('/texture05.jpg')
 
-  let angle = 0
+  let angle = 0 
 
   function draw(){
     gl.enable(gl.DEPTH_TEST)
@@ -20,10 +20,9 @@ function main() {
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT)
     const mat4 = new Mat4()
     model.setWorldMatrix(mat4
-      .scale(1, -1, 1)
-      .rotate(angle, angle, angle)
-      .lookAt(0, 0, 2.5, 0, 0, 0)
-      .perspective(Math.PI * 0.6, aspect, 1.0, 1000)
+      .rotate(0, angle, 0)
+      .lookAt(0, 0, 2, 0, 0, 0)
+      .perspective(Math.PI * 0.5, aspect, 1.0, 1000)
       .getMatrix())
 
 

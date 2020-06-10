@@ -9,7 +9,6 @@ export default class GLVertexBuffer {
     this.program = RenderContext.getProgram()
     this.location = 
       this.gl.getAttribLocation(this.program, name)
-      console.log(name, this.location)
     this.gl.enableVertexAttribArray(this.location)
     /* 初始化Buffer */
     this.buffer = this.gl.createBuffer()

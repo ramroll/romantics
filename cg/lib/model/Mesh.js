@@ -4,12 +4,12 @@ import GLVertexBuffer from './GLVertexBuffer'
 
 export class Mesh {
 
-  constructor({vertices, indices = null, dimension = 3, colors = null, texCoord}){
+  constructor({vertices, indices = null, dimension = 3, colors = null, texCoords}){
     this.dimension = dimension
     this.vertices = vertices
     this.indices = indices
     this.colors = colors
-    this.texCoord = texCoord
+    this.texCoords = texCoords
     this.gl = RenderContext.getGL()
     this.program = RenderContext.getProgram()
 
@@ -35,10 +35,10 @@ export class Mesh {
     }
 
 
-    if(this.texCoord) {
+    if(this.texCoords) {
       this.texturesBuffer = new GLVertexBuffer(
         'a_texcoord',
-        new Float32Array(texCoord),
+        new Float32Array(texCoords),
         2
       )
 
@@ -53,7 +53,7 @@ export class Mesh {
     this.vertexBuffer.associate()
     this.colorsBuffer && this.colorsBuffer.associate()
     this.indicesBuffer && this.indicesBuffer.associate()
-    this.texCoord && this.texturesBuffer.associate()
+    this.texCoords && this.texturesBuffer.associate()
 
     if(this.indicesBuffer) {
       gl.drawElements(

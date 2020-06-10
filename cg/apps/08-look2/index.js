@@ -14,7 +14,7 @@ class LotFs extends Model{
       let unitMatrix = matrix.translate3d(0, 0, -size)
       unitMatrix = 
         matrix.multiply4d(unitMatrix, matrix.rotateY(2* i *Math.PI / 10))
-      f.setUntiMatrix(unitMatrix)
+      f.setUnitMatrix(unitMatrix)
       this.addChild(f)
     }
   }
@@ -23,7 +23,7 @@ class LotFs extends Model{
     for(let i = 0; i < 10; i++) {
       let unitMatrix = matrix.translate3d(0, 0, -size)
       unitMatrix = matrix.multiply4d(unitMatrix, matrix.rotateY(i * Math.PI / 5))
-      this.children[i].setUntiMatrix(unitMatrix)
+      this.children[i].setUnitMatrix(unitMatrix)
     }
 
   }

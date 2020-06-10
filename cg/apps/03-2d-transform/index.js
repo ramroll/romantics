@@ -85,7 +85,7 @@ function main() {
       matScale, 
       matTranslate,
     )
-    model.setUntiMatrix(uMatrix)
+    model.setUnitMatrix(uMatrix)
     model.draw()
   })
 }
