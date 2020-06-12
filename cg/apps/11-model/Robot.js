@@ -73,6 +73,7 @@ export default class Robot extends Model{
       // 产生一个挥手的动画
       const stage = Math.floor(diff / A) % 4
       let ax = null
+      
       // 0 ->  | [0, A]
       // 1 <-, 2 <- [A, -A] 
       // 3 -> [-A, 0]
@@ -160,7 +161,6 @@ class Arm extends Model{
     super(mesh)
 
     this.level = level
-    const mat4 = new Mat4()
     this.x = x
     this.y = y
     this.length = length 
@@ -177,7 +177,7 @@ class Arm extends Model{
         az : sign * 0.3,
         length : length,
         size : .08,
-        level : 1
+        level : this.level + 1 
       }))
     }
   }

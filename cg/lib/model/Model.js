@@ -1,4 +1,4 @@
-import { identity3d, identity4d, multiply4d } from '../matrix'
+import { identity3d, identity4d, multiply4d, multiply3d } from '../matrix'
 import RenderContext from '../RenderContext'
 import { ImageTexture } from './ImageTexture'
 export class Model {
@@ -57,13 +57,23 @@ export class Model {
     this.textureImage = new ImageTexture(src)
   }
 
+  /**
+   * 递归更新世界矩阵 
+   * @param {*} parentWorldMatrix 
+   * @param {*} parentUnitMatrix 
+   */
   updateMatrix(parentWorldMatrix, parentUnitMatrix) {
 
     if(parentUnitMatrix) {
+
+
+      // pworld * punit * unit * vec4
+      // glsl -> 
+      // A(T) * B(T) 
       this.worldMatrix =
         multiply4d(
           parentUnitMatrix,
-          parentWorldMatrix
+          parentWorldMatrix,
         )
     }
     for(let child of this.children) {

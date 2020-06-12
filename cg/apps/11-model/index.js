@@ -27,7 +27,6 @@ function main() {
       .getMatrix())
 
 
-    // angle += 0.2 
     model.updateMatrix()
     model.draw()
     requestAnimationFrame(draw)
