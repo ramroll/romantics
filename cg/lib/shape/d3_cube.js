@@ -1,6 +1,6 @@
 import { Mesh } from "../model/Mesh"
 
-export const d3_cube = (useColor = true, useTexture = false) => {
+export const d3_cube = (useColor = true, useTexture = false, useNorms = false) => {
 
   
   const texCoords = [
@@ -33,6 +33,56 @@ export const d3_cube = (useColor = true, useTexture = false) => {
     16, 17, 18, 16, 18, 19, 
     20, 21, 22, 20, 22, 23 
   ]
+
+  const norms = [
+    // 左
+    -1, 0, 0,
+    -1, 0, 0,
+    -1, 0, 0,
+    -1, 0, 0,
+    -1, 0, 0,
+    -1, 0, 0,
+
+    //前
+    0, 0, 1,
+    0, 0, 1,
+    0, 0, 1,
+    0, 0, 1,
+    0, 0, 1,
+    0, 0, 1,
+
+    // 右
+    -1, 0, 0, 
+    -1, 0, 0, 
+    -1, 0, 0, 
+    -1, 0, 0, 
+    -1, 0, 0, 
+    -1, 0, 0, 
+    
+    // 后
+    0, 0, -1,
+    0, 0, -1,
+    0, 0, -1,
+    0, 0, -1,
+    0, 0, -1,
+    0, 0, -1,
+
+    // 上
+    0, 1, 0,
+    0, 1, 0,
+    0, 1, 0,
+    0, 1, 0,
+    0, 1, 0,
+    0, 1, 0,
+
+    // 下
+    0, -1, 0,
+    0, -1, 0,
+    0, -1, 0,
+    0, -1, 0,
+    0, -1, 0,
+    0, -1, 0,
+  ]
   
   const colors =  [
     .5,.3,.7, .5,.3,.7, .5,.3,.7, .5,.3,.7,
@@ -57,5 +107,6 @@ export const d3_cube = (useColor = true, useTexture = false) => {
 
   return new Mesh({ vertices, indices, 
     colors: useColor && colors, 
+    norms : useNorms && norms,
     texCoords : useTexture && texCoords })
 }

@@ -1,0 +1,45 @@
+<html>
+  <head>
+    <link rel='stylesheet' href="common.css">
+  </head>
+  <body>
+    <canvas id="canvas"></canvas>
+    <div id="widget-panel"></div>
+    <script type="notjs" id='vertex-shader'>
+      attribute vec3 a_position;
+      uniform mat4 u_world;
+      uniform mat4 u_unit;
+      attribute vec3 a_norm;
+
+
+      attribute vec4 a_color;
+      varying vec4 v_color;
+      varying vec3 v_norm;
+      
+      void main() {
+        gl_Position = u_world * u_unit * vec4(a_position, 1);
+        v_color = a_color;
+        v_norm = a_norm;
+      }
+    </script>
+
+    <script id='fragment-shader' type="notjs">
+      precision mediump float;
+      uniform vec3 u_light;
+      varying vec2 v_texcoord;
+      varying vec4 v_color;
+      varying vec3 v_norm;
+
+      
+      void main() {
+        vec3 normal = normalize(v_norm);
+        float light = dot(normal, -u_light);
+        gl_FragColor = vec4(1.0, .0, .0, 1.0);
+        gl_FragColor.rgb *= light;
+      }
+    </script>
+
+
+    <script src="__APP__.js"></script>
+  </body>
+</html>
