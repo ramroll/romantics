@@ -60,6 +60,7 @@ function main() {
       1.0,
       100.0
     ))
+    m1.updateMatrix()
     m1.draw()
     requestAnimationFrame(draw)
   }

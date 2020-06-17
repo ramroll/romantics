@@ -7,6 +7,7 @@ export const d3_sphere = (r = 1, n = 200, m = 100) => {
   const vertices = []
   const indices = []
   const colors = []
+  const norms = []
   const texCoords = []
   for (let y = 0; y <= m; y++) {
     for (let x = 0; x <= n; x++) {
@@ -23,6 +24,7 @@ export const d3_sphere = (r = 1, n = 200, m = 100) => {
       // colors.push(Math.random(), Math.random(), Math.random(), 1)
       texCoords.push(1-u, v)
       vertices.push(px, py, pz)
+      norms.push(px, py, pz)
     }
   }
 
@@ -47,6 +49,6 @@ export const d3_sphere = (r = 1, n = 200, m = 100) => {
     }
   }
 
-  return new Mesh({vertices, indices, texCoords})
+  return new Mesh({vertices, indices, texCoords, norms})
 }
 

@@ -12,6 +12,12 @@ function main() {
     -1, +1, 1
   ]
 
+  gl.enable(gl.DEPTH_TEST)
+  gl.depthFunc(gl.LEQUAL)
+  gl.clearDepth(1.0)
+  gl.viewport(0.0, 0.0, canvas.width, canvas.height)
+  gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT)
+
 
   const mesh = shape.d2_f(0, 0, 100, 150, 30)
   const model = new Model(mesh)

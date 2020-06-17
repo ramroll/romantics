@@ -26,6 +26,8 @@ class LotFs extends Model{
       this.children[i].setUnitMatrix(unitMatrix)
     }
 
+    this.updateMatrix()
+
   }
 
 }
@@ -128,6 +130,7 @@ function main() {
       1.0,
       100.0
     ))
+    m1.updateMatrix()
     m1.draw()
     requestAnimationFrame(draw)
   }

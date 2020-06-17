@@ -5,7 +5,11 @@ function main() {
   const gl = RenderContext.getGL()
   const mesh = shape.d3_cube(100)
   const model = new Model(mesh)
-
+  gl.enable(gl.DEPTH_TEST)
+  gl.depthFunc(gl.LEQUAL)
+  gl.clearDepth(1.0)
+  gl.viewport(0.0, 0.0, canvas.width, canvas.height)
+  gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT)
   model.setVectorUniform('u_color', [Math.random(), Math.random(), Math.random(), 1.0])
 
   let angle = 0

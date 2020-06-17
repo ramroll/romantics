@@ -9,6 +9,7 @@
       attribute vec3 a_position;
       uniform mat4 u_world;
       uniform mat4 u_unit;
+      uniform mat4 u_worldview;
       attribute vec3 a_norm;
 
 
@@ -17,9 +18,10 @@
       varying vec3 v_norm;
       
       void main() {
-        gl_Position = u_world * u_unit * vec4(a_position, 1);
-        v_color = a_color;
-        v_norm = a_norm;
+        gl_Position = u_worldview * u_world * u_unit * vec4(a_position, 1);
+        v_color = vec4(a_position + 0.5, 1.0);
+        v_norm = mat3(u_world) * a_norm;
+
       }
     </script>
 
@@ -34,7 +36,8 @@
       void main() {
         vec3 normal = normalize(v_norm);
         float light = dot(normal, -u_light);
-        gl_FragColor = vec4(1.0, .0, .0, 1.0);
+        //gl_FragColor = vec4(0.0, 1.0, .0, 1.0);
+        gl_FragColor = v_color;
         gl_FragColor.rgb *= light;
       }
     </script>

@@ -9,6 +9,7 @@ export class Model {
       : identity3d()
     this.unitMatrix = dimensions === 3 ? identity4d()
       : identity3d()
+
     this.gl = RenderContext.getGL()
     this.program = RenderContext.getProgram()
     this.gl.useProgram(this.program)
@@ -29,6 +30,11 @@ export class Model {
     }
   }
 
+  setFloatUniform (name, value) {
+    const position = this.gl.getUniformLocation(this.program, name)
+    this.gl.uniform1f(position, value)
+  }
+
   setMatrixUniform(name, value) {
     const position = this.gl.getUniformLocation(this.program, name)
     if(value.length === 4) {
@@ -47,6 +53,8 @@ export class Model {
   setWorldMatrix(worldMatrix) {
     this.worldMatrix = worldMatrix
   }
+
+  
 
   addChild(model){
     model.parent = this
