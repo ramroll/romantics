@@ -34,7 +34,7 @@ function main() {
     },
     {
       type : "slider",
-      range : [0, 1],
+      range : [0.9, 1.0],
       defaultValue : limit,
       onChange : (value) => {
         limit = value

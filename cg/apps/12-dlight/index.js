@@ -2,6 +2,7 @@ import { Model, shape, matrix } from '../../lib'
 import RenderContext from '../../lib/RenderContext'
 import { Mat4, multiply4d } from '../../lib/matrix'
 import { d3_cube, d3_sphere } from '../../lib/shape'
+import Widget from '../../lib/widget'
 
 function main() {
   const gl = RenderContext.getGL()
@@ -10,6 +11,39 @@ function main() {
   const model = new Model(d3_cube(true, false, true)) 
   const aspect = gl.canvas.width / gl.canvas.height
   let angle = 0
+  let light_x = 0,
+    light_y  = 0,
+    light_z = -1 
+  const widget = new Widget([
+    {
+      type : "slider",
+      range : [-5, 5],
+      onChange : (value) => {
+        light_x = value
+      },
+      defaultValue :light_x,
+      label : "x"
+    },
+    {
+      type : "slider",
+      range : [-5, 5],
+      defaultValue : light_y,
+      onChange : (value) => {
+        light_y = value
+      },
+      label : "y"
+    },
+    {
+      type : 'slider',
+      defaultValue : light_z,
+      range : [-5, 5],
+      onChange : (value) => {
+        light_z = value
+      },
+      label : "z"
+    },
+  ])
+  widget.render()
 
   function draw(){
     gl.enable(gl.DEPTH_TEST)
@@ -32,9 +66,9 @@ function main() {
         .getMatrix()
     )
 
-    model.setVectorUniform('u_light', [0, 0, -1])
+    model.setVectorUniform('u_light', [light_x, light_y, light_z])
 
-    // angle += 0.01
+    angle += 0.01
     model.updateMatrix()
     model.draw()
     requestAnimationFrame(draw)

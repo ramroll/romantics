@@ -30,12 +30,13 @@ function main() {
     model.setWorldMatrix(
       new Mat4()
       .rotate(0, angle, 0)
-      .translate(0, 1, -5)
+      .translate(0, 1, -1)
       .getMatrix())
 
 
     model.updateMatrix()
     model.draw()
+    angle += 0.01
 
     model.setVectorUniform('u_light', [0, -0.1, -1])
     requestAnimationFrame(draw)

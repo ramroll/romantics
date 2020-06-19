@@ -38,6 +38,7 @@ module.exports = {
         let content = fs.readFileSync( path.resolve(__dirname, 'index.html') , 'utf-8')
         const menuStr = apps.map(app => `<li><a class='menu-item' data-link='${app}'>${app}</a></li>`).join('\n')
         content = content.replace("__MENU__", menuStr) 
+
         res.send(content)
       })
 
@@ -45,6 +46,14 @@ module.exports = {
         app.get('/' + dir, (req,res) => {
           let content = fs.readFileSync(path.resolve(__dirname, 'apps', dir, "index.html"), 'utf-8')
           content = content.replace("__APP__", dir)
+          if(content.match(/__VERTEX_SHADER__/)) {
+            const vShaderProgram = fs.readFileSync(path.resolve(__dirname, "apps", dir, "vertex.glsl"), 'utf-8')
+            content = content.replace("__VERTEX_SHADER__", vShaderProgram) 
+          }
+          if(content.match(/__FRAGMENT_SHADER__/)) {
+            const fShaderProgram = fs.readFileSync(path.resolve(__dirname, "apps", dir, "frag.glsl"), 'utf-8')
+            content = content.replace("__FRAGMENT_SHADER__", fShaderProgram) 
+          }
           res.send(content)
         })
       })
