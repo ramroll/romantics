@@ -38,6 +38,7 @@ export class Mat4{
 
   frustum(left,right,bottom,top,near,far) {
     this.mat = multiply4d(this.mat, frustum(left, right, bottom, top, near, far))
+    return this
   }
 
   scale(sx, sy, sz) {

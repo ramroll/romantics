@@ -12,7 +12,6 @@ export class Mesh {
     this.norms = norms
     this.texCoords = texCoords
     this.gl = RenderContext.getGL()
-    this.program = RenderContext.getProgram()
 
     this.vertexBuffer = new GLVertexBuffer(
       'a_position', 
@@ -56,8 +55,6 @@ export class Mesh {
 
   draw(){
     const gl = this.gl
-    gl.enable(gl.DEPTH_TEST)
-    gl.depthFunc(gl.LEQUAL)
 
     this.vertexBuffer.associate()
     this.colorsBuffer && this.colorsBuffer.associate()

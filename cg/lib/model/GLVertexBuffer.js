@@ -6,10 +6,7 @@ export default class GLVertexBuffer {
     
     this.dimension = dimension
     this.gl = RenderContext.getGL()
-    this.program = RenderContext.getProgram()
-    this.location = 
-      this.gl.getAttribLocation(this.program, name)
-    this.gl.enableVertexAttribArray(this.location)
+    this.name = name
     /* 初始化Buffer */
     this.buffer = this.gl.createBuffer()
     this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.buffer)
@@ -23,6 +20,9 @@ export default class GLVertexBuffer {
   }
 
   associate(){
+    this.location = 
+      this.gl.getAttribLocation(RenderContext.getProgram(), this.name)
+    this.gl.enableVertexAttribArray(this.location)
     this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.buffer)
     const type = this.gl.FLOAT
     const normalized = false

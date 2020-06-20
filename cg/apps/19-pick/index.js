@@ -14,7 +14,7 @@ function main() {
   let c = 0
   for(let i = 0; i < game.field.width ; i++) {
     for(let j = 0; j < game.field.height; j++) {
-      if(c % 20 === 0) {
+      if(c % 200 === 0) {
         const unit = game.addUnit(false, i, j)
         unit.setAgent("wander")
       }
@@ -24,11 +24,7 @@ function main() {
 
 
   function draw(){
-    gl.enable(gl.DEPTH_TEST)
-    gl.depthFunc(gl.LEQUAL)
-    gl.clearDepth(1.0)
-    gl.viewport(0.0, 0.0, canvas.width, canvas.height)
-    gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT)
+
 
     game.draw()
     requestAnimationFrame(draw)

@@ -96,12 +96,11 @@ export class ImageTexture {
     this.src = src
     this.gl = gl
     this.texture = ImageTexture.createTextureIfNotExits(src)
-    const program = RenderContext.getProgram()
-    this.textureLocation = gl.getUniformLocation(program, name)
   }
 
 
   associate(){
+    this.textureLocation = this.gl.getUniformLocation(RenderContext.getProgram(), this.name)
     this.gl.uniform1i(this.textureLocation, this.texture.id)
   }
   
