@@ -96,24 +96,25 @@ export default class GameField extends Model {
   }
 
   draw() {
-    // const gl = this.gl;
-    // RenderContext.switchProgram("default")
-    // gl.bindFramebuffer(gl.FRAMEBUFFER, null)
-    // gl.useProgram(RenderContext.getProgram());
-    // gl.enable(gl.DEPTH_TEST);
-    // gl.depthFunc(gl.LEQUAL);
-    // gl.clearDepth(1.0);
-    // gl.viewport(0.0, 0.0, canvas.width, canvas.height);
-    // gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-    // this.setMatrixUniform("u_worldview", this.projectViewMatrix);
-    // this.updateMatrix();
-    // super.draw();
+    const gl = this.gl;
+    RenderContext.switchProgram("tile")
+    gl.bindFramebuffer(gl.FRAMEBUFFER, null)
+    gl.useProgram(RenderContext.getProgram());
+    gl.enable(gl.DEPTH_TEST);
+    gl.depthFunc(gl.LEQUAL);
+    gl.clearDepth(1.0);
+    gl.viewport(0.0, 0.0, canvas.width, canvas.height);
+    gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+    this.setMatrixUniform("u_worldview", this.projectViewMatrix);
+    this.updateMatrix();
+    super.draw()
 
     this.pick();
-    // gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+    
   }
 
   initPick() {
+    this.setFloatUniform('u_id', -1)
     const gl = this.gl;
     // Create a texture to render to
     const targetTexture = gl.createTexture();
@@ -230,7 +231,7 @@ export default class GameField extends Model {
     gl.bindFramebuffer(gl.FRAMEBUFFER, this.fb);
     gl.viewport(0, 0, 1, 1);
 
-    gl.enable(gl.CULL_FACE);
+    // gl.enable(gl.CULL_FACE);
     gl.enable(gl.DEPTH_TEST);
 
     // Clear the canvas AND the depth buffer.
@@ -239,8 +240,11 @@ export default class GameField extends Model {
 
     const data = new Uint8Array(4);
     gl.readPixels(0, 0, 1, 1, gl.RGBA, gl.UNSIGNED_BYTE, data);
-    // console.log(data);
+    const id = data[0] + (data[1] << 8) + (data[2] << 16)
+    const x = id % 1000
+    const y = Math.floor(id / 1000)
+    console.log(x, y, id)
+    gl.bindFramebuffer(gl.FRAMEBUFFER, null);
 
-    // RenderContext.switchProgram("default");
   }
 }

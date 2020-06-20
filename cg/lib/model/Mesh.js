@@ -12,6 +12,7 @@ export class Mesh {
     this.norms = norms
     this.texCoords = texCoords
     this.gl = RenderContext.getGL()
+    this.customVerticesBuffer = []
 
     this.vertexBuffer = new GLVertexBuffer(
       'a_position', 
@@ -53,6 +54,14 @@ export class Mesh {
     }
   }
 
+  addVertexBuffer(name, data, dimension) {
+    this.customVerticesBuffer.push(new GLVertexBuffer(
+      name,
+      data,
+      dimension
+    ))
+  }
+
   draw(){
     const gl = this.gl
 
@@ -61,6 +70,10 @@ export class Mesh {
     this.indicesBuffer && this.indicesBuffer.associate()
     this.texCoords && this.texturesBuffer.associate()
     this.normsBuffer && this.normsBuffer.associate()
+
+    this.customVerticesBuffer.forEach(buffer => {
+      buffer.associate()
+    })
 
     if(this.indicesBuffer) {
       gl.drawElements(

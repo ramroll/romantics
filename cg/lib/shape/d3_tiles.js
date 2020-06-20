@@ -5,6 +5,7 @@ export function d3_tiles(tiles, size, width, height) {
   const vertices = []
   const texCoords = []
   const colors = []
+  const ids = []
   for (let y = 0; y < height; y++) {
     for (let x = 0; x < width; x++) {
 
@@ -31,6 +32,7 @@ export function d3_tiles(tiles, size, width, height) {
       )
 
       const id = x * 1000 + y
+      console.log(id)
       
       for (let k = 0; k < 6; k++) {
         colors.push(
@@ -39,9 +41,11 @@ export function d3_tiles(tiles, size, width, height) {
           ((id >> 16) & 255) / 255
         );
       }
+      ids.push(id, id, id, id, id, id)
+
     }
   }
 
-  console.log(vertices.length, colors.length)
-  return new Mesh({vertices, texCoords, colors})
+  const mesh = new Mesh({vertices, texCoords, colors})
+  return mesh
 }

@@ -8,7 +8,9 @@ varying vec2 v_texcoord;
 
 void main() {
   gl_Position = u_worldview * u_world * u_unit * vec4(a_position, 1);
+
   v_texcoord = a_texcoord;
+
 
 
 }
