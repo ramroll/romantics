@@ -21,28 +21,15 @@ function main() {
       c ++
     }
   }
-  const aspect = gl.canvas.width / gl.canvas.height
 
-  const projectViewMatrix = new Mat4()
-    .lookAt(0, 1, 2, -Math.PI * 0.33, 0, 0)
-    .perspective(
-      Math.PI * .6,
-      aspect,
-      0.1,
-      100
-    )
-    .getMatrix();
+
   function draw(){
     gl.enable(gl.DEPTH_TEST)
     gl.depthFunc(gl.LEQUAL)
     gl.clearDepth(1.0)
     gl.viewport(0.0, 0.0, canvas.width, canvas.height)
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT)
-    game.field.setMatrixUniform(
-      "u_worldview",
-      projectViewMatrix
-    );
-    game.field.updateMatrix()
+
     game.draw()
     requestAnimationFrame(draw)
   }

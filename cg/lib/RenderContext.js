@@ -18,6 +18,11 @@ export default class RenderContext {
     gl.canvas.height = gl.canvas.clientHeight
     RenderContext.gl = gl 
     RenderContext.timing = new Timing() 
+    RenderContext.aspect = gl.canvas.width / gl.canvas.height
+  }
+
+  static getAspect() {
+    return RenderContext.aspect
   }
 
   static getGL(){

@@ -6,31 +6,20 @@
     <canvas id="canvas"></canvas>
     <div id="widget-panel"></div>
     <script type="notjs" id='vertex-shader'>
-      attribute vec3 a_position;
-      uniform mat4 u_world;
-      uniform mat4 u_unit;
-      uniform mat4 u_worldview;
-
-      attribute vec2 a_texcoord;
-      varying vec2 v_texcoord;
-      
-      void main() {
-        gl_Position = u_worldview * u_world * u_unit * vec4(a_position, 1);
-        v_texcoord = a_texcoord;
-      }
+      __VERTEX_SHADER__
     </script>
 
     <script id='fragment-shader' type="notjs">
-      precision mediump float;
-      varying vec2 v_texcoord;
-      uniform sampler2D u_texture;
-
-      void main() {
-        //gl_FragColor = vec4(1.0, 0.0, .0, 1.0);
-        gl_FragColor = texture2D(u_texture, v_texcoord);
-      }
+      __FRAGMENT_SHADER__
     </script>
 
+    <script type="notjs" id='vertex-shader-pick'>
+      __VERTEX_SHADER__(pick)
+    </script>
+
+    <script id='fragment-shader-pick' type="notjs">
+      __FRAGMENT_SHADER__(pick)
+    </script>
 
     <script src="__APP__.js"></script>
   </body>
