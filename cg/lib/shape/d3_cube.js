@@ -2,7 +2,6 @@ import { Mesh } from "../model/Mesh"
 
 export const d3_cube = (useColor = true, useTexture = false, useNorms = false) => {
 
-  
   const texCoords = [
     0,0,0,1,.25,1,.25,0,
     .25,0,.5,0,.5,1,.5,0,

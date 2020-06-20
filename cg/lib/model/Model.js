@@ -15,6 +15,7 @@ export class Model {
     this.gl.useProgram(this.program)
     this.children = []
     this.level = level
+    this.textures = []
 
   }
 
@@ -62,7 +63,7 @@ export class Model {
   }
 
   addTextureImage(src) {
-    this.textureImage = new ImageTexture(src)
+    this.textures.push(new ImageTexture(src))
   }
 
   /**
@@ -96,7 +97,9 @@ export class Model {
     this.setMatrixUniform('u_world', this.worldMatrix)
 
     if(this.mesh) {
-      this.textureImage && this.textureImage.associate()
+      this.textures.forEach(texture => {
+        texture.associate()
+      })
       this.mesh.draw()
     }
 
