@@ -67,4 +67,8 @@ export default class GameField extends Model {
     this.addChild(unit.getModel())
     return unit
   }
+
+  draw(){
+    super.draw()
+  }
 }

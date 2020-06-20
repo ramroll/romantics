@@ -11,9 +11,16 @@ const loadShader = (gl, type, source) => {
   return shader;
 }
 
-export const initProgram =  (gl) => {
-  const vertexShaderSource = document.getElementById('vertex-shader').text
-  const fragShaderSource = document.getElementById('fragment-shader').text
+export const initProgram =  (gl, name) => {
+
+  let vShaderId = 'vertex-shader'
+  let fShaderId = 'fragment-shader'
+  if(name !== 'default') {
+    vShaderId += '-' + name
+    fShaderId += '-' + name
+  }
+  const vertexShaderSource = document.getElementById(vShaderId).text
+  const fragShaderSource = document.getElementById(fShaderId).text
 
   const vertexShader = loadShader(gl, gl.VERTEX_SHADER, vertexShaderSource)
   const fragShader = loadShader(gl, gl.FRAGMENT_SHADER, fragShaderSource)

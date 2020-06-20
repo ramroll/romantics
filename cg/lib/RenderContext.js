@@ -4,16 +4,18 @@ import { Timing } from './time/Timing'
 export default class RenderContext {
 
   static gl = null
-  static program = null
   static timing = null
+  static programs = {}
 
-  static init(){
+  static init(name = 'default'){
     if(RenderContext.gl){return}
     const gl = initGL()
-    const program = initProgram(gl)
+    if(!RenderContext.programs[name]) {
+      const program = initProgram(gl, name)
+      RenderContext.programs[name] = program
+    }
     gl.canvas.width = gl.canvas.clientWidth
     gl.canvas.height = gl.canvas.clientHeight
-    RenderContext.program = program
     RenderContext.gl = gl 
     RenderContext.timing = new Timing() 
   }
@@ -28,9 +30,9 @@ export default class RenderContext {
     return RenderContext.timing
   }
 
-  static getProgram(){
-    this.init()
-    return RenderContext.program
+  static getProgram(name = 'default'){
+    this.init(name)
+    return RenderContext.programs[name]
   }
 
 }

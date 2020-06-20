@@ -1,9 +1,9 @@
 import {identity4d} from './identity'
-import { multiply4d } from './multiply'
+import { multiply4d, multiply3d } from './multiply'
 import { rotateX, rotateY, rotateZ } from './rotate'
 import { translate3d } from './translate'
 import { scale3d } from './scale'
-import { perspective } from './project'
+import { perspective, frustum } from './project'
 
 //Facade设计模式
 export class Mat4{
@@ -34,6 +34,10 @@ export class Mat4{
   perspective(fov, aspect, zNear, zFar) {
     this.mat = multiply4d(this.mat, perspective(fov, aspect, zNear, zFar))
     return this
+  }
+
+  frustum(left,right,bottom,top,near,far) {
+    this.mat = multiply4d(this.mat, frustum(left, right, bottom, top, near, far))
   }
 
   scale(sx, sy, sz) {
