@@ -60,15 +60,17 @@ function main() {
       .getMatrix())
 
 
+    const camera = [0, 0, 3]
     model.setMatrixUniform(
       "u_worldview",
       new Mat4()
-        .lookAt(0,0,3,0,0,0)
+        .lookAt(...camera,0,0,0)
         .perspective(Math.PI * 0.5, aspect, 1.0, 1000)
         .getMatrix()
     )
 
     model.setVectorUniform('u_light', [light_x, light_y, light_z])
+    model.setVectorUniform('u_camera', camera)
 
     angle += 0.01
     model.updateMatrix()
