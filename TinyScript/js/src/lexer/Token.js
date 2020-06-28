@@ -332,26 +332,18 @@ class Token {
           if (lookahead == ".") {
             throw LexicalException.fromChar(lookahead);
           } else if (AlphabetHelper.isNumber(lookahead)) {
-            state = 20;
+            state = 4;
           } else {
             return new Token(TokenType.FLOAT, s);
           }
           break;
         case 5:
           if (AlphabetHelper.isNumber(lookahead)) {
-            state = 20;
+            state = 4;
           } else {
             throw LexicalException.fromChar(lookahead);
           }
           break;
-        case 20:
-          if (AlphabetHelper.isNumber(lookahead)) {
-            state = 20;
-          } else if (lookahead == ".") {
-            throw LexicalException.fromChar(lookahead);
-          } else {
-            return new Token(TokenType.FLOAT, s);
-          }
       }
       s += lookahead;
       it.next();
