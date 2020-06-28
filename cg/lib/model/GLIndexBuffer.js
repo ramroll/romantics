@@ -6,7 +6,6 @@ export default class GLIndexBuffer {
     
     this.dimension = dimension
     this.gl = RenderContext.getGL()
-    this.program = RenderContext.getProgram()
     
     /* 初始化Buffer */
     this.buffer = this.gl.createBuffer()

@@ -1,36 +1,61 @@
-import { initGL } from './boot/initGL'
-import { initProgram } from './boot/initProgram'
-import { Timing } from './time/Timing'
+import { initGL } from "./boot/initGL";
+import { initProgram } from "./boot/initProgram";
+import { Timing } from "./time/Timing";
 export default class RenderContext {
+  static gl = null;
+  static timing = null;
+  static programs = {};
 
-  static gl = null
-  static program = null
-  static timing = null
+  static init() {
 
-  static init(){
-    if(RenderContext.gl){return}
+    if(RenderContext.gl) {
+      return
+    }
     const gl = initGL()
-    const program = initProgram(gl)
-    gl.canvas.width = gl.canvas.clientWidth
-    gl.canvas.height = gl.canvas.clientHeight
-    RenderContext.program = program
-    RenderContext.gl = gl 
-    RenderContext.timing = new Timing() 
+    gl.canvas.width = gl.canvas.clientWidth;
+    gl.canvas.height = gl.canvas.clientHeight;
+    RenderContext.gl = gl;
+    RenderContext.timing = new Timing();
+    RenderContext.aspect = gl.canvas.width / gl.canvas.height;
+    RenderContext.currentProgram = null
   }
 
-  static getGL(){
+  static initProgram(name = 'default') {
+    const gl = RenderContext.gl
+    if (!RenderContext.programs[name]) {
+      const program = initProgram(gl, name);
+      RenderContext.programs[name] = program;
+    }
+
+  }
+
+  static getAspect() {
+    return RenderContext.aspect;
+  }
+
+  static getGL() {
+    this.init();
+    return RenderContext.gl;
+  }
+
+  static getTiming() {
+    this.init();
+    return RenderContext.timing;
+  }
+
+
+  static getProgram() {
+    this.init();
+    if(!RenderContext.currentProgram) {
+      this.initProgram('default')
+      RenderContext.currentProgram = RenderContext.programs['default']
+    }
+    return RenderContext.currentProgram
+  }
+
+  static switchProgram(name) {
     this.init()
-    return RenderContext.gl
+    this.initProgram(name)
+    RenderContext.currentProgram = RenderContext.programs[name]
   }
-
-  static getTiming(){
-    this.init()
-    return RenderContext.timing
-  }
-
-  static getProgram(){
-    this.init()
-    return RenderContext.program
-  }
-
 }

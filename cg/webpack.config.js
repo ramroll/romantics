@@ -46,14 +46,48 @@ module.exports = {
         app.get('/' + dir, (req,res) => {
           let content = fs.readFileSync(path.resolve(__dirname, 'apps', dir, "index.html"), 'utf-8')
           content = content.replace("__APP__", dir)
-          if(content.match(/__VERTEX_SHADER__/)) {
-            const vShaderProgram = fs.readFileSync(path.resolve(__dirname, "apps", dir, "vertex.glsl"), 'utf-8')
-            content = content.replace("__VERTEX_SHADER__", vShaderProgram) 
+
+          function replaceShader(pattern, base) {
+            const reg = new RegExp(pattern)
+            if (content.match(reg)) {
+              const regWithName = new RegExp(pattern +"\\((.*)\\)")
+              const m = content.match(
+                regWithName
+              )
+              let name = base + ".glsl"
+              let short = ''
+              if (m && m[1]) {
+                short = m[1]
+                name = base + "-" + m[1] + ".glsl"
+              }
+
+              const program = fs.readFileSync(
+                path.resolve(
+                  __dirname,
+                  "apps",
+                  dir,
+                  name
+                ),
+                "utf-8"
+              )
+              if (short) {
+                content = content.replace(
+                  `${pattern}(${short})`,
+                  program
+                )
+              } else {
+                content = content.replace(
+                  pattern,
+                  program
+                )
+              }
+              return true
+            }
+            return false
           }
-          if(content.match(/__FRAGMENT_SHADER__/)) {
-            const fShaderProgram = fs.readFileSync(path.resolve(__dirname, "apps", dir, "frag.glsl"), 'utf-8')
-            content = content.replace("__FRAGMENT_SHADER__", fShaderProgram) 
-          }
+
+          while(replaceShader('__VERTEX_SHADER__', 'vertex'));
+          while(replaceShader('__FRAGMENT_SHADER__', 'frag'));
           res.send(content)
         })
       })

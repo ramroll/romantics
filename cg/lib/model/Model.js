@@ -11,16 +11,15 @@ export class Model {
       : identity3d()
 
     this.gl = RenderContext.getGL()
-    this.program = RenderContext.getProgram()
-    this.gl.useProgram(this.program)
     this.children = []
     this.level = level
+    this.textures = []
 
   }
 
 
   setVectorUniform(name, value) {
-    const position = this.gl.getUniformLocation(this.program, name)
+    const position = this.gl.getUniformLocation(RenderContext.getProgram(), name)
     if(value.length === 2) {
       this.gl.uniform2fv(position, value)
     } else if(value.length === 3) {
@@ -31,12 +30,12 @@ export class Model {
   }
 
   setFloatUniform (name, value) {
-    const position = this.gl.getUniformLocation(this.program, name)
+    const position = this.gl.getUniformLocation(RenderContext.getProgram(), name)
     this.gl.uniform1f(position, value)
   }
 
   setMatrixUniform(name, value) {
-    const position = this.gl.getUniformLocation(this.program, name)
+    const position = this.gl.getUniformLocation(RenderContext.getProgram(), name)
     if(value.length === 4) {
       this.gl.uniformMatrix2fv(position, false, value)
     } else if(value.length === 9) {
@@ -62,7 +61,7 @@ export class Model {
   }
 
   addTextureImage(src) {
-    this.textureImage = new ImageTexture(src)
+    this.textures.push(new ImageTexture(src))
   }
 
   /**
@@ -96,7 +95,9 @@ export class Model {
     this.setMatrixUniform('u_world', this.worldMatrix)
 
     if(this.mesh) {
-      this.textureImage && this.textureImage.associate()
+      this.textures.forEach(texture => {
+        texture.associate(RenderContext.getProgram())
+      })
       this.mesh.draw()
     }
 

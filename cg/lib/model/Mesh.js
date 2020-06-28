@@ -12,7 +12,7 @@ export class Mesh {
     this.norms = norms
     this.texCoords = texCoords
     this.gl = RenderContext.getGL()
-    this.program = RenderContext.getProgram()
+    this.customVerticesBuffer = []
 
     this.vertexBuffer = new GLVertexBuffer(
       'a_position', 
@@ -54,16 +54,26 @@ export class Mesh {
     }
   }
 
+  addVertexBuffer(name, data, dimension) {
+    this.customVerticesBuffer.push(new GLVertexBuffer(
+      name,
+      data,
+      dimension
+    ))
+  }
+
   draw(){
     const gl = this.gl
-    gl.enable(gl.DEPTH_TEST)
-    gl.depthFunc(gl.LEQUAL)
 
     this.vertexBuffer.associate()
     this.colorsBuffer && this.colorsBuffer.associate()
     this.indicesBuffer && this.indicesBuffer.associate()
     this.texCoords && this.texturesBuffer.associate()
     this.normsBuffer && this.normsBuffer.associate()
+
+    this.customVerticesBuffer.forEach(buffer => {
+      buffer.associate()
+    })
 
     if(this.indicesBuffer) {
       gl.drawElements(

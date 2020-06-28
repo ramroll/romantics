@@ -30,3 +30,17 @@ export function perspective(fov, aspect, zNear, zFar) {
   ];
 
 }
+
+
+export function frustum(left, right, bottom, top, near, far){
+
+  const dx = right - left
+  const dy = top - bottom
+  const dz = far - near
+  return [
+    2*near/dx, 0, 0, 0,
+    0, 2*near/dy, 0, 0,
+    (left+right)/dx, (top+bottom)/dx, -(far+near)/dz, -1,
+    0, 0, -2*near*far/dz, 0
+  ]
+}
