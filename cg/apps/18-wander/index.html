@@ -31,7 +31,22 @@
       }
     </script>
 
+    <script type="notjs" id='vertex-shader-tile'>
+      __VERTEX_SHADER__(tile)
+    </script>
 
+    <script id='fragment-shader-tile' type="notjs">
+      __FRAGMENT_SHADER__(tile)
+    </script> 
+
+    
+    <script type="notjs" id='vertex-shader-pick'>
+      __VERTEX_SHADER__(pick)
+    </script>
+
+    <script id='fragment-shader-pick' type="notjs">
+      __FRAGMENT_SHADER__(pick)
+    </script>
     <script src="__APP__.js"></script>
   </body>
 </html>

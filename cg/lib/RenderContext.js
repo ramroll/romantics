@@ -26,6 +26,10 @@ export default class RenderContext {
       const program = initProgram(gl, name);
       RenderContext.programs[name] = program;
     }
+    if(name === 'default') {
+      RenderContext.gl.useProgram(RenderContext.programs['default'])
+    }
+  
 
   }
 
@@ -57,5 +61,6 @@ export default class RenderContext {
     this.init()
     this.initProgram(name)
     RenderContext.currentProgram = RenderContext.programs[name]
+    RenderContext.gl.useProgram(RenderContext.currentProgram)
   }
 }

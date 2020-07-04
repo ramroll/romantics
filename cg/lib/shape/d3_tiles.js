@@ -32,7 +32,7 @@ export function d3_tiles(tiles, size, width, height) {
       )
 
       const id = x * 1000 + y
-      console.log(id)
+      //console.log(id)
       
       for (let k = 0; k < 6; k++) {
         colors.push(

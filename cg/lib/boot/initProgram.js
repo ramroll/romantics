@@ -18,7 +18,9 @@ export const initProgram =  (gl, name) => {
   if(name !== 'default') {
     vShaderId += '-' + name
     fShaderId += '-' + name
+
   }
+  console.log(vShaderId)
   const vertexShaderSource = document.getElementById(vShaderId).text
   const fragShaderSource = document.getElementById(fShaderId).text
 
